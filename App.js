@@ -3,21 +3,13 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { StyleSheet, Text, View } from "react-native";
 // import { FriendList } from "./src/screens/FriendList";
-import { ScreenNav } from "./src/screens/ScreenNav";
+// import { ScreenNavStack } from "./src/screens/ScreenNavStack";
+import { ScreenNavTab } from "./src/screens/ScreenNavTab";
 
 export default function App() {
   return (
     <NavigationContainer>
-      <ScreenNav />
+      <ScreenNavTab />
     </NavigationContainer>
   );
 }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: "#fff",
-//     alignItems: "center",
-//     justifyContent: "center",
-//   },
-// });

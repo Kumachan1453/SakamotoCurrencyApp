@@ -1,18 +1,15 @@
 import React from "react";
-import { FriendList } from "../screens/FriendList";
-import { Send } from "../screens/Send";
-import { NavigationContainer } from "@react-navigation/native";
+import { FriendList } from "./FriendList";
+import { Send } from "./Send";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-// import FriendList from "./FriendList";
-// import Send from "./Send";
 
 const Stack = createNativeStackNavigator();
 
-export const ScreenNav = () => {
+export const ScreenNavStack = () => {
   return (
     <Stack.Navigator initialRouteName="HOME">
       <Stack.Screen
-        name="HOME"
+        name="フレンドリスト"
         component={FriendList}
         options={{
           headerShown: true,
@@ -46,4 +43,4 @@ export const ScreenNav = () => {
   );
 };
 
-export default ScreenNav;
+export default ScreenNavStack;

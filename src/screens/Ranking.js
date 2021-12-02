@@ -1,36 +1,27 @@
 import React from "react";
-import { StyleSheet, View, ScrollView } from "react-native";
+import { StyleSheet, View, Text, ScrollView } from "react-native";
 import { FriendButton } from "../components/FriendButton";
 import TextTemplateYourCoinRerated from "../components/TextTemplateYourCoinRerated";
 
-export const FriendList = ({ navigation }) => {
-  const HavingYourCoin = 10000;
-  const YourCoinUsage = 20000;
+export const Ranking = () => {
   const FirstDay = "11/1";
   const LastDay = "11/30";
+  const YourCoinUsage = 20000;
   const friendName = "damy-friend";
+  const sumUsageCoin = 40000000;
+  const unit = "C";
   return (
     <ScrollView>
       <View style={styles.content}>
         <TextTemplateYourCoinRerated
-          letter="あなたの所持コイン"
-          numberOfCoin={HavingYourCoin}
-          unit="C"
-        />
-        <TextTemplateYourCoinRerated
-          letter="あなたのコイン使用量"
+          letter="月間使用量ランキング"
           subText1="集計期間"
           date1={FirstDay}
           subText2="〜"
           date2={LastDay}
-          numberOfCoin={YourCoinUsage}
-          unit="C"
         />
         <View style={styles.line} />
-        <FriendButton
-          friendName={friendName}
-          onPress={() => navigation.navigate("Send")}
-        />
+        <FriendButton friendName={friendName} coin={sumUsageCoin} unit={unit} />
       </View>
     </ScrollView>
   );
@@ -62,7 +53,8 @@ const styles = StyleSheet.create({
     width: "100%",
     borderBottomWidth: 1,
     borderColor: "gray",
+    margin: 30,
   },
 });
 
-export default FriendList;
+export default Ranking;

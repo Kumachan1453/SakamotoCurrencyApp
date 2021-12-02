@@ -1,19 +1,22 @@
 import React from "react";
-import { StyleSheet, View, ScrollView } from "react-native";
+import { StyleSheet, View, Text, ScrollView } from "react-native";
 import { FriendButton } from "../components/FriendButton";
 import TextTemplateYourCoinRerated from "../components/TextTemplateYourCoinRerated";
 
-export const FriendList = ({ navigation }) => {
+export const Gift = () => {
   const HavingYourCoin = 10000;
   const YourCoinUsage = 20000;
   const FirstDay = "11/1";
   const LastDay = "11/30";
   const friendName = "damy-friend";
+  const giftCoin = 2000;
+  const timelimit = 3;
+  const unit = "C";
   return (
     <ScrollView>
       <View style={styles.content}>
         <TextTemplateYourCoinRerated
-          letter="あなたの所持コイン"
+          letter="あなたの所持コイン数"
           numberOfCoin={HavingYourCoin}
           unit="C"
         />
@@ -27,9 +30,15 @@ export const FriendList = ({ navigation }) => {
           unit="C"
         />
         <View style={styles.line} />
+        <Text style={styles.bigText}>コインが届いています</Text>
+        <Text style={styles.subText}>
+          ※送られた日から一週間以内に受け取らなければ消滅します
+        </Text>
         <FriendButton
           friendName={friendName}
-          onPress={() => navigation.navigate("Send")}
+          coin={giftCoin}
+          timelimit={timelimit}
+          unit={unit}
         />
       </View>
     </ScrollView>
@@ -62,7 +71,8 @@ const styles = StyleSheet.create({
     width: "100%",
     borderBottomWidth: 1,
     borderColor: "gray",
+    margin: 20,
   },
 });
 
-export default FriendList;
+export default Gift;
