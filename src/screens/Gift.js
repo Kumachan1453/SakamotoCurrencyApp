@@ -1,5 +1,13 @@
-import React from "react";
-import { StyleSheet, View, Text, ScrollView } from "react-native";
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  View,
+  Text,
+  ScrollView,
+  Alert,
+  Modal,
+  TouchableOpacity,
+} from "react-native";
 import { FriendButton } from "../components/FriendButton";
 import TextTemplateYourCoinRerated from "../components/TextTemplateYourCoinRerated";
 
@@ -12,6 +20,9 @@ export const Gift = () => {
   const giftCoin = 2000;
   const timelimit = 3;
   const unit = "C";
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const thanksText = "ありがとう。本当に助かった！";
   return (
     <ScrollView>
       <View style={styles.content}>
@@ -34,7 +45,35 @@ export const Gift = () => {
         <Text style={styles.subText}>
           ※送られた日から一週間以内に受け取らなければ消滅します
         </Text>
+      </View>
+
+      <View style={styles.centeredView}>
+        <Modal
+          animationType="fade"
+          transparent={false}
+          visible={modalVisible}
+          onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
+            setModalVisible(!modalVisible);
+          }}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalText}>
+                {giftCoin}Cを受け取りました！
+              </Text>
+              <Text style={styles.thanksTextStyle}>{thanksText}</Text>
+              <TouchableOpacity
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => setModalVisible(!modalVisible)}
+              >
+                <Text style={styles.textStyle}>OK</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
         <FriendButton
+          onPress={() => setModalVisible(true)}
           friendName={friendName}
           coin={giftCoin}
           timelimit={timelimit}
@@ -72,6 +111,52 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: "gray",
     margin: 20,
+  },
+
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+    width: 100,
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
+  },
+  thanksTextStyle: {
+    color: "gray",
+    marginBottom: 15,
   },
 });
 

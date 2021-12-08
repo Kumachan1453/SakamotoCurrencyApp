@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "gray",
     padding: 10,
+    borderRadius: 15,
   },
   headingText: {
     fontWeight: "bold",

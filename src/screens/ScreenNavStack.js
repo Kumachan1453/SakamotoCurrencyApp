@@ -7,7 +7,7 @@ const Stack = createNativeStackNavigator();
 
 export const ScreenNavStack = () => {
   return (
-    <Stack.Navigator initialRouteName="HOME">
+    <Stack.Navigator initialRouteName="フレンドリスト">
       <Stack.Screen
         name="フレンドリスト"
         component={FriendList}

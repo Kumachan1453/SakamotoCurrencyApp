@@ -1,6 +1,15 @@
-import React from "react";
-import { StyleSheet, View, Text, TextInput } from "react-native";
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  View,
+  Text,
+  TextInput,
+  Alert,
+  Modal,
+  TouchableOpacity,
+} from "react-native";
 import { Button } from "../components/Button";
+import TextInputTemplate from "../components/TextInputTemplate";
 import TextTemplateYourCoinRerated from "../components/TextTemplateYourCoinRerated";
 
 export const Send = () => {
@@ -9,6 +18,8 @@ export const Send = () => {
   const FirstDay = "11/1";
   const LastDay = "11/30";
   const HavingYourCoinAfterSending = 1000;
+
+  const [modalVisible, setModalVisible] = useState(false);
 
   return (
     <View style={styles.content}>
@@ -20,7 +31,11 @@ export const Send = () => {
       <View style={styles.line} />
       <Text style={styles.bigText}>あなたが送るコインの額</Text>
       <View style={styles.flexDirectionRow}>
-        <TextInput style={styles.input} placeholder="数字を入力" />
+        <TextInput
+          style={styles.input}
+          placeholder="数字を入力"
+          keyboardType="numeric"
+        />
         <Text style={styles.bigCoinText}>C</Text>
       </View>
       <View style={styles.line} />
@@ -40,7 +55,43 @@ export const Send = () => {
         <Text style={styles.bigCoinText}>C</Text>
       </View>
       <View style={styles.borderLine} />
-      <Button content="コインを送る" />
+      <View style={styles.sendMessage}>
+        <Text>メッセージを送る</Text>
+        <TextInputTemplate placeholder={"文字を入力"} />
+      </View>
+
+      <View style={styles.centeredView}>
+        <Modal
+          animationType="fade"
+          transparent={false}
+          visible={modalVisible}
+          onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
+            setModalVisible(!modalVisible);
+          }}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalText}>本当にコインを送りますか？</Text>
+              <View style={styles.twoButtonPlacement}>
+                <TouchableOpacity
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={() => setModalVisible(!modalVisible)}
+                >
+                  <Text style={styles.textStyle}>キャンセル</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={() => setModalVisible(!modalVisible)}
+                >
+                  <Text style={styles.textStyle}>OK</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
+        <Button content="コインを送る" onPress={() => setModalVisible(true)} />
+      </View>
     </View>
   );
 };
@@ -51,13 +102,13 @@ const styles = StyleSheet.create({
   },
   bigText: {
     fontWeight: "bold",
-    fontSize: 20,
+    fontSize: 18,
     margin: 10,
     marginTop: 20,
   },
   bigCoinText: {
     fontWeight: "bold",
-    fontSize: 20,
+    fontSize: 18,
     marginTop: 17,
     marginBottom: 30,
   },
@@ -83,7 +134,60 @@ const styles = StyleSheet.create({
     width: "100%",
     borderBottomWidth: 1,
     borderColor: "gray",
-    marginBottom: 50,
+    marginBottom: 20,
+  },
+  sendMessage: {
+    marginBottom: 60,
+  },
+
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.3)",
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  twoButtonPlacement: {
+    flexDirection: "row",
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+    width: 100,
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
+  },
+  thanksTextStyle: {
+    color: "gray",
+    marginBottom: 15,
   },
 });
 

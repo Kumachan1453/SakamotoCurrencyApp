@@ -11,8 +11,10 @@ export const Button = ({ content, onPress }) => {
 
 const styles = StyleSheet.create({
   listItemPlacement: {
-    width: "60%",
-    height: "10%",
+    // width: "60%",
+    // height: "10%",
+    width: 200,
+    height: 70,
     margin: 20,
     backgroundColor: "#ff9900",
     borderWidth: 1,
