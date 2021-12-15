@@ -1,15 +1,43 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, View, Text, TextInput, ScrollView } from "react-native";
 import CircleIcon from "../components/CircleIcon";
 import TextInputTemplate from "../components/TextInputTemplate";
 import TextTemplateYourCoinRerated from "../components/TextTemplateYourCoinRerated";
+import { initializeApp } from "firebase/app";
+import { getFirestore, getDoc, doc } from "firebase/firestore";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB6srd7jvN3hCW5gFLc9yniGimACFTeni4",
+  authDomain: "sakamotocurrencyapp.firebaseapp.com",
+  projectId: "sakamotocurrencyapp",
+  storageBucket: "sakamotocurrencyapp.appspot.com",
+  messagingSenderId: "367955895931",
+  appId: "1:367955895931:web:7041aac36e6138ddf764de",
+  measurementId: "${config.measurementId}",
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 export const Home = () => {
-  const HavingYourCoin = 10000;
-  const YourCoinUsage = 20000;
   const YourRank = 4;
   const FirstDay = "11/1";
   const LastDay = "11/30";
+
+  const [coinOwnership, setCoinOwnership] = useState(0);
+  const [monthlyCoinUsage, setMonthlyCoinUsage] = useState(0);
+  const [ranking, setRanking] = useState("ランク外");
+
+  const getYourServerData = async () => {
+    const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
+    const snapData = await getDoc(getData);
+    setCoinOwnership(snapData.data().coinOwnership);
+    setMonthlyCoinUsage(snapData.data().monthlyCoinUsage);
+    setRanking(snapData.data().ranking);
+    console.log("snapData.data().coinOwnership", snapData.data().coinOwnership);
+  };
+  getYourServerData();
+
   return (
     <ScrollView>
       <View style={styles.content}>
@@ -23,7 +51,7 @@ export const Home = () => {
         <View style={styles.line} />
         <TextTemplateYourCoinRerated
           letter="あなたの所持コイン数"
-          numberOfCoin={HavingYourCoin}
+          numberOfCoin={coinOwnership}
           unit="C"
         />
         <View style={styles.line} />
@@ -33,7 +61,7 @@ export const Home = () => {
           date1={FirstDay}
           subText2="〜"
           date2={LastDay}
-          numberOfCoin={YourCoinUsage}
+          numberOfCoin={monthlyCoinUsage}
           unit="C"
         />
         <View style={styles.line} />
@@ -43,7 +71,7 @@ export const Home = () => {
           date1={FirstDay}
           subText2="〜"
           date2={LastDay}
-          numberOfCoin={YourRank}
+          numberOfCoin={ranking}
           unit="位"
         />
         <View style={styles.line} />

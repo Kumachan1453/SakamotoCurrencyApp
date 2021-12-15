@@ -11,6 +11,21 @@ import {
 import { Button } from "../components/Button";
 import TextInputTemplate from "../components/TextInputTemplate";
 import TextTemplateYourCoinRerated from "../components/TextTemplateYourCoinRerated";
+import { initializeApp } from "firebase/app";
+import { getFirestore, getDoc, doc } from "firebase/firestore";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB6srd7jvN3hCW5gFLc9yniGimACFTeni4",
+  authDomain: "sakamotocurrencyapp.firebaseapp.com",
+  projectId: "sakamotocurrencyapp",
+  storageBucket: "sakamotocurrencyapp.appspot.com",
+  messagingSenderId: "367955895931",
+  appId: "1:367955895931:web:7041aac36e6138ddf764de",
+  measurementId: "${config.measurementId}",
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 export const Send = () => {
   const HavingYourCoin = 10000;
@@ -21,11 +36,23 @@ export const Send = () => {
 
   const [modalVisible, setModalVisible] = useState(false);
 
+  const [coinOwnership, setCoinOwnership] = useState(0);
+  const [monthlyCoinUsage, setMonthlyCoinUsage] = useState(0);
+
+  const getYourServerData = async () => {
+    const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
+    const snapData = await getDoc(getData);
+    setCoinOwnership(snapData.data().coinOwnership);
+    setMonthlyCoinUsage(snapData.data().monthlyCoinUsage);
+    console.log("snapData.data().coinOwnership", snapData.data().coinOwnership);
+  };
+  getYourServerData();
+
   return (
     <View style={styles.content}>
       <TextTemplateYourCoinRerated
         letter="あなたの所持コイン数"
-        numberOfCoin={HavingYourCoin}
+        numberOfCoin={coinOwnership}
         unit="C"
       />
       <View style={styles.line} />
@@ -45,7 +72,7 @@ export const Send = () => {
         date1={FirstDay}
         subText2="〜"
         date2={LastDay}
-        numberOfCoin={YourCoinUsage}
+        numberOfCoin={monthlyCoinUsage}
         unit="C"
       />
       <View style={styles.line} />
