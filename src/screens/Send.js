@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -12,7 +12,7 @@ import { Button } from "../components/Button";
 import TextInputTemplate from "../components/TextInputTemplate";
 import TextTemplateYourCoinRerated from "../components/TextTemplateYourCoinRerated";
 import { initializeApp } from "firebase/app";
-import { getFirestore, getDoc, doc } from "firebase/firestore";
+import { getFirestore, getDoc, doc, updateDoc } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyB6srd7jvN3hCW5gFLc9yniGimACFTeni4",
@@ -28,25 +28,46 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 export const Send = () => {
-  const HavingYourCoin = 10000;
-  const YourCoinUsage = 20000;
+  // const HavingYourCoin = 10000;
+  // const YourCoinUsage = 20000;
   const FirstDay = "11/1";
   const LastDay = "11/30";
   const HavingYourCoinAfterSending = 1000;
+  const [sendingCoin, setSendingCoin] = useState(0);
 
   const [modalVisible, setModalVisible] = useState(false);
 
   const [coinOwnership, setCoinOwnership] = useState(0);
   const [monthlyCoinUsage, setMonthlyCoinUsage] = useState(0);
+  const [balance, setBalance] = useState(0);
 
   const getYourServerData = async () => {
     const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
     const snapData = await getDoc(getData);
     setCoinOwnership(snapData.data().coinOwnership);
     setMonthlyCoinUsage(snapData.data().monthlyCoinUsage);
-    console.log("snapData.data().coinOwnership", snapData.data().coinOwnership);
   };
   getYourServerData();
+
+  const updateData = async () => {
+    const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
+    if (sendingCoin < 0) {
+      alert("数字が0以下です");
+    } else if (coinOwnership - sendingCoin >= 0) {
+      await updateDoc(getData, {
+        coinOwnership: coinOwnership - sendingCoin,
+        monthlyCoinUsage: monthlyCoinUsage + sendingCoin,
+      });
+    } else {
+      alert("コインが足りません");
+    }
+  };
+  useEffect(() => {
+    const timerId = setTimeout(() => {
+      setBalance(coinOwnership - sendingCoin);
+    }, 0);
+    return () => clearTimeout(timerId);
+  }, [sendingCoin]);
 
   return (
     <View style={styles.content}>
@@ -55,16 +76,6 @@ export const Send = () => {
         numberOfCoin={coinOwnership}
         unit="C"
       />
-      <View style={styles.line} />
-      <Text style={styles.bigText}>あなたが送るコインの額</Text>
-      <View style={styles.flexDirectionRow}>
-        <TextInput
-          style={styles.input}
-          placeholder="数字を入力"
-          keyboardType="numeric"
-        />
-        <Text style={styles.bigCoinText}>C</Text>
-      </View>
       <View style={styles.line} />
       <TextTemplateYourCoinRerated
         letter="あなたのコイン使用量"
@@ -76,9 +87,22 @@ export const Send = () => {
         unit="C"
       />
       <View style={styles.line} />
+      <Text style={styles.bigText}>あなたが送るコインの額</Text>
+      <View style={styles.flexDirectionRow}>
+        <TextInput
+          style={styles.input}
+          onChangeText={(text) =>
+            setSendingCoin(parseInt(isNaN(text) ? sendingCoin : text))
+          }
+          placeholder="数字を入力"
+          keyboardType="numeric"
+        />
+        <Text style={styles.bigCoinText}>C</Text>
+      </View>
+      <View style={styles.line} />
       <View style={styles.flexDirectionRow}>
         <Text style={styles.bigText}>残額</Text>
-        <Text style={styles.bigCoinText}>{HavingYourCoinAfterSending}</Text>
+        <Text style={styles.bigCoinText}>{balance}</Text>
         <Text style={styles.bigCoinText}>C</Text>
       </View>
       <View style={styles.borderLine} />
@@ -109,7 +133,10 @@ export const Send = () => {
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={[styles.button, styles.buttonClose]}
-                  onPress={() => setModalVisible(!modalVisible)}
+                  onPress={() => {
+                    setModalVisible(!modalVisible);
+                    updateData();
+                  }}
                 >
                   <Text style={styles.textStyle}>OK</Text>
                 </TouchableOpacity>

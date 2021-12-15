@@ -11,7 +11,7 @@ import {
 import { FriendButton } from "../components/FriendButton";
 import TextTemplateYourCoinRerated from "../components/TextTemplateYourCoinRerated";
 import { initializeApp } from "firebase/app";
-import { getFirestore, getDoc, doc } from "firebase/firestore";
+import { getFirestore, getDoc, doc, updateDoc } from "firebase/firestore";
 // import { getAnalytics } from "firebase/analytics";
 
 const firebaseConfig = {
@@ -48,9 +48,15 @@ export const Gift = () => {
     const snapData = await getDoc(getData);
     setCoinOwnership(snapData.data().coinOwnership);
     setMonthlyCoinUsage(snapData.data().monthlyCoinUsage);
-    console.log("snapData.data().coinOwnership", snapData.data().coinOwnership);
   };
   getYourServerData();
+
+  const updateData = async () => {
+    const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
+    await updateDoc(getData, {
+      coinOwnership: coinOwnership + 1000,
+    });
+  };
 
   return (
     <ScrollView>
@@ -94,7 +100,10 @@ export const Gift = () => {
               <Text style={styles.thanksTextStyle}>{thanksText}</Text>
               <TouchableOpacity
                 style={[styles.button, styles.buttonClose]}
-                onPress={() => setModalVisible(!modalVisible)}
+                onPress={() => {
+                  setModalVisible(!modalVisible);
+                  updateData();
+                }}
               >
                 <Text style={styles.textStyle}>OK</Text>
               </TouchableOpacity>

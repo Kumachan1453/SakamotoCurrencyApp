@@ -34,7 +34,6 @@ export const Home = () => {
     setCoinOwnership(snapData.data().coinOwnership);
     setMonthlyCoinUsage(snapData.data().monthlyCoinUsage);
     setRanking(snapData.data().ranking);
-    console.log("snapData.data().coinOwnership", snapData.data().coinOwnership);
   };
   getYourServerData();
 
