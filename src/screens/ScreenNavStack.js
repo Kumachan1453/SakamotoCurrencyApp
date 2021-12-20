@@ -7,12 +7,13 @@ const Stack = createNativeStackNavigator();
 
 export const ScreenNavStack = () => {
   return (
-    <Stack.Navigator initialRouteName="フレンドリスト">
+    <Stack.Navigator initialRouteName="FriendList">
       <Stack.Screen
-        name="フレンドリスト"
+        name="FriendList"
         component={FriendList}
         options={{
           headerShown: true,
+          title: "フレンド",
           headerStyle: {
             backgroundColor: "#ff9900",
           },

@@ -28,24 +28,26 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 export const Send = () => {
-  // const HavingYourCoin = 10000;
-  // const YourCoinUsage = 20000;
   const FirstDay = "11/1";
   const LastDay = "11/30";
-  const HavingYourCoinAfterSending = 1000;
   const [sendingCoin, setSendingCoin] = useState(0);
 
   const [modalVisible, setModalVisible] = useState(false);
 
   const [coinOwnership, setCoinOwnership] = useState(0);
   const [monthlyCoinUsage, setMonthlyCoinUsage] = useState(0);
-  const [balance, setBalance] = useState(0);
+  const [balance, setBalance] = useState(coinOwnership - sendingCoin);
+  const [futureMonthlyCoinUsage, setFutureMonthlyCoinUsage] = useState(
+    monthlyCoinUsage + sendingCoin
+  );
+  const [sumCoinUsage, setSumCoinUsage] = useState(0);
 
   const getYourServerData = async () => {
     const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
     const snapData = await getDoc(getData);
     setCoinOwnership(snapData.data().coinOwnership);
     setMonthlyCoinUsage(snapData.data().monthlyCoinUsage);
+    setSumCoinUsage(snapData.data().sumCoinUsage);
   };
   getYourServerData();
 
@@ -57,35 +59,82 @@ export const Send = () => {
       await updateDoc(getData, {
         coinOwnership: coinOwnership - sendingCoin,
         monthlyCoinUsage: monthlyCoinUsage + sendingCoin,
+        sumCoinUsage: sumCoinUsage + sendingCoin,
       });
-    } else {
+    } else if (coinOwnership - sendingCoin < 0) {
       alert("コインが足りません");
+    } else {
+      alert("使用できない文字です");
     }
   };
   useEffect(() => {
     const timerId = setTimeout(() => {
       setBalance(coinOwnership - sendingCoin);
+      setFutureMonthlyCoinUsage(monthlyCoinUsage + sendingCoin);
     }, 0);
     return () => clearTimeout(timerId);
   }, [sendingCoin]);
+  if (isNaN(balance) || !isFinite(balance)) {
+    const afterBalance = () => setBalance(coinOwnership);
+    afterBalance();
+  }
+  if (isNaN(futureMonthlyCoinUsage) || !isFinite(futureMonthlyCoinUsage)) {
+    const afterFutureMonthlyCoinUsage = () =>
+      setFutureMonthlyCoinUsage(monthlyCoinUsage);
+    afterFutureMonthlyCoinUsage();
+  }
+
+  // 日付による更新の処理　【削除禁止】
+  // const today = new Date();
+  // const firstDay = today.getDate() === 1;
+  // const minutes = today.getMinutes() === 2;
+  // const hours = today.getHours() === 7;
+
+  // const [count, setCount] = useState(0);
+  // const update = () => {
+  //   if (hours && count < 2) {
+  //     setCount(count + 1);
+  //     console.log(count);
+  //     const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
+  //     updateDoc(getData, {
+  //       coinOwnership: coinOwnership * 0.9,
+  //       // monthlyCoinUsage: 0,
+  //     });
+  //   }
+  // };
+  // update();
 
   return (
     <View style={styles.content}>
-      <TextTemplateYourCoinRerated
-        letter="あなたの所持コイン数"
-        numberOfCoin={coinOwnership}
-        unit="C"
-      />
+      <View style={styles.flexDirectionRowAndCenter}>
+        <TextTemplateYourCoinRerated
+          letter="所持コイン数"
+          numberOfCoin={coinOwnership}
+          unit="C"
+        />
+        <TextTemplateYourCoinRerated
+          letter="残額"
+          numberOfCoin={balance}
+          unit="C"
+        />
+      </View>
       <View style={styles.line} />
-      <TextTemplateYourCoinRerated
-        letter="あなたのコイン使用量"
-        subText1="集計期間"
-        date1={FirstDay}
-        subText2="〜"
-        date2={LastDay}
-        numberOfCoin={monthlyCoinUsage}
-        unit="C"
-      />
+      <View style={styles.flexDirectionRowAndCenter}>
+        <TextTemplateYourCoinRerated
+          letter="コイン使用量"
+          subText1="集計期間"
+          date1={FirstDay}
+          subText2="〜"
+          date2={LastDay}
+          numberOfCoin={monthlyCoinUsage}
+          unit="C"
+        />
+        <TextTemplateYourCoinRerated
+          letter="使用後の使用量"
+          numberOfCoin={futureMonthlyCoinUsage}
+          unit="C"
+        />
+      </View>
       <View style={styles.line} />
       <Text style={styles.bigText}>あなたが送るコインの額</Text>
       <View style={styles.flexDirectionRow}>
@@ -94,17 +143,19 @@ export const Send = () => {
           onChangeText={(text) =>
             setSendingCoin(parseInt(isNaN(text) ? sendingCoin : text))
           }
+          type="number"
+          pattern="[0-9]+"
           placeholder="数字を入力"
           keyboardType="numeric"
         />
         <Text style={styles.bigCoinText}>C</Text>
       </View>
-      <View style={styles.line} />
-      <View style={styles.flexDirectionRow}>
+      {/* <View style={styles.line} /> */}
+      {/* <View style={styles.flexDirectionRow}>
         <Text style={styles.bigText}>残額</Text>
         <Text style={styles.bigCoinText}>{balance}</Text>
         <Text style={styles.bigCoinText}>C</Text>
-      </View>
+      </View> */}
       <View style={styles.borderLine} />
       <View style={styles.sendMessage}>
         <Text>メッセージを送る</Text>
@@ -154,11 +205,16 @@ const styles = StyleSheet.create({
   content: {
     alignItems: "center",
   },
+  flexDirectionRowAndCenter: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
   bigText: {
     fontWeight: "bold",
     fontSize: 18,
     margin: 10,
     marginTop: 20,
+    alignItems: "center",
   },
   bigCoinText: {
     fontWeight: "bold",
