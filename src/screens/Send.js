@@ -7,6 +7,7 @@ import {
   Alert,
   Modal,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 import { Button } from "../components/Button";
 import TextInputTemplate from "../components/TextInputTemplate";
@@ -42,6 +43,8 @@ export const Send = () => {
   );
   const [sumCoinUsage, setSumCoinUsage] = useState(0);
 
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+
   const getYourServerData = async () => {
     const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
     const snapData = await getDoc(getData);
@@ -55,7 +58,7 @@ export const Send = () => {
     const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
     if (sendingCoin < 0) {
       alert("数字が0以下です");
-    } else if (coinOwnership - sendingCoin >= 0) {
+    } else if (coinOwnership - sendingCoin > 0) {
       await updateDoc(getData, {
         coinOwnership: coinOwnership - sendingCoin,
         monthlyCoinUsage: monthlyCoinUsage + sendingCoin,
@@ -84,120 +87,110 @@ export const Send = () => {
     afterFutureMonthlyCoinUsage();
   }
 
-  // 日付による更新の処理　【削除禁止】
-  // const today = new Date();
-  // const firstDay = today.getDate() === 1;
-  // const minutes = today.getMinutes() === 2;
-  // const hours = today.getHours() === 7;
-
-  // const [count, setCount] = useState(0);
-  // const update = () => {
-  //   if (hours && count < 2) {
-  //     setCount(count + 1);
-  //     console.log(count);
-  //     const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
-  //     updateDoc(getData, {
-  //       coinOwnership: coinOwnership * 0.9,
-  //       // monthlyCoinUsage: 0,
-  //     });
-  //   }
-  // };
-  // update();
+  if (sendingCoin > 0 && sendingCoin <= coinOwnership) {
+    const notSendingCoinError = () => setIsButtonDisabled(false);
+    if (isButtonDisabled === true) {
+      notSendingCoinError();
+      console.log("BBBBB");
+    }
+  }
 
   return (
-    <View style={styles.content}>
-      <View style={styles.flexDirectionRowAndCenter}>
-        <TextTemplateYourCoinRerated
-          letter="所持コイン数"
-          numberOfCoin={coinOwnership}
-          unit="C"
-        />
-        <TextTemplateYourCoinRerated
-          letter="残額"
-          numberOfCoin={balance}
-          unit="C"
-        />
-      </View>
-      <View style={styles.line} />
-      <View style={styles.flexDirectionRowAndCenter}>
-        <TextTemplateYourCoinRerated
-          letter="コイン使用量"
-          subText1="集計期間"
-          date1={FirstDay}
-          subText2="〜"
-          date2={LastDay}
-          numberOfCoin={monthlyCoinUsage}
-          unit="C"
-        />
-        <TextTemplateYourCoinRerated
-          letter="使用後の使用量"
-          numberOfCoin={futureMonthlyCoinUsage}
-          unit="C"
-        />
-      </View>
-      <View style={styles.line} />
-      <Text style={styles.bigText}>あなたが送るコインの額</Text>
-      <View style={styles.flexDirectionRow}>
-        <TextInput
-          style={styles.input}
-          onChangeText={(text) =>
-            setSendingCoin(parseInt(isNaN(text) ? sendingCoin : text))
-          }
-          type="number"
-          pattern="[0-9]+"
-          placeholder="数字を入力"
-          keyboardType="numeric"
-        />
-        <Text style={styles.bigCoinText}>C</Text>
-      </View>
-      {/* <View style={styles.line} /> */}
-      {/* <View style={styles.flexDirectionRow}>
-        <Text style={styles.bigText}>残額</Text>
-        <Text style={styles.bigCoinText}>{balance}</Text>
-        <Text style={styles.bigCoinText}>C</Text>
-      </View> */}
-      <View style={styles.borderLine} />
-      <View style={styles.sendMessage}>
-        <Text>メッセージを送る</Text>
-        <TextInputTemplate placeholder={"文字を入力"} />
-      </View>
+    <ScrollView>
+      <View style={styles.content}>
+        <View style={styles.flexDirectionRowAndCenter}>
+          <TextTemplateYourCoinRerated
+            letter="所持コイン数"
+            numberOfCoin={coinOwnership}
+            unit="C"
+          />
+          <TextTemplateYourCoinRerated
+            letter="残額"
+            numberOfCoin={balance}
+            unit="C"
+          />
+        </View>
+        <View style={styles.line} />
+        <View style={styles.flexDirectionRowAndCenter}>
+          <TextTemplateYourCoinRerated
+            letter="コイン使用量"
+            subText1="集計期間"
+            date1={FirstDay}
+            subText2="〜"
+            date2={LastDay}
+            numberOfCoin={monthlyCoinUsage}
+            unit="C"
+          />
+          <TextTemplateYourCoinRerated
+            letter="使用後の使用量"
+            numberOfCoin={futureMonthlyCoinUsage}
+            unit="C"
+          />
+        </View>
+        <View style={styles.line} />
+        <Text style={styles.bigText}>あなたが送るコインの額</Text>
+        <View style={styles.flexDirectionRow}>
+          <TextInput
+            style={styles.input}
+            onChangeText={(text) =>
+              setSendingCoin(parseInt(isNaN(text) ? sendingCoin : text))
+            }
+            type="number"
+            pattern="[0-9]+"
+            placeholder="数字を入力"
+            keyboardType="numeric"
+          />
+          <Text style={styles.bigCoinText}>C</Text>
+        </View>
+        <View style={styles.borderLine} />
+        <View style={styles.sendMessage}>
+          <Text>メッセージを送る</Text>
+          <TextInputTemplate placeholder={"文字を入力"} />
+        </View>
 
-      <View style={styles.centeredView}>
-        <Modal
-          animationType="fade"
-          transparent={false}
-          visible={modalVisible}
-          onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
-            setModalVisible(!modalVisible);
-          }}
-        >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Text style={styles.modalText}>本当にコインを送りますか？</Text>
-              <View style={styles.twoButtonPlacement}>
-                <TouchableOpacity
-                  style={[styles.button, styles.buttonClose]}
-                  onPress={() => setModalVisible(!modalVisible)}
-                >
-                  <Text style={styles.textStyle}>キャンセル</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[styles.button, styles.buttonClose]}
-                  onPress={() => {
-                    setModalVisible(!modalVisible);
-                    updateData();
-                  }}
-                >
-                  <Text style={styles.textStyle}>OK</Text>
-                </TouchableOpacity>
+        <View style={styles.centeredView}>
+          <Modal
+            animationType="fade"
+            transparent={false}
+            visible={modalVisible}
+            onRequestClose={() => {
+              Alert.alert("Modal has been closed.");
+              setModalVisible(!modalVisible);
+            }}
+          >
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <Text style={styles.modalText}>本当にコインを送りますか？</Text>
+                <View style={styles.twoButtonPlacement}>
+                  <TouchableOpacity
+                    style={[styles.button, styles.buttonClose]}
+                    onPress={() => setModalVisible(!modalVisible)}
+                  >
+                    <Text style={styles.textStyle}>キャンセル</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[styles.button, styles.buttonClose]}
+                    onPress={() => {
+                      setModalVisible(!modalVisible);
+                      updateData();
+                      // sendingCoin.clear();
+                    }}
+                  >
+                    <Text style={styles.textStyle}>OK</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
-          </View>
-        </Modal>
-        <Button content="コインを送る" onPress={() => setModalVisible(true)} />
+          </Modal>
+          <Button
+            content="コインを送る"
+            onPress={() => setModalVisible(true)}
+            isButtonDisabled={isButtonDisabled}
+          />
+        </View>
+        <View style={styles.space} />
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -298,6 +291,9 @@ const styles = StyleSheet.create({
   thanksTextStyle: {
     color: "gray",
     marginBottom: 15,
+  },
+  space: {
+    marginBottom: 500,
   },
 });
 
