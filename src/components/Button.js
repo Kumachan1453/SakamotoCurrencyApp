@@ -7,8 +7,8 @@ export const Button = ({ content, onPress, isButtonDisabled }) => {
       onPress={onPress}
       style={
         isButtonDisabled
-          ? styles.grayListItemPlacement
-          : styles.orangeListItemPlacement
+          ? styles.offListItemPlacement
+          : styles.onListItemPlacement
       }
       disabled={isButtonDisabled}
     >
@@ -18,23 +18,15 @@ export const Button = ({ content, onPress, isButtonDisabled }) => {
 };
 
 const styles = StyleSheet.create({
-  grayListItemPlacement: {
+  offListItemPlacement: {
     width: 200,
     height: 70,
-    backgroundColor: "gray",
-    borderWidth: 1,
-    shadowColor: "black",
-    shadowOffset: {
-      height: 1,
-      width: 1,
-    },
-    shadowRadius: 2,
-    shadowOpacity: 1,
+    backgroundColor: "#DDDDDD",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
   },
-  orangeListItemPlacement: {
+  onListItemPlacement: {
     width: 200,
     height: 70,
     backgroundColor: "#ff9900",

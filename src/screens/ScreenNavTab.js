@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useLayoutEffect } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { ScreenNavStack } from "./ScreenNavStack";
 import { Home } from "./Home";
@@ -6,7 +6,15 @@ import { Ionicons } from "@expo/vector-icons";
 import Gift from "./Gift";
 import Ranking from "./Ranking";
 import { initializeApp } from "firebase/app";
-import { getFirestore, getDoc, doc, updateDoc } from "firebase/firestore";
+import {
+  getFirestore,
+  collection,
+  getDoc,
+  getDocs,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
+import { useEffect } from "react/cjs/react.development";
 
 const firebaseConfig = {
   apiKey: "AIzaSyB6srd7jvN3hCW5gFLc9yniGimACFTeni4",
@@ -36,31 +44,64 @@ export const ScreenNavTab = () => {
   };
   getYourServerData();
 
-  //日付による更新の処理　【削除禁止】
   const today = new Date();
   const firstDay = today.getDate() === 1;
-  const minutes = today.getMinutes() === 2;
-  const onHours = today.getHours() === 17;
-  const offHours = today.getHours() === 18;
+  const onMinutes = today.getMinutes() === 50;
+  const offMinutes = today.getMinutes() === 19;
+  const onHours = today.getHours() === 9;
+  const offHours = today.getHours() === 9;
 
-  const monthlyUpdate = async () => {
-    const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
-    const snapData = await getDoc(getData);
-    if (onHours && snapData.data().updateNumber < 1) {
-      updateDoc(getData, {
-        coinOwnership:
-          snapData.data().coinOwnership * 0.9 +
-          snapData.data().monthlyCoinUsage * 0.05,
-        monthlyCoinUsage: (snapData.data().monthlyCoinUsage = 0),
-        updateNumber: snapData.data().updateNumber + 1,
-      });
-    } else if (offHours && snapData.data().updateNumber === 1) {
-      updateDoc(getData, {
-        updateNumber: snapData.data().updateNumber - 1,
-      });
-    }
-  };
-  monthlyUpdate();
+  const [onHours2, setOnHours2] = useState(onHours);
+
+  //日付による更新の処理　【削除禁止】
+  // const monthlyUpdate = async () => {
+  //   const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
+  //   const snapData = await getDoc(getData);
+  //   if (onHours && snapData.data().updateNumber < 1) {
+  //     useEffect(() => {
+  //       setCoinOwnership(
+  //         snapData.data().coinOwnership * 0.9 +
+  //           snapData.data().monthlyCoinUsage * 0.05
+  //       );
+  //       setMonthlyCoinUsage(0);
+  //       setUpdateNumber(snapData.data().updateNumber + 1);
+  //       // updateDoc(getData, {
+  //       //   coinOwnership:
+  //       //     snapData.data().coinOwnership * 0.9 +
+  //       //     snapData.data().monthlyCoinUsage * 0.05,
+  //       //   monthlyCoinUsage: (snapData.data().monthlyCoinUsage = 0),
+  //       //   updateNumber: snapData.data().updateNumber + 1,
+  //       // });
+  //     }, onHours);
+  //   } else if (offHours && snapData.data().updateNumber === 1) {
+  //     useEffect(() => {
+  //       updateDoc(getData, {
+  //         updateNumber: snapData.data().updateNumber - 1,
+  //       });
+  //     });
+  //   }
+  // };
+  // monthlyUpdate();
+  useLayoutEffect(() => {
+    const monthlyUpdate = async () => {
+      const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
+      const snapData = await getDoc(getData);
+      if (onHours && snapData.data().updateNumber < 1) {
+        updateDoc(getData, {
+          coinOwnership:
+            snapData.data().coinOwnership * 0.9 +
+            snapData.data().monthlyCoinUsage * 0.05,
+          monthlyCoinUsage: (snapData.data().monthlyCoinUsage = 0),
+          updateNumber: snapData.data().updateNumber + 1,
+        });
+      } else if (offHours && offMinutes && snapData.data().updateNumber === 1) {
+        updateDoc(getData, {
+          updateNumber: snapData.data().updateNumber - 1,
+        });
+      }
+    };
+    monthlyUpdate();
+  }, []);
   //ここまで
 
   return (

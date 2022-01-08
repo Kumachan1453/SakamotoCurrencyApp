@@ -1,9 +1,16 @@
-import React, { useState } from "react";
-import { StyleSheet, View, ScrollView } from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, View, ScrollView, FlatList } from "react-native";
 import { FriendButton } from "../components/FriendButton";
 import TextTemplateYourCoinRerated from "../components/TextTemplateYourCoinRerated";
 import { initializeApp } from "firebase/app";
-import { getFirestore, getDoc, doc } from "firebase/firestore";
+import {
+  getFirestore,
+  getDoc,
+  getDocs,
+  collection,
+  doc,
+} from "firebase/firestore";
+import { useIsFocused } from "@react-navigation/native";
 
 const firebaseConfig = {
   apiKey: "AIzaSyB6srd7jvN3hCW5gFLc9yniGimACFTeni4",
@@ -19,27 +26,38 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 export const FriendList = ({ navigation }) => {
-  const HavingYourCoin = 10000;
-  const YourCoinUsage = 20000;
   const FirstDay = "11/1";
   const LastDay = "11/30";
-  const friendName = "damy-friend";
+  // const friendName = "damy-friend";
 
   const [coinOwnership, setCoinOwnership] = useState(0);
   const [monthlyCoinUsage, setMonthlyCoinUsage] = useState(0);
 
-  const getYourServerData = async () => {
+  const [listData, setListData] = useState([]);
+
+  const isFocused = useIsFocused();
+
+  useEffect(async () => {
+    const getDatas = collection(db, "users");
+    const querySnapshot = await getDocs(getDatas);
+    const array = [];
+    querySnapshot.forEach((doc) => {
+      array.push(doc.data().name);
+    });
+    setListData(array);
+  }, []);
+
+  useEffect(async () => {
     const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
     const snapData = await getDoc(getData);
-    setCoinOwnership(snapData.data().coinOwnership);
-    setMonthlyCoinUsage(snapData.data().monthlyCoinUsage);
-  };
-  getYourServerData();
+    setCoinOwnership(Math.round(snapData.data().coinOwnership));
+    setMonthlyCoinUsage(Math.round(snapData.data().monthlyCoinUsage));
+  }, [isFocused]);
 
   return (
-    <ScrollView>
+    <View>
       <View style={styles.content}>
-        <TextTemplateYourCoinRerated
+        {/* <TextTemplateYourCoinRerated
           letter="あなたの所持コイン"
           numberOfCoin={coinOwnership}
           unit="C"
@@ -53,19 +71,29 @@ export const FriendList = ({ navigation }) => {
           numberOfCoin={monthlyCoinUsage}
           unit="C"
         />
-        <View style={styles.line} />
-        <FriendButton
-          friendName={friendName}
-          onPress={() => navigation.navigate("Send")}
+        <View style={styles.line} /> */}
+        <FlatList
+          data={listData}
+          renderItem={({ item }) => {
+            console.log("item", item);
+            return (
+              <FriendButton
+                friendName={item}
+                onPress={() => navigation.navigate("Send")}
+              />
+            );
+          }}
+          keyExtractor={(index) => index.toString()}
         />
       </View>
-    </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   content: {
-    alignItems: "center",
+    height: "100%",
+    // justifyContent: "center",
   },
   bigText: {
     fontWeight: "bold",

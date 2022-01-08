@@ -14,6 +14,11 @@ import TextInputTemplate from "../components/TextInputTemplate";
 import TextTemplateYourCoinRerated from "../components/TextTemplateYourCoinRerated";
 import { initializeApp } from "firebase/app";
 import { getFirestore, getDoc, doc, updateDoc } from "firebase/firestore";
+import { useIsFocused } from "@react-navigation/native";
+import FriendList from "../screens/FriendList";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
+const Stack = createNativeStackNavigator();
 
 const firebaseConfig = {
   apiKey: "AIzaSyB6srd7jvN3hCW5gFLc9yniGimACFTeni4",
@@ -37,7 +42,9 @@ export const Send = () => {
 
   const [coinOwnership, setCoinOwnership] = useState(0);
   const [monthlyCoinUsage, setMonthlyCoinUsage] = useState(0);
-  const [balance, setBalance] = useState(coinOwnership - sendingCoin);
+  const [balance, setBalance] = useState(
+    Math.round(coinOwnership - sendingCoin)
+  );
   const [futureMonthlyCoinUsage, setFutureMonthlyCoinUsage] = useState(
     monthlyCoinUsage + sendingCoin
   );
@@ -45,14 +52,15 @@ export const Send = () => {
 
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
-  const getYourServerData = async () => {
+  const isFocused = useIsFocused();
+
+  useEffect(async () => {
     const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
     const snapData = await getDoc(getData);
-    setCoinOwnership(snapData.data().coinOwnership);
-    setMonthlyCoinUsage(snapData.data().monthlyCoinUsage);
-    setSumCoinUsage(snapData.data().sumCoinUsage);
-  };
-  getYourServerData();
+    setCoinOwnership(Math.round(snapData.data().coinOwnership));
+    setMonthlyCoinUsage(Math.round(snapData.data().monthlyCoinUsage));
+    setSumCoinUsage(Math.round(snapData.data().sumCoinUsage));
+  }, [isFocused]);
 
   const updateData = async () => {
     const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
@@ -70,6 +78,12 @@ export const Send = () => {
       alert("使用できない文字です");
     }
   };
+  useEffect(async () => {
+    const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
+    const snapData = await getDoc(getData);
+    setCoinOwnership(snapData.data().coinOwnership);
+    setMonthlyCoinUsage(snapData.data().monthlyCoinUsage);
+  }, [updateData]);
   useEffect(() => {
     const timerId = setTimeout(() => {
       setBalance(coinOwnership - sendingCoin);
@@ -77,6 +91,7 @@ export const Send = () => {
     }, 0);
     return () => clearTimeout(timerId);
   }, [sendingCoin]);
+
   if (isNaN(balance) || !isFinite(balance)) {
     const afterBalance = () => setBalance(coinOwnership);
     afterBalance();
@@ -88,10 +103,12 @@ export const Send = () => {
   }
 
   if (sendingCoin > 0 && sendingCoin <= coinOwnership) {
-    const notSendingCoinError = () => setIsButtonDisabled(false);
-    if (isButtonDisabled === true) {
-      notSendingCoinError();
-      console.log("BBBBB");
+    if (isButtonDisabled) {
+      setIsButtonDisabled(false);
+    }
+  } else {
+    if (!isButtonDisabled) {
+      setIsButtonDisabled(true);
     }
   }
 
@@ -136,7 +153,6 @@ export const Send = () => {
               setSendingCoin(parseInt(isNaN(text) ? sendingCoin : text))
             }
             type="number"
-            pattern="[0-9]+"
             placeholder="数字を入力"
             keyboardType="numeric"
           />
@@ -173,7 +189,8 @@ export const Send = () => {
                     onPress={() => {
                       setModalVisible(!modalVisible);
                       updateData();
-                      // sendingCoin.clear();
+                      // setSendingCoin(0);
+                      () => navigation.goBack();
                     }}
                   >
                     <Text style={styles.textStyle}>OK</Text>

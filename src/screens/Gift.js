@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -12,6 +12,8 @@ import { FriendButton } from "../components/FriendButton";
 import TextTemplateYourCoinRerated from "../components/TextTemplateYourCoinRerated";
 import { initializeApp } from "firebase/app";
 import { getFirestore, getDoc, doc, updateDoc } from "firebase/firestore";
+import { useIsFocused } from "@react-navigation/native";
+import { Button } from "../components/Button";
 // import { getAnalytics } from "firebase/analytics";
 
 const firebaseConfig = {
@@ -43,13 +45,14 @@ export const Gift = () => {
   const [coinOwnership, setCoinOwnership] = useState(0);
   const [monthlyCoinUsage, setMonthlyCoinUsage] = useState(0);
 
-  const getYourServerData = async () => {
+  const isFocused = useIsFocused();
+
+  useEffect(async () => {
     const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
     const snapData = await getDoc(getData);
-    setCoinOwnership(snapData.data().coinOwnership);
-    setMonthlyCoinUsage(snapData.data().monthlyCoinUsage);
-  };
-  getYourServerData();
+    setCoinOwnership(Math.round(snapData.data().coinOwnership));
+    setMonthlyCoinUsage(Math.round(snapData.data().monthlyCoinUsage));
+  }, [isFocused]);
 
   const updateData = async () => {
     const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");

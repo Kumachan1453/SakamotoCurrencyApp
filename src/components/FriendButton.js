@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
   friendButton: {
     width: "95%",
     height: 80,
-    margin: 20,
+    margin: 10,
     backgroundColor: "white",
     borderWidth: 1,
     borderRadius: 10,

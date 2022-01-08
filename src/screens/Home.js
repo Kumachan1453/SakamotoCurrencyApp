@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, TextInput, ScrollView } from "react-native";
 import CircleIcon from "../components/CircleIcon";
 import TextInputTemplate from "../components/TextInputTemplate";
 import TextTemplateYourCoinRerated from "../components/TextTemplateYourCoinRerated";
 import { initializeApp } from "firebase/app";
 import { getFirestore, getDoc, doc } from "firebase/firestore";
+import { useIsFocused } from "@react-navigation/native";
 
 const firebaseConfig = {
   apiKey: "AIzaSyB6srd7jvN3hCW5gFLc9yniGimACFTeni4",
@@ -20,7 +21,6 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 export const Home = () => {
-  const YourRank = 4;
   const FirstDay = "11/1";
   const LastDay = "11/30";
 
@@ -28,14 +28,15 @@ export const Home = () => {
   const [monthlyCoinUsage, setMonthlyCoinUsage] = useState(0);
   const [ranking, setRanking] = useState("ランク外");
 
-  const getYourServerData = async () => {
+  const isFocused = useIsFocused();
+
+  useEffect(async () => {
     const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
     const snapData = await getDoc(getData);
-    setCoinOwnership(snapData.data().coinOwnership);
-    setMonthlyCoinUsage(snapData.data().monthlyCoinUsage);
-    setRanking(snapData.data().ranking);
-  };
-  getYourServerData();
+    setCoinOwnership(Math.round(snapData.data().coinOwnership));
+    setMonthlyCoinUsage(Math.round(snapData.data().monthlyCoinUsage));
+    setRanking(Math.round(snapData.data().ranking));
+  }, [isFocused]);
 
   return (
     <ScrollView>
