@@ -46,7 +46,7 @@ export const Send = () => {
     Math.round(coinOwnership - sendingCoin)
   );
   const [futureMonthlyCoinUsage, setFutureMonthlyCoinUsage] = useState(
-    monthlyCoinUsage + sendingCoin
+    Math.round(monthlyCoinUsage + sendingCoin)
   );
   const [sumCoinUsage, setSumCoinUsage] = useState(0);
 
@@ -81,13 +81,13 @@ export const Send = () => {
   useEffect(async () => {
     const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
     const snapData = await getDoc(getData);
-    setCoinOwnership(snapData.data().coinOwnership);
-    setMonthlyCoinUsage(snapData.data().monthlyCoinUsage);
+    setCoinOwnership(Math.round(snapData.data().coinOwnership));
+    setMonthlyCoinUsage(Math.round(snapData.data().monthlyCoinUsage));
   }, [updateData]);
   useEffect(() => {
     const timerId = setTimeout(() => {
-      setBalance(coinOwnership - sendingCoin);
-      setFutureMonthlyCoinUsage(monthlyCoinUsage + sendingCoin);
+      setBalance(Math.round(coinOwnership - sendingCoin));
+      setFutureMonthlyCoinUsage(Math.round(monthlyCoinUsage + sendingCoin));
     }, 0);
     return () => clearTimeout(timerId);
   }, [sendingCoin]);
@@ -148,7 +148,7 @@ export const Send = () => {
         <Text style={styles.bigText}>あなたが送るコインの額</Text>
         <View style={styles.flexDirectionRow}>
           <TextInput
-            style={styles.input}
+            style={isButtonDisabled ? styles.errorInput : styles.input}
             onChangeText={(text) =>
               setSendingCoin(parseInt(isNaN(text) ? sendingCoin : text))
             }
@@ -237,6 +237,13 @@ const styles = StyleSheet.create({
     height: 40,
     borderBottomWidth: 1,
     borderColor: "gray",
+    padding: 10,
+  },
+  errorInput: {
+    width: 230,
+    height: 40,
+    borderBottomWidth: 1.4,
+    borderColor: "red",
     padding: 10,
   },
   subText: {
