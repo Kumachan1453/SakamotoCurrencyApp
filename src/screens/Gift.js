@@ -3,10 +3,10 @@ import {
   StyleSheet,
   View,
   Text,
-  ScrollView,
   Alert,
   Modal,
   TouchableOpacity,
+  FlatList,
 } from "react-native";
 import { FriendButton } from "../components/FriendButton";
 import TextTemplateYourCoinRerated from "../components/TextTemplateYourCoinRerated";
@@ -14,6 +14,7 @@ import { initializeApp } from "firebase/app";
 import { getFirestore, getDoc, doc, updateDoc } from "firebase/firestore";
 import { useIsFocused } from "@react-navigation/native";
 import { Button } from "../components/Button";
+import ModalTemplete from "../components/ModalTemplete";
 // import { getAnalytics } from "firebase/analytics";
 
 const firebaseConfig = {
@@ -32,11 +33,17 @@ const db = getFirestore(app);
 // const analytics = getAnalytics(app);
 
 export const Gift = () => {
+  const arrayTest = [
+    { name: "Satou", sendingCoin: 1000, id: 1 },
+    { name: "Ota", sendingCoin: 5000, id: 2 },
+    { name: "Ziro", sendingCoin: 10000, id: 3 },
+  ];
+  console.log("arrayTest.sendingCoin", arrayTest.name);
   const FirstDay = "11/1";
   const LastDay = "11/30";
   const friendName = "damy-friend";
-  const giftCoin = 2000;
-  const timelimit = 3;
+  // const giftCoin = 2000;
+  // const timelimit = 3;
   const unit = "C";
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -61,8 +68,15 @@ export const Gift = () => {
     });
   };
 
+  useEffect(async () => {
+    const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
+    const snapData = await getDoc(getData);
+    setCoinOwnership(Math.round(snapData.data().coinOwnership));
+    setMonthlyCoinUsage(Math.round(snapData.data().monthlyCoinUsage));
+  }, [updateData]);
+
   return (
-    <ScrollView>
+    <>
       <View style={styles.content}>
         <TextTemplateYourCoinRerated
           letter="あなたの所持コイン数"
@@ -86,42 +100,79 @@ export const Gift = () => {
       </View>
 
       <View style={styles.centeredView}>
-        <Modal
-          animationType="fade"
-          transparent={false}
-          visible={modalVisible}
-          onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
-            setModalVisible(!modalVisible);
+        <FlatList
+          data={arrayTest}
+          renderItem={({ item }) => {
+            return (
+              <>
+                <ModalTemplete
+                  transparent={false}
+                  visible={modalVisible}
+                  onRequestClose={() => {
+                    Alert.alert("Modal has been closed.");
+                    setModalVisible(!modalVisible);
+                  }}
+                  centerText={{ item } + "Cを受け取りますか？"}
+                  subCenterText={"ありがとう"}
+                  buttonPlacement={true}
+                  leftText={"受け取らない"}
+                  rightText={"受け取る"}
+                  leftOnPress={() => {
+                    setModalVisible(!modalVisible);
+                  }}
+                  rightOnPress={() => {
+                    setModalVisible(!modalVisible);
+                    updateData();
+                    () => navigation.goBack();
+                  }}
+                />
+                {/* <Modal
+                  animationType="fade"
+                  transparent={false}
+                  visible={modalVisible}
+                  onRequestClose={() => {
+                    Alert.alert("Modal has been closed.");
+                    setModalVisible(!modalVisible);
+                  }}
+                >
+                  <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                      <Text style={styles.modalText}>
+                        {item.sendingCoin}Cを受け取りました！
+                      </Text>
+                      <Text style={styles.thanksTextStyle}>{thanksText}</Text>
+                      <TouchableOpacity
+                        style={[styles.button, styles.buttonClose]}
+                        onPress={() => {
+                          setModalVisible(!modalVisible);
+                          updateData();
+                        }}
+                      >
+                        <Text style={styles.textStyle}>OK</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </Modal> */}
+                <FriendButton
+                  onPress={() => setModalVisible(true)}
+                  friendName={item.name}
+                  coin={item.sendingCoin}
+                  unit={unit}
+                />
+              </>
+            );
           }}
-        >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Text style={styles.modalText}>
-                {giftCoin}Cを受け取りました！
-              </Text>
-              <Text style={styles.thanksTextStyle}>{thanksText}</Text>
-              <TouchableOpacity
-                style={[styles.button, styles.buttonClose]}
-                onPress={() => {
-                  setModalVisible(!modalVisible);
-                  updateData();
-                }}
-              >
-                <Text style={styles.textStyle}>OK</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
-        <FriendButton
+          keyExtractor={(item) => item.id}
+        />
+        {/* <FriendButton
           onPress={() => setModalVisible(true)}
           friendName={friendName}
           coin={giftCoin}
           timelimit={timelimit}
           unit={unit}
-        />
+        /> */}
       </View>
-    </ScrollView>
+    </>
   );
 };
 

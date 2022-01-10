@@ -17,6 +17,7 @@ import { getFirestore, getDoc, doc, updateDoc } from "firebase/firestore";
 import { useIsFocused } from "@react-navigation/native";
 import FriendList from "../screens/FriendList";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import ModalTemplete from "../components/ModalTemplete";
 
 const Stack = createNativeStackNavigator();
 
@@ -165,40 +166,26 @@ export const Send = () => {
         </View>
 
         <View style={styles.centeredView}>
-          <Modal
-            animationType="fade"
+          <ModalTemplete
             transparent={false}
             visible={modalVisible}
             onRequestClose={() => {
               Alert.alert("Modal has been closed.");
               setModalVisible(!modalVisible);
             }}
-          >
-            <View style={styles.centeredView}>
-              <View style={styles.modalView}>
-                <Text style={styles.modalText}>本当にコインを送りますか？</Text>
-                <View style={styles.twoButtonPlacement}>
-                  <TouchableOpacity
-                    style={[styles.button, styles.buttonClose]}
-                    onPress={() => setModalVisible(!modalVisible)}
-                  >
-                    <Text style={styles.textStyle}>キャンセル</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={[styles.button, styles.buttonClose]}
-                    onPress={() => {
-                      setModalVisible(!modalVisible);
-                      updateData();
-                      // setSendingCoin(0);
-                      () => navigation.goBack();
-                    }}
-                  >
-                    <Text style={styles.textStyle}>OK</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View>
-          </Modal>
+            centerText={"本当にコインを送りますか？"}
+            buttonPlacement={true}
+            leftText={"キャンセル"}
+            rightText={"OK"}
+            leftOnPress={() => {
+              setModalVisible(!modalVisible);
+            }}
+            rightOnPress={() => {
+              setModalVisible(!modalVisible);
+              updateData();
+              () => navigation.goBack();
+            }}
+          />
           <Button
             content="コインを送る"
             onPress={() => setModalVisible(true)}
@@ -266,58 +253,12 @@ const styles = StyleSheet.create({
   sendMessage: {
     marginBottom: 60,
   },
-
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0,0,0,0.3)",
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: "white",
-    borderRadius: 20,
-    padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  twoButtonPlacement: {
-    flexDirection: "row",
-  },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-  buttonOpen: {
-    backgroundColor: "#F194FF",
-  },
-  buttonClose: {
-    backgroundColor: "#2196F3",
-    width: 100,
-  },
-  textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: "center",
-  },
-  thanksTextStyle: {
-    color: "gray",
-    marginBottom: 15,
-  },
   space: {
     marginBottom: 500,
+  },
+
+  twoButtonPlacement: {
+    flexDirection: "row",
   },
 });
 

@@ -1,13 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, ScrollView, FlatList } from "react-native";
+import { StyleSheet, View, FlatList } from "react-native";
 import { FriendButton } from "../components/FriendButton";
 import { initializeApp } from "firebase/app";
-import {
-  getFirestore,
-  getDocs,
-  collection,
-  QuerySnapshot,
-} from "firebase/firestore";
+import { getFirestore, getDocs, collection } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyB6srd7jvN3hCW5gFLc9yniGimACFTeni4",
