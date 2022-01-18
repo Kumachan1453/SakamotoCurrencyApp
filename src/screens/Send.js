@@ -5,16 +5,21 @@ import {
   Text,
   TextInput,
   Alert,
-  Modal,
-  TouchableOpacity,
   ScrollView,
 } from "react-native";
 import { Button } from "../components/Button";
 import TextInputTemplate from "../components/TextInputTemplate";
 import TextTemplateYourCoinRerated from "../components/TextTemplateYourCoinRerated";
 import { initializeApp } from "firebase/app";
-import { getFirestore, getDoc, doc, updateDoc } from "firebase/firestore";
-import { useIsFocused } from "@react-navigation/native";
+import {
+  getFirestore,
+  getDoc,
+  doc,
+  updateDoc,
+  collection,
+  addDoc,
+} from "firebase/firestore";
+import { useIsFocused, useRoute } from "@react-navigation/native";
 import FriendList from "../screens/FriendList";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ModalTemplete from "../components/ModalTemplete";
@@ -34,7 +39,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-export const Send = () => {
+export const Send = ({ navigation: { navigate } }) => {
+  // console.log("params", params);
   const FirstDay = "11/1";
   const LastDay = "11/30";
   const [sendingCoin, setSendingCoin] = useState(0);
@@ -53,7 +59,28 @@ export const Send = () => {
 
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
+  const [subId, setSubId] = useState(0);
+
+  const route = useRoute();
   const isFocused = useIsFocused();
+
+  // const Sakamotos = {
+  //   name: "阪本周平",
+  //   sendingCoin: [
+  //     {
+  //       name: "田中肇",
+  //       sendingCoin: 2000,
+  //     },
+  //     {
+  //       name: "本間貞郎",
+  //       sendingCoin: 1000,
+  //     },
+  //     {
+  //       name: "本田太郎",
+  //       sendingCoin: 1000,
+  //     },
+  //   ],
+  // };
 
   useEffect(async () => {
     const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
@@ -67,8 +94,10 @@ export const Send = () => {
     const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
     if (sendingCoin < 0) {
       alert("数字が0以下です");
-    } else if (coinOwnership - sendingCoin > 0) {
+    } else if (coinOwnership - sendingCoin >= 0) {
+      setSendingCoin(sendingCoin);
       await updateDoc(getData, {
+        // sendingCoin: sendingCoin,
         coinOwnership: coinOwnership - sendingCoin,
         monthlyCoinUsage: monthlyCoinUsage + sendingCoin,
         sumCoinUsage: sumCoinUsage + sendingCoin,
@@ -79,12 +108,36 @@ export const Send = () => {
       alert("使用できない文字です");
     }
   };
+
+  const pressOkButton = () => {
+    setSubId(subId + 1);
+    console.log("subId", subId);
+  };
+
+  useEffect(async () => {
+    const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
+    const snapData = await getDoc(getData);
+    if (sendingCoin === 0 || isNaN(sendingCoin)) {
+      console.log("処理を阻止");
+    } else {
+      const sendGift = await addDoc(collection(db, "coins"), {
+        name: snapData.data().name,
+        sendingCoin: sendingCoin,
+        subId: subId,
+        userId: route.params.id,
+      });
+      console.log("Document written with ID: ", sendGift.id);
+      console.log("route.params.id", route.params.id);
+    }
+  }, [subId]);
+
   useEffect(async () => {
     const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
     const snapData = await getDoc(getData);
     setCoinOwnership(Math.round(snapData.data().coinOwnership));
     setMonthlyCoinUsage(Math.round(snapData.data().monthlyCoinUsage));
   }, [updateData]);
+
   useEffect(() => {
     const timerId = setTimeout(() => {
       setBalance(Math.round(coinOwnership - sendingCoin));
@@ -150,8 +203,9 @@ export const Send = () => {
         <View style={styles.flexDirectionRow}>
           <TextInput
             style={isButtonDisabled ? styles.errorInput : styles.input}
-            onChangeText={(text) =>
-              setSendingCoin(parseInt(isNaN(text) ? sendingCoin : text))
+            onChangeText={
+              (text) =>
+                setSendingCoin(parseInt(isNaN(text) ? sendingCoin : text)) //要確認
             }
             type="number"
             placeholder="数字を入力"
@@ -183,7 +237,8 @@ export const Send = () => {
             rightOnPress={() => {
               setModalVisible(!modalVisible);
               updateData();
-              () => navigation.goBack();
+              pressOkButton();
+              // navigate("FriendList");
             }}
           />
           <Button

@@ -37,7 +37,7 @@ export const FriendList = ({ navigation }) => {
           return (
             <FriendButton
               friendName={item.name}
-              onPress={() => navigation.navigate("Send")}
+              onPress={() => navigation.navigate("Send", item)}
             />
           );
         }}

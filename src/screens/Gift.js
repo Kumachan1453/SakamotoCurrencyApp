@@ -11,8 +11,16 @@ import {
 import { FriendButton } from "../components/FriendButton";
 import TextTemplateYourCoinRerated from "../components/TextTemplateYourCoinRerated";
 import { initializeApp } from "firebase/app";
-import { getFirestore, getDoc, doc, updateDoc } from "firebase/firestore";
-import { useIsFocused } from "@react-navigation/native";
+import {
+  getFirestore,
+  getDoc,
+  doc,
+  docs,
+  updateDoc,
+  getDocs,
+  collection,
+} from "firebase/firestore";
+import { useIsFocused, useRoute } from "@react-navigation/native";
 import { Button } from "../components/Button";
 import ModalTemplete from "../components/ModalTemplete";
 // import { getAnalytics } from "firebase/analytics";
@@ -32,13 +40,43 @@ const db = getFirestore(app);
 
 // const analytics = getAnalytics(app);
 
-export const Gift = () => {
-  const arrayTest = [
-    { name: "Satou", sendingCoin: 1000, id: 1 },
-    { name: "Ota", sendingCoin: 5000, id: 2 },
-    { name: "Ziro", sendingCoin: 10000, id: 3 },
-  ];
-  console.log("arrayTest.sendingCoin", arrayTest.name);
+export const Gift = ({ item }) => {
+  const route = useRoute();
+  const [giftListData, setGiftListData] = useState([]);
+  useEffect(async () => {
+    const sendGift = collection(db, "coins");
+    const querySnapshot = await getDocs(sendGift);
+    const array = [];
+    querySnapshot.forEach((docs) => {
+      array.push({
+        name: docs.data().name,
+        sendingCoin: docs.data().sendingCoin,
+        subId: docs.data().subId,
+        userId: docs.data().userId,
+      });
+    });
+    setGiftListData(array);
+  });
+
+  // useEffect(async () => {
+  //   const getDatas = collection(db, "users");
+  //   const querySnapshot = await getDocs(getDatas);
+  //   const array = [];
+  //   querySnapshot.forEach((docs) => {
+  //     array.push({
+  //       name: docs.data().name,
+  //       sendingCoin: docs.data().sendingCoin,
+  //       id: docs.id,
+  //     });
+  //   });
+  //   setGiftListData(array);
+  // }, []);
+  // const arrayTest = [
+  //   { name: "Satou", sendingCoin: 1000, id: 1 },
+  //   { name: "Ota", sendingCoin: 5000, id: 2 },
+  //   { name: "Ziro", sendingCoin: 10000, id: 3 },
+  // ];
+  // console.log("arrayTest[0].sendingCoin", arrayTest[0].sendingCoin);
   const FirstDay = "11/1";
   const LastDay = "11/30";
   const friendName = "damy-friend";
@@ -46,11 +84,12 @@ export const Gift = () => {
   // const timelimit = 3;
   const unit = "C";
 
-  const [modalVisible, setModalVisible] = useState(false);
-  const thanksText = "ありがとう。本当に助かった！";
+  // const [modalVisible, setModalVisible] = useState(false);
 
   const [coinOwnership, setCoinOwnership] = useState(0);
   const [monthlyCoinUsage, setMonthlyCoinUsage] = useState(0);
+
+  const [itemId, setItemId] = useState(item);
 
   const isFocused = useIsFocused();
 
@@ -61,19 +100,47 @@ export const Gift = () => {
     setMonthlyCoinUsage(Math.round(snapData.data().monthlyCoinUsage));
   }, [isFocused]);
 
-  const updateData = async () => {
-    const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
-    await updateDoc(getData, {
-      coinOwnership: coinOwnership + 1000,
-    });
-  };
-
   useEffect(async () => {
     const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
     const snapData = await getDoc(getData);
     setCoinOwnership(Math.round(snapData.data().coinOwnership));
     setMonthlyCoinUsage(Math.round(snapData.data().monthlyCoinUsage));
-  }, [updateData]);
+  }, [() => updateData()]);
+
+  // const [subId, setSubId] = useState(1);
+  // const addGiftlist = async () => {
+  //   const getData = collection(db, "users");
+  //   const snapData = await getDoc(getData);
+  //   if (snapData.data().sendingCoin === 0) {
+  //     return false;
+  //   }
+  //   setSubId(subId + 1);
+  //   setGiftListData([
+  //     {
+  //       subId: subId,
+  //       name: docs.data().name,
+  //       sendingCoin: docs.data().sendingCoin,
+  //       id: docs.id,
+  //     },
+  //   ]);
+  // };
+
+  // const filter = (item) => {
+  //   if (item.sendingCoin === 0) {
+  //     let giftFilter = giftListData.filter((list) => {
+  //       return list.id !== item.id;
+  //     });
+  //     setGiftListData(giftFilter);
+  //   }
+  // };
+  // filter();
+
+  // const deleteTask = (item) => {
+  //   let array = arrayTest.filter((task) => {
+  //     return task.id !== item.id;
+  //   });
+  //   setGiftList(array);
+  // };
 
   return (
     <>
@@ -101,76 +168,61 @@ export const Gift = () => {
 
       <View style={styles.centeredView}>
         <FlatList
-          data={arrayTest}
+          data={giftListData}
           renderItem={({ item }) => {
-            return (
-              <>
-                <ModalTemplete
-                  transparent={false}
-                  visible={modalVisible}
-                  onRequestClose={() => {
-                    Alert.alert("Modal has been closed.");
-                    setModalVisible(!modalVisible);
-                  }}
-                  centerText={{ item } + "Cを受け取りますか？"}
-                  subCenterText={"ありがとう"}
-                  buttonPlacement={true}
-                  leftText={"受け取らない"}
-                  rightText={"受け取る"}
-                  leftOnPress={() => {
-                    setModalVisible(!modalVisible);
-                  }}
-                  rightOnPress={() => {
-                    setModalVisible(!modalVisible);
-                    updateData();
-                    () => navigation.goBack();
-                  }}
-                />
-                {/* <Modal
-                  animationType="fade"
-                  transparent={false}
-                  visible={modalVisible}
-                  onRequestClose={() => {
-                    Alert.alert("Modal has been closed.");
-                    setModalVisible(!modalVisible);
-                  }}
-                >
-                  <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                      <Text style={styles.modalText}>
-                        {item.sendingCoin}Cを受け取りました！
-                      </Text>
-                      <Text style={styles.thanksTextStyle}>{thanksText}</Text>
-                      <TouchableOpacity
-                        style={[styles.button, styles.buttonClose]}
-                        onPress={() => {
-                          setModalVisible(!modalVisible);
-                          updateData();
-                        }}
-                      >
-                        <Text style={styles.textStyle}>OK</Text>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                </Modal> */}
-                <FriendButton
-                  onPress={() => setModalVisible(true)}
-                  friendName={item.name}
-                  coin={item.sendingCoin}
-                  unit={unit}
-                />
-              </>
-            );
+            const updateData = async () => {
+              const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
+              await updateDoc(getData, {
+                coinOwnership: coinOwnership + item.sendingCoin,
+              });
+              console.log("item.id -inUpdateData", item.id);
+            };
+            const onPressAction = (item) => {
+              // setModalVisible(true);
+              setItemId(item.id);
+              updateData();
+              // deleteTask(item);
+              console.log("item.id -inOnPressAction", item.id);
+            };
+            // console.log("item.sendingCoin", item.sendingCoin);
+            if (item.userId === "LGXdrQNczf95rT90Tp2R") {
+              return (
+                <>
+                  {/* <ModalTemplete
+                    transparent={false}
+                    visible={modalVisible}
+                    onRequestClose={() => {
+                      Alert.alert("Modal has been closed.");
+                      setModalVisible(!modalVisible);
+                    }}
+                    centerText={{ item } + "Cを受け取りますか？"}
+                    // subCenterText={subCenterText}
+                    buttonPlacement={true}
+                    leftText={"受け取らない"}
+                    rightText={"受け取る"}
+                    leftOnPress={() => {
+                      setModalVisible(!modalVisible);
+                    }}
+                    rightOnPress={() => {
+                      setModalVisible(!modalVisible);
+                      // deleteTask(item);
+                      setItemId(item.id);
+                      updateData();
+                      console.log("item.id -inRightOnPress", item.id);
+                    }}
+                  /> */}
+                  <FriendButton
+                    onPress={() => onPressAction(item)}
+                    friendName={item.name}
+                    coin={item.sendingCoin}
+                    unit={unit}
+                  />
+                </>
+              );
+            }
           }}
           keyExtractor={(item) => item.id}
         />
-        {/* <FriendButton
-          onPress={() => setModalVisible(true)}
-          friendName={friendName}
-          coin={giftCoin}
-          timelimit={timelimit}
-          unit={unit}
-        /> */}
       </View>
     </>
   );
