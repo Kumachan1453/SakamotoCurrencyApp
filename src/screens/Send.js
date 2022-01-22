@@ -40,7 +40,6 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 export const Send = ({ navigation: { navigate } }) => {
-  // console.log("params", params);
   const FirstDay = "11/1";
   const LastDay = "11/30";
   const [sendingCoin, setSendingCoin] = useState(0);
@@ -63,24 +62,6 @@ export const Send = ({ navigation: { navigate } }) => {
 
   const route = useRoute();
   const isFocused = useIsFocused();
-
-  // const Sakamotos = {
-  //   name: "阪本周平",
-  //   sendingCoin: [
-  //     {
-  //       name: "田中肇",
-  //       sendingCoin: 2000,
-  //     },
-  //     {
-  //       name: "本間貞郎",
-  //       sendingCoin: 1000,
-  //     },
-  //     {
-  //       name: "本田太郎",
-  //       sendingCoin: 1000,
-  //     },
-  //   ],
-  // };
 
   useEffect(async () => {
     const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
@@ -111,23 +92,26 @@ export const Send = ({ navigation: { navigate } }) => {
 
   const pressOkButton = () => {
     setSubId(subId + 1);
-    console.log("subId", subId);
+    // console.log("subId", subId);
   };
 
   useEffect(async () => {
     const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
     const snapData = await getDoc(getData);
     if (sendingCoin === 0 || isNaN(sendingCoin)) {
-      console.log("処理を阻止");
+      // console.log("処理を阻止");
     } else {
       const sendGift = await addDoc(collection(db, "coins"), {
         name: snapData.data().name,
         sendingCoin: sendingCoin,
+        // id: sendGift.id,
         subId: subId,
-        userId: route.params.id,
+        recipientUserId: route.params.id,
       });
-      console.log("Document written with ID: ", sendGift.id);
-      console.log("route.params.id", route.params.id);
+      // collection.doc(id).set({
+      //   ...sendGift,
+      // });
+      // console.log("Document written with ID: ", sendGift.id);
     }
   }, [subId]);
 

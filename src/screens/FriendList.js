@@ -29,6 +29,7 @@ export const FriendList = ({ navigation }) => {
     setListData(array);
   }, []);
 
+  // console.log("listData", listData);
   return (
     <View style={styles.content}>
       <FlatList
