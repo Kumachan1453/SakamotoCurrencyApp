@@ -11,16 +11,19 @@ const config = {
 };
 firebase.initializeApp(config);
 
-export const Login = (email, password) => {
+// ユーザ登録
+export const SignUp = (email, password) => {
   firebase
     .auth()
-    .signInWithEmailAndPassword(email, password)
-    .then((response) => {
-      alert("Login Success!");
+    .createUserWithEmailAndPassword(email, password)
+    .then((user) => {
+      if (user) {
+        console.log("Success to Signup");
+      }
     })
     .catch((error) => {
-      alert(error.message);
+      console.log(error);
     });
 };
 
-export default Login;
+export default SignUp;
