@@ -9,29 +9,29 @@ import { auth } from "./src/components/Firebase";
 
 const Stack = createNativeStackNavigator();
 
+// export default function App() {
+//   useEffect(() => {
+//     const unsubscribe = onAuthStateChanged(auth, (user) => {
+//       if (user) {
+//         console.log(user);
+//       }
+//     });
+//     return () => unsubscribe();
+//   }, []);
+//   return (
+//     <NavigationContainer>
+//       <Stack.Navigator>
+//         <Stack.Screen name="Register" component={RegisterScreen} />
+//         <Stack.Screen name="ScreenNavTab" component={ScreenNavTab} />
+//       </Stack.Navigator>
+//     </NavigationContainer>
+//   );
+// }
 export default function App() {
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        console.log(user);
-      }
-    });
-    return () => unsubscribe();
-  }, []);
   return (
+    // <RegisterScreen />
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Register" component={RegisterScreen} />
-        <Stack.Screen name="ScreenNavTab" component={ScreenNavTab} />
-      </Stack.Navigator>
+      <ScreenNavTab />
     </NavigationContainer>
   );
 }
-// export default function App() {
-//   return (
-//     <RegisterScreen />
-//     // <NavigationContainer>
-//     //   <ScreenNavTab />
-//     // </NavigationContainer>
-//   );
-// }
