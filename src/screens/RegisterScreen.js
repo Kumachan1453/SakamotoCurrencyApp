@@ -6,24 +6,8 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
 } from "react-native";
-import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-// import { auth } from "./Firebase";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyB6srd7jvN3hCW5gFLc9yniGimACFTeni4",
-  authDomain: "sakamotocurrencyapp.firebaseapp.com",
-  projectId: "sakamotocurrencyapp",
-  storageBucket: "sakamotocurrencyapp.appspot.com",
-  messagingSenderId: "367955895931",
-  appId: "1:367955895931:web:7041aac36e6138ddf764de",
-  measurementId: "${config.measurementId}",
-};
-
-const app = initializeApp(firebaseConfig);
-
-export const auth = getAuth(app);
+import { auth } from "../components/Firebase";
 
 export const RegisterScreen = () => {
   const [email, setEmail] = useState("");
@@ -31,9 +15,9 @@ export const RegisterScreen = () => {
   const handleRegister = async () => {
     try {
       const user = await createUserWithEmailAndPassword(auth, email, password);
-      console.log(user);
+      console.log("user", user);
     } catch (error) {
-      console.log(error.message);
+      console.log("error.message", error.message);
     }
   };
 
