@@ -27,6 +27,7 @@ const Stack = createNativeStackNavigator();
 //     </NavigationContainer>
 //   );
 // }
+
 export default function App() {
   return (
     // <RegisterScreen />
