@@ -16,6 +16,7 @@
     "firebase": "^9.6.0",
     "firebase-auth": "^0.1.2",
     "firebaseui": "^6.0.0",
+    "i": "^0.3.7",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-native": "0.64.3",

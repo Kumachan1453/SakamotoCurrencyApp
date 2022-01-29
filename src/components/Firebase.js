@@ -1,4 +1,3 @@
-import firebase from "firebase";
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
@@ -9,7 +8,7 @@ const firebaseConfig = {
   storageBucket: "sakamotocurrencyapp.appspot.com",
   messagingSenderId: "367955895931",
   appId: "1:367955895931:web:7041aac36e6138ddf764de",
-  measurementId: "G-YH0TYRRGQD",
+  measurementId: "${config.measurementId}",
 };
 
 const app = initializeApp(firebaseConfig);
