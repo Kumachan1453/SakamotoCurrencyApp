@@ -7,18 +7,17 @@ import {
   KeyboardAvoidingView,
   StyleSheet,
 } from "react-native";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../components/Firebase";
 
-export const RegisterScreen = () => {
+export const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const handleRegister = async () => {
+  const handleLogin = async () => {
     try {
-      const user = await createUserWithEmailAndPassword(auth, email, password);
-      console.log("user", user);
+      await signInWithEmailAndPassword(auth, email, password);
     } catch (error) {
-      console.log("error.message", error.message);
+      console.log(error.message);
     }
   };
 
@@ -27,7 +26,7 @@ export const RegisterScreen = () => {
       behavior="padding"
       style={styles.keyboardAvoidingView}
     >
-      <Text style={styles.textUsersRegister}>ユーザ登録画面</Text>
+      <Text style={styles.textUsersLogin}>ログイン画面</Text>
       <View style={styles.view}>
         <TextInput
           style={styles.textInputEmail}
@@ -50,10 +49,10 @@ export const RegisterScreen = () => {
       </View>
       <TouchableOpacity
         style={styles.touchableOpacity}
-        onPress={handleRegister}
+        onPress={handleLogin}
         disabled={!email || !password}
       >
-        <Text style={styles.textStyleInTouchableOpacity}>登録する</Text>
+        <Text style={styles.textStyleInTouchableOpacity}>ログイン</Text>
       </TouchableOpacity>
     </KeyboardAvoidingView>
   );
@@ -65,7 +64,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flex: 1,
   },
-  textUsersRegister: {
+  textUsersLogin: {
     fontSize: 20,
     marginBottom: 20,
   },
@@ -93,5 +92,3 @@ const styles = StyleSheet.create({
     color: "white",
   },
 });
-
-export default RegisterScreen;

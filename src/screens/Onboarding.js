@@ -1,12 +1,13 @@
 // import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
-import { View, Text } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 // import { ScreenNavTab } from "./src/screens/ScreenNavTab";
 import { Test } from "../screens/Test";
 import { RegisterScreen } from "../screens/RegisterScreen";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../components/Firebase";
+import { LoginScreen } from "./LoginScreen";
+import { LoadingScreen } from "../components/LoadingScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -27,24 +28,17 @@ export const Onboarding = () => {
     return () => unsubscribe();
   }, []);
   if (loading) {
-    return (
-      <View
-        style={{
-          justifyContent: "center",
-          alignItems: "center",
-          flex: 1,
-        }}
-      >
-        <Text>Loading...</Text>
-      </View>
-    );
+    return <LoadingScreen />;
   } else {
     return (
       <Stack.Navigator>
         {user ? (
-          <Stack.Screen name="Test" component={Test} />
+          <Stack.Screen name="Home" component={Test} />
         ) : (
-          <Stack.Screen name="Register" component={RegisterScreen} />
+          <>
+            <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="Register" component={RegisterScreen} />
+          </>
         )}
       </Stack.Navigator>
     );
