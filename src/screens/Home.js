@@ -3,8 +3,11 @@ import { StyleSheet, View, Text, TextInput, ScrollView } from "react-native";
 import CircleIcon from "../components/CircleIcon";
 import TextInputTemplate from "../components/TextInputTemplate";
 import TextTemplateYourCoinRerated from "../components/TextTemplateYourCoinRerated";
+import LogoutButton from "../components/LogoutButton";
 import { initializeApp } from "firebase/app";
 import { getFirestore, getDoc, doc } from "firebase/firestore";
+import { signOut } from "firebase/auth";
+import { auth } from "../components/Firebase";
 import { useIsFocused } from "@react-navigation/native";
 
 const firebaseConfig = {
@@ -37,6 +40,16 @@ export const Home = () => {
     setMonthlyCoinUsage(Math.round(snapData.data().monthlyCoinUsage));
     setRanking(Math.round(snapData.data().ranking));
   }, [isFocused]);
+
+  const handleLogout = () => {
+    signOut(auth)
+      .then(() => {
+        console.log("logout");
+      })
+      .catch((error) => {
+        console.log("error.message", error.message);
+      });
+  };
 
   return (
     <ScrollView>
@@ -75,6 +88,9 @@ export const Home = () => {
           unit="位"
         />
         <View style={styles.line} />
+        <View>
+          <LogoutButton onPress={handleLogout} />
+        </View>
       </View>
     </ScrollView>
   );

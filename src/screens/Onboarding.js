@@ -1,8 +1,6 @@
-// import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-// import { ScreenNavTab } from "./src/screens/ScreenNavTab";
-import { Test } from "../screens/Test";
+import { ScreenNavTab } from "../screens/ScreenNavTab";
 import { RegisterScreen } from "../screens/RegisterScreen";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../components/Firebase";
@@ -31,9 +29,13 @@ export const Onboarding = () => {
     return <LoadingScreen />;
   } else {
     return (
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
         {user ? (
-          <Stack.Screen name="Home" component={Test} />
+          <Stack.Screen name="ScreenNavTab" component={ScreenNavTab} />
         ) : (
           <>
             <Stack.Screen name="Login" component={LoginScreen} />
