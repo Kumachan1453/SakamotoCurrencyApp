@@ -5,7 +5,6 @@ import { Home } from "./Home";
 import { Ionicons } from "@expo/vector-icons";
 import Gift from "./Gift";
 import Ranking from "./Ranking";
-import { initializeApp } from "firebase/app";
 import {
   getFirestore,
   collection,
@@ -14,19 +13,8 @@ import {
   doc,
   updateDoc,
 } from "firebase/firestore";
+import { db } from "../components/Firebase";
 import { useEffect } from "react/cjs/react.development";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyB6srd7jvN3hCW5gFLc9yniGimACFTeni4",
-  authDomain: "sakamotocurrencyapp.firebaseapp.com",
-  projectId: "sakamotocurrencyapp",
-  storageBucket: "sakamotocurrencyapp.appspot.com",
-  messagingSenderId: "367955895931",
-  appId: "1:367955895931:web:7041aac36e6138ddf764de",
-  measurementId: "${config.measurementId}",
-};
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
 
 const Tab = createBottomTabNavigator();
 

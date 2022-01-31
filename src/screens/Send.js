@@ -10,34 +10,14 @@ import {
 import { Button } from "../components/Button";
 import TextInputTemplate from "../components/TextInputTemplate";
 import TextTemplateYourCoinRerated from "../components/TextTemplateYourCoinRerated";
-import { initializeApp } from "firebase/app";
-import {
-  getFirestore,
-  getDoc,
-  doc,
-  updateDoc,
-  collection,
-  addDoc,
-} from "firebase/firestore";
+import { getDoc, doc, updateDoc, collection, addDoc } from "firebase/firestore";
 import { useIsFocused, useRoute } from "@react-navigation/native";
 import FriendList from "../screens/FriendList";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ModalTemplete from "../components/ModalTemplete";
+import { db } from "../components/Firebase";
 
 const Stack = createNativeStackNavigator();
-
-const firebaseConfig = {
-  apiKey: "AIzaSyB6srd7jvN3hCW5gFLc9yniGimACFTeni4",
-  authDomain: "sakamotocurrencyapp.firebaseapp.com",
-  projectId: "sakamotocurrencyapp",
-  storageBucket: "sakamotocurrencyapp.appspot.com",
-  messagingSenderId: "367955895931",
-  appId: "1:367955895931:web:7041aac36e6138ddf764de",
-  measurementId: "${config.measurementId}",
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
 
 export const Send = ({ navigation: { navigate } }) => {
   const FirstDay = "11/1";

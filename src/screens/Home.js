@@ -4,24 +4,11 @@ import CircleIcon from "../components/CircleIcon";
 import TextInputTemplate from "../components/TextInputTemplate";
 import TextTemplateYourCoinRerated from "../components/TextTemplateYourCoinRerated";
 import LogoutButton from "../components/LogoutButton";
-import { initializeApp } from "firebase/app";
-import { getFirestore, getDoc, doc } from "firebase/firestore";
+import { getDoc, doc } from "firebase/firestore";
 import { signOut } from "firebase/auth";
 import { auth } from "../components/Firebase";
+import { db } from "../components/Firebase";
 import { useIsFocused } from "@react-navigation/native";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyB6srd7jvN3hCW5gFLc9yniGimACFTeni4",
-  authDomain: "sakamotocurrencyapp.firebaseapp.com",
-  projectId: "sakamotocurrencyapp",
-  storageBucket: "sakamotocurrencyapp.appspot.com",
-  messagingSenderId: "367955895931",
-  appId: "1:367955895931:web:7041aac36e6138ddf764de",
-  measurementId: "${config.measurementId}",
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
 
 export const Home = () => {
   const FirstDay = "11/1";

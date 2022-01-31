@@ -10,9 +10,7 @@ import {
 } from "react-native";
 import { FriendButton } from "../components/FriendButton";
 import TextTemplateYourCoinRerated from "../components/TextTemplateYourCoinRerated";
-import { initializeApp } from "firebase/app";
 import {
-  getFirestore,
   getDoc,
   doc,
   updateDoc,
@@ -21,20 +19,8 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 import { useIsFocused } from "@react-navigation/native";
+import { db } from "../components/Firebase";
 import ModalTemplete from "../components/ModalTemplete";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyB6srd7jvN3hCW5gFLc9yniGimACFTeni4",
-  authDomain: "sakamotocurrencyapp.firebaseapp.com",
-  projectId: "sakamotocurrencyapp",
-  storageBucket: "sakamotocurrencyapp.appspot.com",
-  messagingSenderId: "367955895931",
-  appId: "1:367955895931:web:7041aac36e6138ddf764de",
-  measurementId: "${config.measurementId}",
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
 
 export const Gift = () => {
   const [giftListData, setGiftListData] = useState([]);
