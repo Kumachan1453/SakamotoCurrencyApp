@@ -10,7 +10,7 @@ import {
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../components/Firebase";
 
-export const LoginScreen = () => {
+export const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const handleLogin = async () => {
@@ -53,6 +53,12 @@ export const LoginScreen = () => {
         disabled={!email || !password}
       >
         <Text style={styles.textStyleInTouchableOpacity}>ログイン</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={{ marginTop: 10 }}
+        onPress={() => navigation.navigate("Register")}
+      >
+        <Text>ユーザ登録はこちら</Text>
       </TouchableOpacity>
     </KeyboardAvoidingView>
   );

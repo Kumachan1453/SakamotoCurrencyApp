@@ -5,7 +5,7 @@ import TextInputTemplate from "../components/TextInputTemplate";
 import TextTemplateYourCoinRerated from "../components/TextTemplateYourCoinRerated";
 import LogoutButton from "../components/LogoutButton";
 import { getDoc, doc } from "firebase/firestore";
-import { signOut } from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../components/Firebase";
 import { db } from "../components/Firebase";
 import { useIsFocused } from "@react-navigation/native";
@@ -19,6 +19,15 @@ export const Home = () => {
   const [ranking, setRanking] = useState("ランク外");
 
   const isFocused = useIsFocused();
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      const uid = user.uid;
+      console.log("user.uid", user.uid);
+    } else {
+      console.log("else");
+    }
+  });
 
   useEffect(async () => {
     const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");

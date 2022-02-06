@@ -1,18 +1,5 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { signOut } from "firebase/auth";
-import { auth } from "../components/Firebase";
-
-const handleLogout = () => {
-  signOut(auth)
-    .then(() => {
-      console.log("logout");
-    })
-    .catch((error) => {
-      console.log("error.message", error.message);
-    });
-};
-export const Logout = handleLogout();
 
 export const LogoutButton = ({ onPress }) => {
   return (

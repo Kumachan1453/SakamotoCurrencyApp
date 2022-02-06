@@ -1,11 +1,18 @@
 import React from "react";
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  FlatList,
+} from "react-native";
 import CircleIcon from "./CircleIcon";
 
-export const FriendButton = ({ friendName, onPress, coin, unit }) => {
+export const FriendButton = ({ friendName, onPress, coin, unit, ranking }) => {
   return (
     <TouchableOpacity onPress={onPress} style={styles.friendButton}>
       <View style={styles.contentsPlacement}>
+        <Text style={styles.listStyleText}>{ranking}</Text>
         <CircleIcon />
         <Text style={styles.listStyleText}>{friendName}</Text>
         <View style={styles.coinTextPlacement}>
