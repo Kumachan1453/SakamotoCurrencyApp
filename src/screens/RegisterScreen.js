@@ -6,36 +6,114 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   StyleSheet,
+  Alert,
 } from "react-native";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth, db } from "../components/Firebase";
-import { addDoc, collection } from "firebase/firestore";
+import { jpCheck, blankCheck, checkEmailFormat } from "../components/IfText";
+import { auth } from "../components/Firebase";
+// import { addDoc, collection } from "firebase/firestore";
+// import { MailTextInput } from "../components/MailTextInput";
 
 export const RegisterScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [userName, setUserName] = useState("");
-  const [coinOwnership, setCoinOwnership] = useState(10000);
-  const [sendingCoin, setSendingCoin] = useState(0);
-  const [ranking, setRanking] = useState(0);
-  const [sumCoinUsage, setSumCoinUsage] = useState(0);
-  const [updateNumber, setUpdateNumber] = useState(0);
-  const handleRegister = async () => {
-    try {
-      const user = await createUserWithEmailAndPassword(auth, email, password);
-      const addUser = await addDoc(collection(db, "users"), {
-        name: userName,
-        email: email,
-        password: password,
-        coinOwnership: coinOwnership,
-        sendingCoin: sendingCoin,
-        ranking: ranking,
-        sumCoinUsage: sumCoinUsage,
-        updateNumber: updateNumber,
-      });
-      console.log("uid", uid);
-    } catch (error) {
-      console.log("error.message", error.message);
+  // const [userName, setUserName] = useState("");
+  // const [coinOwnership, setCoinOwnership] = useState(10000);
+  // const [sendingCoin, setSendingCoin] = useState(0);
+  // const [ranking, setRanking] = useState(0);
+  // const [sumCoinUsage, setSumCoinUsage] = useState(0);
+  // const [updateNumber, setUpdateNumber] = useState(0);
+  // const handleRegister = async () => {
+  //   try {
+  //     const user = await createUserWithEmailAndPassword(auth, email, password);
+  //     const addUser = await addDoc(collection(db, "users"), {
+  //       name: userName,
+  //       email: email,
+  //       password: password,
+  //       coinOwnership: coinOwnership,
+  //       sendingCoin: sendingCoin,
+  //       ranking: ranking,
+  //       sumCoinUsage: sumCoinUsage,
+  //       updateNumber: updateNumber,
+  //     });
+  //     console.log("uid", uid);
+  //   } catch (error) {
+  //     alert("エラーが発生しました");
+  //     console.log("error.message", error.message);
+  //   }
+  // };
+  const signUp = (email, password) => {
+    const isJapanese = jpCheck(email);
+    const isBlankEmail = blankCheck(email);
+    const isBlankPassword = blankCheck(password);
+    // const isBlankConfirmPassword = blankCheck(confirmPassword);
+    const isFormatAddress = checkEmailFormat(email);
+    // const isMatchPassword = password !== confirmPassword;
+    if (
+      isJapanese ||
+      isBlankEmail ||
+      isBlankPassword
+      // isFormatAddress
+      // isBlankConfirmPassword ||
+      // !isMatchPassword
+    ) {
+      Alert.alert("入力に誤りがあります。正しく入力してください");
+      return;
+    } else {
+      const handleRegister = async () => {
+        try {
+          const user = await createUserWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
+          console.log("user", user);
+        } catch (error) {
+          // alert("エラーが発生しました");
+          // console.log("error.message", error.message);
+          if (
+            error.message ===
+            "The email address is already in use by another account."
+          ) {
+            Alert.alert("すでに登録されているメールアドレスです。");
+          } else if (
+            error.message === "Password should be at least 6 characters"
+          ) {
+            Alert.alert("パスワードは6文字以上で登録してください。");
+          } else {
+            Alert.alert("エラーです。異る入力内容でもう一度お試しください");
+            console.log(error.message);
+            console.log("user", user);
+          }
+        }
+      };
+      handleRegister();
+      // firebase
+      //   .auth()
+      //   .createUserWithEmailAndPassword(email, password)
+      // .then((user) => {
+      //   if (user) {
+      //     Alert.alert("アカウントの登録が完了しました");
+      //     // dispatch(
+      //     //   signInAction({ userEmail: email, userPassword: password })
+      //     // );
+      //     return;
+      //   }
+      // .catch((error) => {
+      // if (
+      //   error.message ===
+      //   "The email address is already in use by another account."
+      // ) {
+      //   Alert.alert("すでに登録されているメールアドレスです。");
+      // } else if (
+      //   error.message === "Password should be at least 6 characters"
+      // ) {
+      //   Alert.alert("パスワードは6文字以上で登録してください。");
+      // } else {
+      //   Alert.alert("エラーです。異る入力内容でもう一度お試しください");
+      //   console.log(error.message);
+      // }
+      // });
     }
   };
 
@@ -65,7 +143,7 @@ export const RegisterScreen = () => {
           autoCapitalize="none"
         />
       </View>
-      <View style={styles.view}>
+      {/* <View style={styles.view}>
         <TextInput
           style={styles.textInput}
           onChangeText={setUserName}
@@ -73,11 +151,11 @@ export const RegisterScreen = () => {
           placeholder="名前を入力してください"
           autoCapitalize="none"
         />
-      </View>
+      </View> */}
       <TouchableOpacity
         style={styles.touchableOpacity}
-        onPress={handleRegister}
-        disabled={!email || !password || !userName}
+        onPress={signUp}
+        disabled={!email || !password}
       >
         <Text style={styles.textStyleInTouchableOpacity}>登録する</Text>
       </TouchableOpacity>

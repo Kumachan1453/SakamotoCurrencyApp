@@ -35,6 +35,7 @@ export const Gift = () => {
         subId: docs.data().subId,
         recipientUserId: docs.data().recipientUserId,
         id: docs.id,
+        time: docs.data().time,
       });
     });
     setGiftListData(array);
@@ -54,14 +55,7 @@ export const Gift = () => {
     const snapData = await getDoc(getData);
     setCoinOwnership(Math.round(snapData.data().coinOwnership));
     setMonthlyCoinUsage(Math.round(snapData.data().monthlyCoinUsage));
-  }, [isFocused]);
-
-  useEffect(async () => {
-    const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
-    const snapData = await getDoc(getData);
-    setCoinOwnership(Math.round(snapData.data().coinOwnership));
-    setMonthlyCoinUsage(Math.round(snapData.data().monthlyCoinUsage));
-  }, [() => updateData()]);
+  }, [isFocused, () => updateData()]);
 
   const updateData = async (item) => {
     const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
@@ -140,6 +134,7 @@ export const Gift = () => {
                     friendName={item.name}
                     coin={item.sendingCoin}
                     unit={unit}
+                    time={item.time}
                   />
                 </>
               );

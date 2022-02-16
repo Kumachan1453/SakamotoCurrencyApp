@@ -87,6 +87,7 @@ export const Send = ({ navigation: { navigate } }) => {
         // id: sendGift.id,
         subId: subId,
         recipientUserId: route.params.id,
+        time: new Date().toLocaleString(),
       });
       // collection.doc(id).set({
       //   ...sendGift,

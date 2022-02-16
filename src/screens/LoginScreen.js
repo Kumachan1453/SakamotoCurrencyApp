@@ -17,6 +17,7 @@ export const LoginScreen = ({ navigation }) => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
     } catch (error) {
+      alert("エラーが発生しました");
       console.log(error.message);
     }
   };

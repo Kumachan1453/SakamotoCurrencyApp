@@ -8,16 +8,28 @@ import {
 } from "react-native";
 import CircleIcon from "./CircleIcon";
 
-export const FriendButton = ({ friendName, onPress, coin, unit, ranking }) => {
+export const FriendButton = ({
+  friendName,
+  onPress,
+  coin,
+  unit,
+  ranking,
+  time,
+}) => {
   return (
     <TouchableOpacity onPress={onPress} style={styles.friendButton}>
-      <View style={styles.contentsPlacement}>
-        <Text style={styles.listStyleText}>{ranking}</Text>
-        <CircleIcon />
-        <Text style={styles.listStyleText}>{friendName}</Text>
-        <View style={styles.coinTextPlacement}>
-          <Text style={styles.coinText}>{coin}</Text>
-          <Text style={styles.coinText}>{unit}</Text>
+      <View>
+        <View style={styles.contentsPlacement}>
+          <Text style={styles.listStyleText}>{ranking}</Text>
+          <CircleIcon />
+          <Text style={styles.listStyleText}>{friendName}</Text>
+          <View style={styles.coinTextPlacement}>
+            <Text style={styles.coinText}>{coin}</Text>
+            <Text style={styles.coinText}>{unit}</Text>
+          </View>
+        </View>
+        <View>
+          <Text>{time}</Text>
         </View>
       </View>
     </TouchableOpacity>

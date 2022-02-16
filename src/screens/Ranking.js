@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, FlatList } from "react-native";
 import { FriendButton } from "../components/FriendButton";
 import TextTemplateYourCoinRerated from "../components/TextTemplateYourCoinRerated";
-import { getDocs, collection } from "firebase/firestore";
+import { doc, getDoc, getDocs, collection } from "firebase/firestore";
 import { db } from "../components/Firebase";
 import { useIsFocused } from "@react-navigation/native";
 
@@ -15,8 +15,10 @@ export const Ranking = () => {
   // const unit = "C";
 
   // const [ranking, setRanking] = useState(0);
-
+  const [coinOwnership, setCoinOwnership] = useState(0);
+  const [monthlyCoinUsage, setMonthlyCoinUsage] = useState(0);
   const [rankingListData, setRankingListData] = useState([]);
+  const [ranking, setRanking] = useState("ランク外");
   useEffect(async () => {
     const getDatas = collection(db, "users");
     const rankingQuerySnapshot = await getDocs(getDatas);
@@ -33,6 +35,13 @@ export const Ranking = () => {
   }, []);
 
   const isFocused = useIsFocused();
+  useEffect(async () => {
+    const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
+    const snapData = await getDoc(getData);
+    setCoinOwnership(Math.round(snapData.data().coinOwnership));
+    setMonthlyCoinUsage(Math.round(snapData.data().monthlyCoinUsage));
+    setRanking(Math.round(snapData.data().ranking));
+  }, [isFocused]);
 
   rankingListData.monthlyCoinUsage = rankingListData.sort((a, b) => {
     let x = a["monthlyCoinUsage"];
@@ -45,20 +54,20 @@ export const Ranking = () => {
     }
     return 0;
   });
-  let ranking, tmp;
+  let tmp;
   rankingListData.monthlyCoinUsage.forEach((item, index) => {
     if (item.monthlyCoinUsage !== tmp) {
-      ranking = index + 1;
+      item.ranking = index + 1;
       tmp = item.monthlyCoinUsage;
     }
-    console.log(
-      "ranking:",
-      ranking,
-      ", name:",
-      item.name,
-      ", monthlyCoinUsage:",
-      item.monthlyCoinUsage
-    );
+    // console.log(
+    //   "item.ranking:",
+    //   item.ranking,
+    //   ", name:",
+    //   item.name,
+    //   ", monthlyCoinUsage:",
+    //   item.monthlyCoinUsage
+    // );
   });
 
   // let scores = [
@@ -91,7 +100,6 @@ export const Ranking = () => {
 
   return (
     <View style={styles.content}>
-      <Text>test</Text>
       <FlatList
         data={rankingListData}
         renderItem={({ item }) => {
