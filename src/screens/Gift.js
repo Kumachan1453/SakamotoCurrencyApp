@@ -66,7 +66,11 @@ export const Gift = () => {
     console.log("updateData-B");
   };
   const deleteData = async (item) => {
-    console.log("item.id", item.id);
+    // const array = giftListData.filter((task) => {
+    //   return task.id !== item.id;
+    // });
+    // setGiftListData(array);
+    // console.log("task.id", task.id);
     await deleteDoc(doc(db, "coins", item.id));
   };
   const onPressAction = async (item) => {
@@ -149,9 +153,9 @@ export const Gift = () => {
 };
 
 const styles = StyleSheet.create({
-  content: {
-    alignItems: "center",
-  },
+  // content: {
+  //   alignItems: "center",
+  // },
   bigText: {
     fontWeight: "bold",
     fontSize: 20,

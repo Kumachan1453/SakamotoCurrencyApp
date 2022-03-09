@@ -2,12 +2,15 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, View, FlatList } from "react-native";
 import { FriendButton } from "../components/FriendButton";
 import { db } from "../components/Firebase";
-import { getDocs, collection } from "firebase/firestore";
+import { getDocs, collection, query, where } from "firebase/firestore";
 
 export const FriendList = ({ navigation }) => {
   const [listData, setListData] = useState([]);
   useEffect(async () => {
-    const getDatas = collection(db, "users");
+    const getDatas = query(
+      collection(db, "users")
+      // where("8hj8oNjxxBVwK9zUunE6", "==", false)
+    );
     const querySnapshot = await getDocs(getDatas);
     const array = [];
     querySnapshot.forEach((docs) => {
@@ -16,7 +19,6 @@ export const FriendList = ({ navigation }) => {
     setListData(array);
   }, []);
 
-  // console.log("listData", listData);
   return (
     <View style={styles.content}>
       <FlatList

@@ -2,23 +2,23 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, FlatList } from "react-native";
 import { FriendButton } from "../components/FriendButton";
 import TextTemplateYourCoinRerated from "../components/TextTemplateYourCoinRerated";
-import { doc, getDoc, getDocs, collection } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  getDocs,
+  updateDoc,
+  collection,
+} from "firebase/firestore";
 import { db } from "../components/Firebase";
 import { useIsFocused } from "@react-navigation/native";
 
 export const Ranking = () => {
   const FirstDay = "11/1";
   const LastDay = "11/30";
-  // const YourCoinUsage = 20000;
-  // const friendName = "damy-friend";
-  // const sumUsageCoin = 40000000;
-  // const unit = "C";
-
-  // const [ranking, setRanking] = useState(0);
   const [coinOwnership, setCoinOwnership] = useState(0);
   const [monthlyCoinUsage, setMonthlyCoinUsage] = useState(0);
   const [rankingListData, setRankingListData] = useState([]);
-  const [ranking, setRanking] = useState("ランク外");
+  const [ranking, setRanking] = useState(0);
   useEffect(async () => {
     const getDatas = collection(db, "users");
     const rankingQuerySnapshot = await getDocs(getDatas);
@@ -35,17 +35,10 @@ export const Ranking = () => {
   }, []);
 
   const isFocused = useIsFocused();
-  useEffect(async () => {
-    const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
-    const snapData = await getDoc(getData);
-    setCoinOwnership(Math.round(snapData.data().coinOwnership));
-    setMonthlyCoinUsage(Math.round(snapData.data().monthlyCoinUsage));
-    setRanking(Math.round(snapData.data().ranking));
-  }, [isFocused]);
 
   rankingListData.monthlyCoinUsage = rankingListData.sort((a, b) => {
-    let x = a["monthlyCoinUsage"];
-    let y = b["monthlyCoinUsage"];
+    const x = a["monthlyCoinUsage"];
+    const y = b["monthlyCoinUsage"];
     if (x > y) {
       return -1;
     }
@@ -59,16 +52,32 @@ export const Ranking = () => {
     if (item.monthlyCoinUsage !== tmp) {
       item.ranking = index + 1;
       tmp = item.monthlyCoinUsage;
+      // const updateData = async () => {
+      //   await updateDoc(collection(db, "users"), {
+      //     ranking: item.ranking,
+      //   });
+      // };
+      // updateData();
     }
-    // console.log(
-    //   "item.ranking:",
-    //   item.ranking,
-    //   ", name:",
-    //   item.name,
-    //   ", monthlyCoinUsage:",
-    //   item.monthlyCoinUsage
-    // );
+    console.log(
+      "item.ranking:",
+      item.ranking,
+      "tmp",
+      tmp,
+      ", item.name:",
+      item.name,
+      ", item.monthlyCoinUsage:",
+      item.monthlyCoinUsage
+    );
   });
+
+  useEffect(async () => {
+    const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
+    const snapData = await getDoc(getData);
+    setCoinOwnership(Math.round(snapData.data().coinOwnership));
+    setMonthlyCoinUsage(Math.round(snapData.data().monthlyCoinUsage));
+    setRanking(Math.round(snapData.data().ranking));
+  }, [isFocused]);
 
   // let scores = [
   //   { score: 10, name: "○○○○" },

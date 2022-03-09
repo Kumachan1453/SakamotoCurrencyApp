@@ -50,14 +50,20 @@ export const Home = () => {
   return (
     <ScrollView>
       <View style={styles.content}>
-        <CircleIcon style={styles.CircleIconPlacement} />
-        <Text style={styles.headingText}>ユーザー名</Text>
-        <TextInputTemplate placeholder={"名前（ニックネーム）を入力"} />
-        <Text style={styles.headingText}>自己紹介</Text>
-        <TextInputTemplate placeholder={"文字を入力"} />
-        <Text style={styles.headingText}>自由記入欄</Text>
-        <TextInput style={styles.textBox} placeholder="文字を入力" multiline />
-        <View style={styles.line} />
+        <View style={styles.center}>
+          <CircleIcon style={styles.CircleIconPlacement} />
+          <Text style={styles.headingText}>ユーザー名</Text>
+          <TextInputTemplate placeholder={"名前（ニックネーム）を入力"} />
+          <Text style={styles.headingText}>自己紹介</Text>
+          <TextInputTemplate placeholder={"文字を入力"} />
+          <Text style={styles.headingText}>自由記入欄</Text>
+          <TextInput
+            style={styles.textBox}
+            placeholder="文字を入力"
+            multiline
+          />
+          <View style={styles.line} />
+        </View>
         <TextTemplateYourCoinRerated
           letter="あなたの所持コイン数"
           numberOfCoin={coinOwnership}
@@ -93,8 +99,9 @@ export const Home = () => {
 };
 
 const styles = StyleSheet.create({
-  content: {
+  center: {
     alignItems: "center",
+    marginTop: 10,
   },
   CircleIconPlacement: {
     marginTop: 30,

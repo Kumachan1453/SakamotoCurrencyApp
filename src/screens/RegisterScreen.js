@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   TextInput,
@@ -9,113 +9,81 @@ import {
   Alert,
 } from "react-native";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { jpCheck, blankCheck, checkEmailFormat } from "../components/IfText";
-import { auth } from "../components/Firebase";
-// import { addDoc, collection } from "firebase/firestore";
-// import { MailTextInput } from "../components/MailTextInput";
+import { jpCheck, blankCheck } from "../components/IfText";
+import { auth, db } from "../components/Firebase";
+import { addDoc, collection } from "firebase/firestore";
 
 export const RegisterScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  // const [userName, setUserName] = useState("");
-  // const [coinOwnership, setCoinOwnership] = useState(10000);
-  // const [sendingCoin, setSendingCoin] = useState(0);
-  // const [ranking, setRanking] = useState(0);
-  // const [sumCoinUsage, setSumCoinUsage] = useState(0);
-  // const [updateNumber, setUpdateNumber] = useState(0);
-  // const handleRegister = async () => {
-  //   try {
-  //     const user = await createUserWithEmailAndPassword(auth, email, password);
-  //     const addUser = await addDoc(collection(db, "users"), {
-  //       name: userName,
-  //       email: email,
-  //       password: password,
-  //       coinOwnership: coinOwnership,
-  //       sendingCoin: sendingCoin,
-  //       ranking: ranking,
-  //       sumCoinUsage: sumCoinUsage,
-  //       updateNumber: updateNumber,
-  //     });
-  //     console.log("uid", uid);
-  //   } catch (error) {
-  //     alert("エラーが発生しました");
-  //     console.log("error.message", error.message);
-  //   }
-  // };
-  const signUp = (email, password) => {
-    const isJapanese = jpCheck(email);
-    const isBlankEmail = blankCheck(email);
-    const isBlankPassword = blankCheck(password);
-    // const isBlankConfirmPassword = blankCheck(confirmPassword);
-    const isFormatAddress = checkEmailFormat(email);
-    // const isMatchPassword = password !== confirmPassword;
-    if (
-      isJapanese ||
-      isBlankEmail ||
-      isBlankPassword
-      // isFormatAddress
-      // isBlankConfirmPassword ||
-      // !isMatchPassword
-    ) {
-      Alert.alert("入力に誤りがあります。正しく入力してください");
+  const [userName, setUserName] = useState("");
+  const [signError, setSignError] = useState(false);
+
+  const [coinOwnership, setCoinOwnership] = useState(10000);
+  const [monthlyCoinUsage, setMonthlyCoinUsage] = useState(0);
+  const [sendingCoin, setSendingCoin] = useState(0);
+  const [ranking, setRanking] = useState(0);
+  const [sumCoinUsage, setSumCoinUsage] = useState(0);
+  const [updateNumber, setUpdateNumber] = useState(0);
+
+  const isJapanese = jpCheck(email);
+  const isBlankEmail = blankCheck(email);
+  const isBlankPassword = blankCheck(password);
+
+  const signUp = () => {
+    if (isJapanese || isBlankEmail || isBlankPassword) {
+      setSignError(true);
       return;
     } else {
-      const handleRegister = async () => {
+      const handleRegister = async (user) => {
         try {
           const user = await createUserWithEmailAndPassword(
             auth,
             email,
             password
           );
-          console.log("user", user);
+          const addUser = await addDoc(collection(db, "users"), {
+            name: userName,
+            email: email,
+            password: password,
+            coinOwnership: coinOwnership,
+            monthlyCoinUsage: monthlyCoinUsage,
+            sendingCoin: sendingCoin,
+            ranking: ranking,
+            sumCoinUsage: sumCoinUsage,
+            updateNumber: updateNumber,
+          });
+          addUser();
         } catch (error) {
-          // alert("エラーが発生しました");
-          // console.log("error.message", error.message);
           if (
             error.message ===
             "The email address is already in use by another account."
           ) {
+            setSignError(true);
             Alert.alert("すでに登録されているメールアドレスです。");
           } else if (
             error.message === "Password should be at least 6 characters"
           ) {
+            setSignError(true);
             Alert.alert("パスワードは6文字以上で登録してください。");
           } else {
-            Alert.alert("エラーです。異る入力内容でもう一度お試しください");
+            setSignError(true);
+            Alert.alert("エラーです。異なる入力内容でもう一度お試しください");
             console.log(error.message);
             console.log("user", user);
           }
         }
       };
       handleRegister();
-      // firebase
-      //   .auth()
-      //   .createUserWithEmailAndPassword(email, password)
-      // .then((user) => {
-      //   if (user) {
-      //     Alert.alert("アカウントの登録が完了しました");
-      //     // dispatch(
-      //     //   signInAction({ userEmail: email, userPassword: password })
-      //     // );
-      //     return;
-      //   }
-      // .catch((error) => {
-      // if (
-      //   error.message ===
-      //   "The email address is already in use by another account."
-      // ) {
-      //   Alert.alert("すでに登録されているメールアドレスです。");
-      // } else if (
-      //   error.message === "Password should be at least 6 characters"
-      // ) {
-      //   Alert.alert("パスワードは6文字以上で登録してください。");
-      // } else {
-      //   Alert.alert("エラーです。異る入力内容でもう一度お試しください");
-      //   console.log(error.message);
-      // }
-      // });
     }
   };
+
+  useEffect(() => {
+    const timerId = setTimeout(() => {
+      signUp;
+    }, 0);
+    return () => clearTimeout(timerId);
+  }, [email || password]);
 
   return (
     <KeyboardAvoidingView
@@ -125,37 +93,41 @@ export const RegisterScreen = () => {
       <Text style={styles.textUsersRegister}>ユーザ登録画面</Text>
       <View style={styles.view}>
         <TextInput
-          style={styles.textInput}
+          //style={setSignError(true) ? styles.errorTextInput : styles.textInput}と記述すると無限ループに関するエラーが発生する。
+          style={signError ? styles.errorTextInput : styles.textInput}
           onChangeText={setEmail}
           value={email}
-          placeholder="メールアドレスを入力してください"
+          placeholder="メールアドレス"
           autoCapitalize="none"
           autoCorrect={false}
         />
       </View>
       <View style={styles.view}>
         <TextInput
-          style={styles.textInput}
+          style={signError ? styles.errorTextInput : styles.textInput}
+          // style={styles.textInput}
           onChangeText={setPassword}
           value={password}
-          placeholder="パスワードを入力してください"
+          placeholder="パスワード（6文字以上）"
           secureTextEntry={true}
           autoCapitalize="none"
         />
       </View>
-      {/* <View style={styles.view}>
+      <View style={styles.view}>
         <TextInput
           style={styles.textInput}
           onChangeText={setUserName}
           value={userName}
-          placeholder="名前を入力してください"
+          placeholder="名前"
           autoCapitalize="none"
         />
-      </View> */}
+      </View>
       <TouchableOpacity
         style={styles.touchableOpacity}
         onPress={signUp}
-        disabled={!email || !password}
+        disabled={
+          !email || !password || isJapanese || isBlankEmail || isBlankPassword
+        }
       >
         <Text style={styles.textStyleInTouchableOpacity}>登録する</Text>
       </TouchableOpacity>
@@ -181,6 +153,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 5,
     borderColor: "gray",
+  },
+  errorTextInput: {
+    width: 250,
+    borderWidth: 1,
+    padding: 5,
+    borderColor: "red",
   },
   touchableOpacity: {
     padding: 10,
