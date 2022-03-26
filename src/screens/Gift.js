@@ -51,14 +51,14 @@ export const Gift = () => {
   const isFocused = useIsFocused();
 
   useEffect(async () => {
-    const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
+    const getData = doc(db, "users", "PwPoDHh2HiXjRmZW7Ekf");
     const snapData = await getDoc(getData);
     setCoinOwnership(Math.round(snapData.data().coinOwnership));
     setMonthlyCoinUsage(Math.round(snapData.data().monthlyCoinUsage));
   }, [isFocused, () => updateData()]);
 
   const updateData = async (item) => {
-    const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
+    const getData = doc(db, "users", "PwPoDHh2HiXjRmZW7Ekf");
     console.log("updateData-A");
     await updateDoc(getData, {
       coinOwnership: coinOwnership + item.sendingCoin,

@@ -4,13 +4,16 @@ import CircleIcon from "../components/CircleIcon";
 import TextInputTemplate from "../components/TextInputTemplate";
 import TextTemplateYourCoinRerated from "../components/TextTemplateYourCoinRerated";
 import LogoutButton from "../components/LogoutButton";
-import { getDoc, doc } from "firebase/firestore";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import { getDoc, doc, collection, query, getDocs } from "firebase/firestore";
+import { onAuthStateChanged, signOut, getAuth } from "firebase/auth";
 import { auth } from "../components/Firebase";
 import { db } from "../components/Firebase";
 import { useIsFocused } from "@react-navigation/native";
+import GetIdentificationUserData from "../components/TestComponents/GetIdentificationUserData";
 
 export const Home = () => {
+  // GetIdentificationUserData();
+  const isFocused = useIsFocused();
   const FirstDay = "11/1";
   const LastDay = "11/30";
 
@@ -18,19 +21,23 @@ export const Home = () => {
   const [monthlyCoinUsage, setMonthlyCoinUsage] = useState(0);
   const [ranking, setRanking] = useState("ランク外");
 
-  const isFocused = useIsFocused();
+  const userId = "PwPoDHh2HiXjRmZW7Ekf";
+
+  const getUserProfile = getAuth();
+  const user = getUserProfile.currentUser;
+  const uid = user.uid;
+  const email = user.email;
 
   onAuthStateChanged(auth, (user) => {
     if (user) {
       const uid = user.uid;
-      console.log("user.uid", user.uid);
+      console.log("uid", uid);
     } else {
       console.log("else");
     }
   });
-
   useEffect(async () => {
-    const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
+    const getData = doc(db, "users", userId);
     const snapData = await getDoc(getData);
     setCoinOwnership(Math.round(snapData.data().coinOwnership));
     setMonthlyCoinUsage(Math.round(snapData.data().monthlyCoinUsage));

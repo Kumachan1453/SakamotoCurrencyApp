@@ -8,18 +8,20 @@ import {
   StyleSheet,
   Alert,
 } from "react-native";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 import { jpCheck, blankCheck } from "../components/IfText";
 import { auth, db } from "../components/Firebase";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, query, getDocs } from "firebase/firestore";
+// import { Button } from "../components/Button";
 
 export const RegisterScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userName, setUserName] = useState("");
   const [signError, setSignError] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
-  const [coinOwnership, setCoinOwnership] = useState(10000);
+  const [coinOwnership, setCoinOwnership] = useState(20000);
   const [monthlyCoinUsage, setMonthlyCoinUsage] = useState(0);
   const [sendingCoin, setSendingCoin] = useState(0);
   const [ranking, setRanking] = useState(0);
@@ -29,6 +31,34 @@ export const RegisterScreen = () => {
   const isJapanese = jpCheck(email);
   const isBlankEmail = blankCheck(email);
   const isBlankPassword = blankCheck(password);
+
+  // const getDocId = async () => {
+  //   const q = query(collection(db, "users"));
+
+  //   const querySnapshot = await getDocs(q);
+  //   querySnapshot.forEach((doc) => {
+  //     console.log("doc.id:", doc.id, " => ", "doc.data():", doc.data());
+  //   });
+  // };
+  // getDocId();
+
+  if (!email || !password || isJapanese || isBlankEmail || isBlankPassword) {
+    if (isButtonDisabled) {
+      const setIsButtonDisabledTrue = () => {
+        setIsButtonDisabled(true);
+        console.log("true");
+      };
+      setIsButtonDisabledTrue;
+    }
+  } else {
+    if (!isButtonDisabled) {
+      const setIsButtonDisabledFalse = () => {
+        setIsButtonDisabled(false);
+        console.log("false");
+      };
+      setIsButtonDisabledFalse;
+    }
+  }
 
   const signUp = () => {
     if (isJapanese || isBlankEmail || isBlankPassword) {
@@ -122,6 +152,11 @@ export const RegisterScreen = () => {
           autoCapitalize="none"
         />
       </View>
+      {/* <Button
+        content="サインイン"
+        onPress={signUp}
+        isButtonDisabled={isButtonDisabled}
+      /> */}
       <TouchableOpacity
         style={styles.touchableOpacity}
         onPress={signUp}

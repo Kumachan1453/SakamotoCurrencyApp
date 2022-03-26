@@ -5,32 +5,23 @@ import { Home } from "./Home";
 import { Ionicons } from "@expo/vector-icons";
 import Gift from "./Gift";
 import Ranking from "./Ranking";
-import {
-  getFirestore,
-  collection,
-  getDoc,
-  getDocs,
-  doc,
-  updateDoc,
-} from "firebase/firestore";
-import { db } from "../components/Firebase";
-import { useEffect } from "react/cjs/react.development";
+// import {
+//   getFirestore,
+//   collection,
+//   getDoc,
+//   getDocs,
+//   doc,
+//   updateDoc,
+// } from "firebase/firestore";
+// import { db } from "../components/Firebase";
+// import { useEffect } from "react/cjs/react.development";
 
 const Tab = createBottomTabNavigator();
 
 export const ScreenNavTab = () => {
-  const [coinOwnership, setCoinOwnership] = useState(0);
-  const [monthlyCoinUsage, setMonthlyCoinUsage] = useState(0);
-  const [updateNumber, setUpdateNumber] = useState(0);
-
-  const getYourServerData = async () => {
-    const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
-    const snapData = await getDoc(getData);
-    setCoinOwnership(snapData.data().coinOwnership);
-    setMonthlyCoinUsage(snapData.data().monthlyCoinUsage);
-    setUpdateNumber(snapData.data().updateNumber);
-  };
-  getYourServerData();
+  // const [coinOwnership, setCoinOwnership] = useState(0);
+  // const [monthlyCoinUsage, setMonthlyCoinUsage] = useState(0);
+  // const [updateNumber, setUpdateNumber] = useState(0);
 
   const today = new Date();
   const firstDay = today.getDate() === 1;
@@ -70,26 +61,27 @@ export const ScreenNavTab = () => {
   //   }
   // };
   // monthlyUpdate();
-  useLayoutEffect(() => {
-    const monthlyUpdate = async () => {
-      const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
-      const snapData = await getDoc(getData);
-      if (onHours && snapData.data().updateNumber < 1) {
-        updateDoc(getData, {
-          coinOwnership:
-            snapData.data().coinOwnership * 0.9 +
-            snapData.data().monthlyCoinUsage * 0.05,
-          monthlyCoinUsage: (snapData.data().monthlyCoinUsage = 0),
-          updateNumber: snapData.data().updateNumber + 1,
-        });
-      } else if (offHours && offMinutes && snapData.data().updateNumber === 1) {
-        updateDoc(getData, {
-          updateNumber: snapData.data().updateNumber - 1,
-        });
-      }
-    };
-    monthlyUpdate();
-  }, []);
+
+  // useLayoutEffect(() => {
+  //   const monthlyUpdate = async () => {
+  //     const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
+  //     const snapData = await getDoc(getData);
+  //     if (onHours && snapData.data().updateNumber < 1) {
+  //       updateDoc(getData, {
+  //         coinOwnership:
+  //           snapData.data().coinOwnership * 0.9 +
+  //           snapData.data().monthlyCoinUsage * 0.05,
+  //         monthlyCoinUsage: (snapData.data().monthlyCoinUsage = 0),
+  //         updateNumber: snapData.data().updateNumber + 1,
+  //       });
+  //     } else if (offHours && offMinutes && snapData.data().updateNumber === 1) {
+  //       updateDoc(getData, {
+  //         updateNumber: snapData.data().updateNumber - 1,
+  //       });
+  //     }
+  //   };
+  //   monthlyUpdate();
+  // }, []);
   //ここまで
 
   return (
