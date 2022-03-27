@@ -18,7 +18,7 @@ const Stack = createNativeStackNavigator();
 const getData = async () => {
   const getDatas = collection(db, "users");
   const querySnapshot = await getDocs(getDatas);
-  console.log("querySnapshot", querySnapshot);
+  // console.log("querySnapshot", querySnapshot);
 };
 getData();
 

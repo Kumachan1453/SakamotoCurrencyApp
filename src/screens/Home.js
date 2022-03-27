@@ -27,17 +27,29 @@ export const Home = () => {
   const user = getUserProfile.currentUser;
   const uid = user.uid;
   const email = user.email;
+  // console.log("email", email);
 
   onAuthStateChanged(auth, (user) => {
     if (user) {
       const uid = user.uid;
-      console.log("uid", uid);
+      // console.log("uid", uid);
     } else {
-      console.log("else");
+      // console.log("else");
     }
   });
   useEffect(async () => {
     const getData = doc(db, "users", userId);
+    const getCollection = await getDocs(collection(db, "users"));
+    const array = [];
+    getCollection.forEach((docs) => {
+      array.push({ email: docs.data().email, id: docs.id });
+      // console.log("docs", docs);
+    });
+    const loginFilter = array.filter((login) => {
+      return email === login.email;
+    });
+    console.log("loginFilter", loginFilter);
+
     const snapData = await getDoc(getData);
     setCoinOwnership(Math.round(snapData.data().coinOwnership));
     setMonthlyCoinUsage(Math.round(snapData.data().monthlyCoinUsage));
@@ -60,7 +72,8 @@ export const Home = () => {
         <View style={styles.center}>
           <CircleIcon style={styles.CircleIconPlacement} />
           <Text style={styles.headingText}>ユーザー名</Text>
-          <TextInputTemplate placeholder={"名前（ニックネーム）を入力"} />
+          <Text style={styles.headingText}>{user.email}</Text>
+          {/* <TextInputTemplate placeholder={"名前（ニックネーム）を入力"} /> */}
           <Text style={styles.headingText}>自己紹介</Text>
           <TextInputTemplate placeholder={"文字を入力"} />
           <Text style={styles.headingText}>自由記入欄</Text>
