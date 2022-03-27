@@ -13,6 +13,7 @@ import GetIdentificationUserData from "../components/TestComponents/GetIdentific
 
 export const Home = () => {
   // GetIdentificationUserData();
+
   const isFocused = useIsFocused();
   const FirstDay = "11/1";
   const LastDay = "11/30";
@@ -38,18 +39,16 @@ export const Home = () => {
     }
   });
   useEffect(async () => {
-    const getData = doc(db, "users", userId);
     const getCollection = await getDocs(collection(db, "users"));
     const array = [];
     getCollection.forEach((docs) => {
       array.push({ email: docs.data().email, id: docs.id });
-      // console.log("docs", docs);
     });
     const loginFilter = array.filter((login) => {
       return email === login.email;
     });
-    console.log("loginFilter", loginFilter);
-
+    console.log("loginFilter[0].id", loginFilter[0].id);
+    const getData = doc(db, "users", loginFilter[0].id);
     const snapData = await getDoc(getData);
     setCoinOwnership(Math.round(snapData.data().coinOwnership));
     setMonthlyCoinUsage(Math.round(snapData.data().monthlyCoinUsage));
