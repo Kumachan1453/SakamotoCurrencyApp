@@ -18,11 +18,16 @@ import {
   collection,
   deleteDoc,
 } from "firebase/firestore";
+import { onAuthStateChanged, signOut, getAuth } from "firebase/auth";
 import { useIsFocused } from "@react-navigation/native";
 import { db } from "../components/Firebase";
 import ModalTemplete from "../components/ModalTemplete";
 
 export const Gift = () => {
+  const getUserProfile = getAuth();
+  const user = getUserProfile.currentUser;
+  const email = user.email;
+
   const [giftListData, setGiftListData] = useState([]);
   useEffect(async () => {
     const sendGift = collection(db, "coins");
@@ -51,19 +56,26 @@ export const Gift = () => {
   const isFocused = useIsFocused();
 
   useEffect(async () => {
-    const getData = doc(db, "users", "PwPoDHh2HiXjRmZW7Ekf");
+    const getCollection = await getDocs(collection(db, "users"));
+    const array = [];
+    getCollection.forEach((docs) => {
+      array.push({ email: docs.data().email, id: docs.id });
+    });
+    const loginFilter = array.filter((login) => {
+      return email === login.email;
+    });
+    console.log("loginFilter[0].id", loginFilter[0].id);
+    const getData = doc(db, "users", loginFilter[0].id);
     const snapData = await getDoc(getData);
     setCoinOwnership(Math.round(snapData.data().coinOwnership));
     setMonthlyCoinUsage(Math.round(snapData.data().monthlyCoinUsage));
-  }, [isFocused, () => updateData()]);
-
+  }, [isFocused]);
+  // () => updateData();
   const updateData = async (item) => {
-    const getData = doc(db, "users", "PwPoDHh2HiXjRmZW7Ekf");
-    console.log("updateData-A");
+    const getData = doc(db, "users", loginFilter[0].id);
     await updateDoc(getData, {
       coinOwnership: coinOwnership + item.sendingCoin,
     });
-    console.log("updateData-B");
   };
   const deleteData = async (item) => {
     // const array = giftListData.filter((task) => {

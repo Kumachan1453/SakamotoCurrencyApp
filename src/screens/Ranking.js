@@ -11,8 +11,13 @@ import {
 } from "firebase/firestore";
 import { db } from "../components/Firebase";
 import { useIsFocused } from "@react-navigation/native";
+import { onAuthStateChanged, signOut, getAuth } from "firebase/auth";
 
 export const Ranking = () => {
+  const getUserProfile = getAuth();
+  const user = getUserProfile.currentUser;
+  const email = user.email;
+
   const FirstDay = "11/1";
   const LastDay = "11/30";
   const [coinOwnership, setCoinOwnership] = useState(0);
@@ -72,7 +77,15 @@ export const Ranking = () => {
   });
 
   useEffect(async () => {
-    const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
+    const getCollection = await getDocs(collection(db, "users"));
+    const array = [];
+    getCollection.forEach((docs) => {
+      array.push({ email: docs.data().email, id: docs.id });
+    });
+    const loginFilter = array.filter((login) => {
+      return email === login.email;
+    });
+    const getData = doc(db, "users", loginFilter[0].id);
     const snapData = await getDoc(getData);
     setCoinOwnership(Math.round(snapData.data().coinOwnership));
     setMonthlyCoinUsage(Math.round(snapData.data().monthlyCoinUsage));

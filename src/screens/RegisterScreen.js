@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 import { jpCheck, blankCheck } from "../components/IfText";
+import { useRoute } from "@react-navigation/native";
 import { auth, db } from "../components/Firebase";
 import { addDoc, collection, query, getDocs } from "firebase/firestore";
 // import { Button } from "../components/Button";
@@ -21,7 +22,7 @@ export const RegisterScreen = () => {
   const [signError, setSignError] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
-  const [coinOwnership, setCoinOwnership] = useState(20000);
+  const [coinOwnership, setCoinOwnership] = useState(10000);
   const [monthlyCoinUsage, setMonthlyCoinUsage] = useState(0);
   const [sendingCoin, setSendingCoin] = useState(0);
   const [ranking, setRanking] = useState(0);
@@ -61,6 +62,7 @@ export const RegisterScreen = () => {
   }
 
   const signUp = () => {
+    const route = useRoute();
     if (isJapanese || isBlankEmail || isBlankPassword) {
       setSignError(true);
       return;
@@ -84,6 +86,13 @@ export const RegisterScreen = () => {
             updateNumber: updateNumber,
           });
           addUser();
+          // const giftCoin = await addDoc(collection(db, "coins"), {
+          //   name: "運営からのプレゼント",
+          //   sendingCoin: 10000,
+          //   recipientUserId: route.params.id,
+          //   time: new Date().toLocaleString(),
+          // });
+          // giftCoin();
         } catch (error) {
           if (
             error.message ===

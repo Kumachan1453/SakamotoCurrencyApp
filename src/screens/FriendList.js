@@ -2,21 +2,32 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, View, FlatList } from "react-native";
 import { FriendButton } from "../components/FriendButton";
 import { db } from "../components/Firebase";
-import { getDocs, collection, query, where } from "firebase/firestore";
+import { doc, collection, getDocs, query } from "firebase/firestore";
+import { onAuthStateChanged, signOut, getAuth } from "firebase/auth";
 
 export const FriendList = ({ navigation }) => {
   const [listData, setListData] = useState([]);
+  const getUserProfile = getAuth();
+  const user = getUserProfile.currentUser;
+  const email = user.email;
+
   useEffect(async () => {
-    const getDatas = query(
-      collection(db, "users")
-      // where("8hj8oNjxxBVwK9zUunE6", "==", false)
-    );
+    const getDatas = query(collection(db, "users"));
     const querySnapshot = await getDocs(getDatas);
     const array = [];
     querySnapshot.forEach((docs) => {
-      array.push({ name: docs.data().name, id: docs.id });
+      array.push({
+        name: docs.data().name,
+        email: docs.data().email,
+        id: docs.id,
+      });
     });
-    setListData(array);
+    const loginFilter = array.filter((login) => {
+      return email !== login.email;
+    });
+    const loginFilter1 = loginFilter;
+    console.log("loginFilter1", loginFilter1);
+    setListData(loginFilter1);
   }, []);
 
   return (

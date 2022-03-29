@@ -10,6 +10,7 @@ import { auth } from "../components/Firebase";
 import { db } from "../components/Firebase";
 import { useIsFocused } from "@react-navigation/native";
 import GetIdentificationUserData from "../components/TestComponents/GetIdentificationUserData";
+// import { userId } from "../components/LoginFilter";
 
 export const Home = () => {
   // GetIdentificationUserData();
@@ -21,8 +22,6 @@ export const Home = () => {
   const [coinOwnership, setCoinOwnership] = useState(0);
   const [monthlyCoinUsage, setMonthlyCoinUsage] = useState(0);
   const [ranking, setRanking] = useState("ランク外");
-
-  const userId = "PwPoDHh2HiXjRmZW7Ekf";
 
   const getUserProfile = getAuth();
   const user = getUserProfile.currentUser;
@@ -47,7 +46,6 @@ export const Home = () => {
     const loginFilter = array.filter((login) => {
       return email === login.email;
     });
-    console.log("loginFilter[0].id", loginFilter[0].id);
     const getData = doc(db, "users", loginFilter[0].id);
     const snapData = await getDoc(getData);
     setCoinOwnership(Math.round(snapData.data().coinOwnership));

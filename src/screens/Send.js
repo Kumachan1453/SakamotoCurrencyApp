@@ -10,16 +10,28 @@ import {
 import { Button } from "../components/Button";
 import TextInputTemplate from "../components/TextInputTemplate";
 import TextTemplateYourCoinRerated from "../components/TextTemplateYourCoinRerated";
-import { getDoc, doc, updateDoc, collection, addDoc } from "firebase/firestore";
+import {
+  getDoc,
+  getDocs,
+  doc,
+  updateDoc,
+  collection,
+  addDoc,
+} from "firebase/firestore";
 import { useIsFocused, useRoute } from "@react-navigation/native";
 import FriendList from "../screens/FriendList";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ModalTemplete from "../components/ModalTemplete";
 import { db } from "../components/Firebase";
+import { onAuthStateChanged, signOut, getAuth } from "firebase/auth";
 
 const Stack = createNativeStackNavigator();
 
 export const Send = ({ navigation: { navigate } }) => {
+  const getUserProfile = getAuth();
+  const user = getUserProfile.currentUser;
+  const email = user.email;
+
   const FirstDay = "11/1";
   const LastDay = "11/30";
   const [sendingCoin, setSendingCoin] = useState(0);
@@ -44,7 +56,15 @@ export const Send = ({ navigation: { navigate } }) => {
   const isFocused = useIsFocused();
 
   useEffect(async () => {
-    const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
+    const getCollection = await getDocs(collection(db, "users"));
+    const array = [];
+    getCollection.forEach((docs) => {
+      array.push({ email: docs.data().email, id: docs.id });
+    });
+    const loginFilter = array.filter((login) => {
+      return email === login.email;
+    });
+    const getData = doc(db, "users", loginFilter[0].id);
     const snapData = await getDoc(getData);
     setCoinOwnership(Math.round(snapData.data().coinOwnership));
     setMonthlyCoinUsage(Math.round(snapData.data().monthlyCoinUsage));
@@ -52,7 +72,15 @@ export const Send = ({ navigation: { navigate } }) => {
   }, [isFocused]);
 
   const updateData = async () => {
-    const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
+    const getCollection = await getDocs(collection(db, "users"));
+    const array = [];
+    getCollection.forEach((docs) => {
+      array.push({ email: docs.data().email, id: docs.id });
+    });
+    const loginFilter = array.filter((login) => {
+      return email === login.email;
+    });
+    const getData = doc(db, "users", loginFilter[0].id);
     if (sendingCoin < 0) {
       alert("数字が0以下です");
     } else if (coinOwnership - sendingCoin >= 0) {
@@ -76,7 +104,15 @@ export const Send = ({ navigation: { navigate } }) => {
   };
 
   useEffect(async () => {
-    const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
+    const getCollection = await getDocs(collection(db, "users"));
+    const array = [];
+    getCollection.forEach((docs) => {
+      array.push({ email: docs.data().email, id: docs.id });
+    });
+    const loginFilter = array.filter((login) => {
+      return email === login.email;
+    });
+    const getData = doc(db, "users", loginFilter[0].id);
     const snapData = await getDoc(getData);
     if (sendingCoin === 0 || isNaN(sendingCoin)) {
       // console.log("処理を阻止");
@@ -95,13 +131,6 @@ export const Send = ({ navigation: { navigate } }) => {
       // console.log("Document written with ID: ", sendGift.id);
     }
   }, [subId]);
-
-  useEffect(async () => {
-    const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
-    const snapData = await getDoc(getData);
-    setCoinOwnership(Math.round(snapData.data().coinOwnership));
-    setMonthlyCoinUsage(Math.round(snapData.data().monthlyCoinUsage));
-  }, [updateData]);
 
   useEffect(() => {
     const timerId = setTimeout(() => {
