@@ -25,9 +25,7 @@ export const FriendList = ({ navigation }) => {
     const loginFilter = array.filter((login) => {
       return email !== login.email;
     });
-    const loginFilter1 = loginFilter;
-    console.log("loginFilter1", loginFilter1);
-    setListData(loginFilter1);
+    setListData(loginFilter);
   }, []);
 
   return (

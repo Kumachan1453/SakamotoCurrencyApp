@@ -14,7 +14,6 @@ import GetIdentificationUserData from "../components/TestComponents/GetIdentific
 
 export const Home = () => {
   // GetIdentificationUserData();
-
   const isFocused = useIsFocused();
   const FirstDay = "11/1";
   const LastDay = "11/30";
@@ -25,7 +24,6 @@ export const Home = () => {
 
   const getUserProfile = getAuth();
   const user = getUserProfile.currentUser;
-  const uid = user.uid;
   const email = user.email;
   // console.log("email", email);
 
