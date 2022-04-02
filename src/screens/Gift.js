@@ -64,7 +64,6 @@ export const Gift = () => {
     const loginFilter = array.filter((login) => {
       return email === login.email;
     });
-    console.log("loginFilter[0].id", loginFilter[0].id);
     const getData = doc(db, "users", loginFilter[0].id);
     const snapData = await getDoc(getData);
     setCoinOwnership(Math.round(snapData.data().coinOwnership));
@@ -78,15 +77,9 @@ export const Gift = () => {
     });
   };
   const deleteData = async (item) => {
-    // const array = giftListData.filter((task) => {
-    //   return task.id !== item.id;
-    // });
-    // setGiftListData(array);
-    // console.log("task.id", task.id);
     await deleteDoc(doc(db, "coins", item.id));
   };
   const onPressAction = async (item) => {
-    // setModalVisible(true);
     updateData(item);
     deleteData(item);
   };

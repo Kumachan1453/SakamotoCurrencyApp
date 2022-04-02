@@ -12,8 +12,10 @@ import {
 import { db } from "../components/Firebase";
 import { useIsFocused } from "@react-navigation/native";
 import { onAuthStateChanged, signOut, getAuth } from "firebase/auth";
+import { async } from "@firebase/util";
 
 export const Ranking = () => {
+  const isFocused = useIsFocused();
   const getUserProfile = getAuth();
   const user = getUserProfile.currentUser;
   const email = user.email;
@@ -39,7 +41,21 @@ export const Ranking = () => {
     setRankingListData(rankingArray);
   }, []);
 
-  const isFocused = useIsFocused();
+  useEffect(async () => {
+    const getCollection = await getDocs(collection(db, "users"));
+    const array = [];
+    getCollection.forEach((docs) => {
+      array.push({ email: docs.data().email, id: docs.id });
+    });
+    const loginFilter = array.filter((login) => {
+      return email === login.email;
+    });
+    const getData = doc(db, "users", loginFilter[0].id);
+    const snapData = await getDoc(getData);
+    setCoinOwnership(Math.round(snapData.data().coinOwnership));
+    setMonthlyCoinUsage(Math.round(snapData.data().monthlyCoinUsage));
+    setRanking(Math.round(snapData.data().ranking));
+  }, [isFocused]);
 
   rankingListData.monthlyCoinUsage = rankingListData.sort((a, b) => {
     const x = a["monthlyCoinUsage"];
@@ -57,68 +73,10 @@ export const Ranking = () => {
     if (item.monthlyCoinUsage !== tmp) {
       item.ranking = index + 1;
       tmp = item.monthlyCoinUsage;
-      // const updateData = async () => {
-      //   await updateDoc(collection(db, "users"), {
-      //     ranking: item.ranking,
-      //   });
-      // };
-      // updateData();
+    } else if (item.monthlyCoinUsage === tmp) {
+      item.ranking = index;
     }
-    console.log(
-      "item.ranking:",
-      item.ranking,
-      "tmp",
-      tmp,
-      ", item.name:",
-      item.name,
-      ", item.monthlyCoinUsage:",
-      item.monthlyCoinUsage
-    );
   });
-
-  useEffect(async () => {
-    const getCollection = await getDocs(collection(db, "users"));
-    const array = [];
-    getCollection.forEach((docs) => {
-      array.push({ email: docs.data().email, id: docs.id });
-    });
-    const loginFilter = array.filter((login) => {
-      return email === login.email;
-    });
-    const getData = doc(db, "users", loginFilter[0].id);
-    const snapData = await getDoc(getData);
-    setCoinOwnership(Math.round(snapData.data().coinOwnership));
-    setMonthlyCoinUsage(Math.round(snapData.data().monthlyCoinUsage));
-    setRanking(Math.round(snapData.data().ranking));
-  }, [isFocused]);
-
-  // let scores = [
-  //   { score: 10, name: "○○○○" },
-  //   { score: 8, name: "●●●●●" },
-  //   { score: 9, name: "XXXX" },
-  //   { score: 8, name: "▲▲▲▲▲" },
-  //   { score: 9, name: "△△△△" },
-  //   { score: 8, name: "■■■■■" },
-  // ];
-  // scores = scores.sort((a, b) => {
-  //   var x = a["score"];
-  //   var y = b["score"];
-  //   if (x > y) {
-  //     return -1;
-  //   }
-  //   if (x < y) {
-  //     return 1;
-  //   }
-  //   return 0;
-  // });
-  // let count, tmp;
-  // scores.forEach((item, index) => {
-  //   if (item.score !== tmp) {
-  //     count = index + 1;
-  //     tmp = item.score;
-  //   }
-  //   console.log("count:", count, ", name:", item.name, ", score:", item.score);
-  // });
 
   return (
     <View style={styles.content}>
