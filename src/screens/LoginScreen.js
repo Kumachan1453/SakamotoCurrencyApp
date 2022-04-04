@@ -7,10 +7,11 @@ import {
   KeyboardAvoidingView,
   StyleSheet,
 } from "react-native";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
 import { auth } from "../components/Firebase";
 
 export const LoginScreen = ({ navigation }) => {
+  const getUserProfile = getAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const handleLogin = async () => {

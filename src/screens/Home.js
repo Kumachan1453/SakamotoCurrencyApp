@@ -18,6 +18,7 @@ export const Home = () => {
   const FirstDay = "11/1";
   const LastDay = "11/30";
 
+  const [name, setName] = useState("");
   const [coinOwnership, setCoinOwnership] = useState(0);
   const [monthlyCoinUsage, setMonthlyCoinUsage] = useState(0);
   const [ranking, setRanking] = useState("ランク外");
@@ -46,6 +47,7 @@ export const Home = () => {
     });
     const getData = doc(db, "users", loginFilter[0].id);
     const snapData = await getDoc(getData);
+    setName(snapData.data().name);
     setCoinOwnership(Math.round(snapData.data().coinOwnership));
     setMonthlyCoinUsage(Math.round(snapData.data().monthlyCoinUsage));
     setRanking(Math.round(snapData.data().ranking));
@@ -67,16 +69,10 @@ export const Home = () => {
         <View style={styles.center}>
           <CircleIcon style={styles.CircleIconPlacement} />
           <Text style={styles.headingText}>ユーザー名</Text>
-          <Text style={styles.headingText}>{user.email}</Text>
+          <Text style={styles.headingText}>{name}</Text>
+          <Text style={styles.headingText}>メールアドレス</Text>
+          <Text style={styles.headingText}>{email}</Text>
           {/* <TextInputTemplate placeholder={"名前（ニックネーム）を入力"} /> */}
-          <Text style={styles.headingText}>自己紹介</Text>
-          <TextInputTemplate placeholder={"文字を入力"} />
-          <Text style={styles.headingText}>自由記入欄</Text>
-          <TextInput
-            style={styles.textBox}
-            placeholder="文字を入力"
-            multiline
-          />
           <View style={styles.line} />
         </View>
         <TextTemplateYourCoinRerated
@@ -95,17 +91,7 @@ export const Home = () => {
           unit="C"
         />
         <View style={styles.line} />
-        <TextTemplateYourCoinRerated
-          letter="あなたの順位"
-          subText1="集計期間"
-          date1={FirstDay}
-          subText2="〜"
-          date2={LastDay}
-          numberOfCoin={ranking}
-          unit="位"
-        />
-        <View style={styles.line} />
-        <View>
+        <View style={styles.logoutPlacement}>
           <LogoutButton onPress={handleLogout} />
         </View>
       </View>
@@ -152,6 +138,10 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: "gray",
     marginTop: 20,
+  },
+  logoutPlacement: {
+    alignItems: "center",
+    marginTop: 50,
   },
 });
 

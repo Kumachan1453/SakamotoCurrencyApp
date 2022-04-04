@@ -208,10 +208,6 @@ export const Send = ({ navigation: { navigate } }) => {
           <Text style={styles.bigCoinText}>C</Text>
         </View>
         <View style={styles.borderLine} />
-        <View style={styles.sendMessage}>
-          <Text>メッセージを送る</Text>
-          <TextInputTemplate placeholder={"文字を入力"} />
-        </View>
 
         <View style={styles.centeredView}>
           <ModalTemplete

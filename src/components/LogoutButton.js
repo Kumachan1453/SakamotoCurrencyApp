@@ -13,14 +13,19 @@ export const LogoutButton = ({ onPress }) => {
 
 const styles = StyleSheet.create({
   touchableOpacity: {
+    alignItems: "center",
+    justifyContent: "center",
     marginTop: 10,
     padding: 10,
     backgroundColor: "#88cb7f",
     borderRadius: 10,
-    width: 100,
+    width: 150,
+    height: 70,
   },
   textLogOut: {
     color: "white",
+    fontSize: 20,
+    fontWeight: "600",
   },
 });
 

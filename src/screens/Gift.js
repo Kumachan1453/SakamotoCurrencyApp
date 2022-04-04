@@ -27,6 +27,7 @@ export const Gift = () => {
   const getUserProfile = getAuth();
   const user = getUserProfile.currentUser;
   const email = user.email;
+  const [userId, setUserId] = useState("");
 
   const [giftListData, setGiftListData] = useState([]);
   useEffect(async () => {
@@ -66,6 +67,7 @@ export const Gift = () => {
     });
     const getData = doc(db, "users", loginFilter[0].id);
     const snapData = await getDoc(getData);
+    setUserId(loginFilter[0].id);
     setCoinOwnership(Math.round(snapData.data().coinOwnership));
     setMonthlyCoinUsage(Math.round(snapData.data().monthlyCoinUsage));
   }, [isFocused]);
@@ -102,17 +104,13 @@ export const Gift = () => {
           unit="C"
         />
         <View style={styles.line} />
-        <Text style={styles.bigText}>コインが届いています</Text>
-        <Text style={styles.subText}>
-          ※送られた日から一週間以内に受け取らなければ消滅します
-        </Text>
       </View>
 
       <View style={styles.centeredView}>
         <FlatList
           data={giftListData}
           renderItem={({ item }) => {
-            if (item.recipientUserId === "LGXdrQNczf95rT90Tp2R") {
+            if (item.recipientUserId === userId) {
               return (
                 <>
                   {/* <ModalTemplete
