@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, TextInput, ScrollView } from "react-native";
 import CircleIcon from "../components/CircleIcon";
-import TextInputTemplate from "../components/TextInputTemplate";
 import TextTemplateYourCoinRerated from "../components/TextTemplateYourCoinRerated";
 import LogoutButton from "../components/LogoutButton";
 import { getDoc, doc, collection, query, getDocs } from "firebase/firestore";
@@ -9,11 +8,8 @@ import { onAuthStateChanged, signOut, getAuth } from "firebase/auth";
 import { auth } from "../components/Firebase";
 import { db } from "../components/Firebase";
 import { useIsFocused } from "@react-navigation/native";
-import GetIdentificationUserData from "../components/TestComponents/GetIdentificationUserData";
-// import { userId } from "../components/LoginFilter";
 
 export const Home = () => {
-  // GetIdentificationUserData();
   const isFocused = useIsFocused();
   const FirstDay = "11/1";
   const LastDay = "11/30";
@@ -26,14 +22,11 @@ export const Home = () => {
   const getUserProfile = getAuth();
   const user = getUserProfile.currentUser;
   const email = user.email;
-  // console.log("email", email);
 
   onAuthStateChanged(auth, (user) => {
     if (user) {
       const uid = user.uid;
-      // console.log("uid", uid);
     } else {
-      // console.log("else");
     }
   });
   useEffect(async () => {
@@ -72,21 +65,16 @@ export const Home = () => {
           <Text style={styles.headingText}>{name}</Text>
           <Text style={styles.headingText}>メールアドレス</Text>
           <Text style={styles.headingText}>{email}</Text>
-          {/* <TextInputTemplate placeholder={"名前（ニックネーム）を入力"} /> */}
           <View style={styles.line} />
         </View>
         <TextTemplateYourCoinRerated
-          letter="あなたの所持コイン数"
+          letter="あなたの所持コイン数："
           numberOfCoin={coinOwnership}
           unit="C"
         />
         <View style={styles.line} />
         <TextTemplateYourCoinRerated
-          letter="あなたのコイン使用量"
-          subText1="集計期間"
-          date1={FirstDay}
-          subText2="〜"
-          date2={LastDay}
+          letter="あなたのコイン使用量："
           numberOfCoin={monthlyCoinUsage}
           unit="C"
         />

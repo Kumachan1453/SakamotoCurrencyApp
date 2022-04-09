@@ -1,27 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text, FlatList } from "react-native";
-import { FriendButton } from "../components/FriendButton";
-import TextTemplateYourCoinRerated from "../components/TextTemplateYourCoinRerated";
-import {
-  doc,
-  getDoc,
-  getDocs,
-  updateDoc,
-  collection,
-} from "firebase/firestore";
+import { View, FlatList } from "react-native";
+import { doc, getDoc, getDocs, collection } from "firebase/firestore";
 import { db } from "../components/Firebase";
 import { useIsFocused } from "@react-navigation/native";
-import { onAuthStateChanged, signOut, getAuth } from "firebase/auth";
-import { async } from "@firebase/util";
+import { getAuth } from "firebase/auth";
+import FriendButton from "../components/FriendButton";
 
 export const Ranking = () => {
   const isFocused = useIsFocused();
   const getUserProfile = getAuth();
   const user = getUserProfile.currentUser;
   const email = user.email;
-
-  const FirstDay = "11/1";
-  const LastDay = "11/30";
   const [coinOwnership, setCoinOwnership] = useState(0);
   const [monthlyCoinUsage, setMonthlyCoinUsage] = useState(0);
   const [rankingListData, setRankingListData] = useState([]);
@@ -79,7 +68,7 @@ export const Ranking = () => {
   });
 
   return (
-    <View style={styles.content}>
+    <View>
       <FlatList
         data={rankingListData}
         renderItem={({ item }) => {
@@ -96,35 +85,5 @@ export const Ranking = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  content: {
-    alignItems: "center",
-  },
-  bigText: {
-    fontWeight: "bold",
-    fontSize: 20,
-    margin: 10,
-    marginTop: 20,
-  },
-  bigCoinText: {
-    fontWeight: "bold",
-    fontSize: 20,
-    marginTop: 10,
-    marginBottom: 30,
-  },
-  subText: {
-    color: "#808080",
-  },
-  flexDirectionRow: {
-    flexDirection: "row",
-  },
-  line: {
-    width: "100%",
-    borderBottomWidth: 1,
-    borderColor: "gray",
-    margin: 30,
-  },
-});
 
 export default Ranking;

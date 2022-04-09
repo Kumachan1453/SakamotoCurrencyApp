@@ -47,7 +47,7 @@ export const ScreenNavStack = () => {
         component={Send}
         options={{
           headerShown: true,
-          title: `${route.params}にコインを送る`, // 「route.params.name」は読み込まれていない
+          title: `コインを送る`, // 「route.params.name」は読み込まれていない
           headerStyle: {
             backgroundColor: "#ff9900",
           },

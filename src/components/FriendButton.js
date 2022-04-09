@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  StyleSheet,
-  View,
-  Text,
-  TouchableOpacity,
-  FlatList,
-} from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import CircleIcon from "./CircleIcon";
 
 export const FriendButton = ({

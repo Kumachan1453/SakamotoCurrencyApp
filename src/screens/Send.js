@@ -8,7 +8,6 @@ import {
   ScrollView,
 } from "react-native";
 import { Button } from "../components/Button";
-import TextInputTemplate from "../components/TextInputTemplate";
 import TextTemplateYourCoinRerated from "../components/TextTemplateYourCoinRerated";
 import {
   getDoc,
@@ -28,6 +27,8 @@ import { onAuthStateChanged, signOut, getAuth } from "firebase/auth";
 const Stack = createNativeStackNavigator();
 
 export const Send = ({ navigation: { navigate } }) => {
+  const textPattern = "/^([1-9]d*|0)$/";
+
   const getUserProfile = getAuth();
   const user = getUserProfile.currentUser;
   const email = user.email;
@@ -51,6 +52,8 @@ export const Send = ({ navigation: { navigate } }) => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
   const [subId, setSubId] = useState(0);
+
+  const [textInput, setTextInput] = useState(0);
 
   const route = useRoute();
   const isFocused = useIsFocused();
@@ -162,50 +165,49 @@ export const Send = ({ navigation: { navigate } }) => {
 
   return (
     <ScrollView>
-      <View style={styles.content}>
-        <View style={styles.flexDirectionRowAndCenter}>
+      <View>
+        <View>
           <TextTemplateYourCoinRerated
-            letter="所持コイン数"
+            letter="所持コイン数："
             numberOfCoin={coinOwnership}
             unit="C"
           />
           <TextTemplateYourCoinRerated
-            letter="残額"
+            letter="残額："
             numberOfCoin={balance}
             unit="C"
           />
         </View>
         <View style={styles.line} />
-        <View style={styles.flexDirectionRowAndCenter}>
+        <View>
           <TextTemplateYourCoinRerated
-            letter="コイン使用量"
-            subText1="集計期間"
-            date1={FirstDay}
-            subText2="〜"
-            date2={LastDay}
+            letter="コイン使用量："
             numberOfCoin={monthlyCoinUsage}
             unit="C"
           />
           <TextTemplateYourCoinRerated
-            letter="使用後の使用量"
+            letter="使用後の使用量："
             numberOfCoin={futureMonthlyCoinUsage}
             unit="C"
           />
         </View>
         <View style={styles.line} />
-        <Text style={styles.bigText}>あなたが送るコインの額</Text>
-        <View style={styles.flexDirectionRow}>
-          <TextInput
-            style={isButtonDisabled ? styles.errorInput : styles.input}
-            onChangeText={
-              (text) =>
-                setSendingCoin(parseInt(isNaN(text) ? sendingCoin : text)) //要確認
-            }
-            type="number"
-            placeholder="数字を入力"
-            keyboardType="numeric"
-          />
-          <Text style={styles.bigCoinText}>C</Text>
+        <View style={styles.alignItemsCenter}>
+          <Text style={styles.bigText}>あなたが送るコインの額</Text>
+          <View style={styles.flexDirectionRow}>
+            <TextInput
+              style={isButtonDisabled ? styles.errorInput : styles.input}
+              onChangeText={
+                (text) =>
+                  setSendingCoin(parseInt(isNaN(text) ? sendingCoin : text)) //要確認
+              }
+              value={textInput}
+              type="number"
+              placeholder="数字を入力"
+              keyboardType="number-pad"
+            />
+            <Text style={styles.bigCoinText}>C</Text>
+          </View>
         </View>
         <View style={styles.borderLine} />
 
@@ -231,11 +233,13 @@ export const Send = ({ navigation: { navigate } }) => {
               // navigate("FriendList");
             }}
           />
-          <Button
-            content="コインを送る"
-            onPress={() => setModalVisible(true)}
-            isButtonDisabled={isButtonDisabled}
-          />
+          <View style={styles.alignItemsCenter}>
+            <Button
+              content="コインを送る"
+              onPress={() => setModalVisible(true)}
+              isButtonDisabled={isButtonDisabled}
+            />
+          </View>
         </View>
         <View style={styles.space} />
       </View>
@@ -244,11 +248,7 @@ export const Send = ({ navigation: { navigate } }) => {
 };
 
 const styles = StyleSheet.create({
-  content: {
-    alignItems: "center",
-  },
-  flexDirectionRowAndCenter: {
-    flexDirection: "row",
+  alignItemsCenter: {
     alignItems: "center",
   },
   bigText: {

@@ -1,13 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  StyleSheet,
-  View,
-  Text,
-  Alert,
-  Modal,
-  TouchableOpacity,
-  FlatList,
-} from "react-native";
+import { StyleSheet, View, FlatList } from "react-native";
 import { FriendButton } from "../components/FriendButton";
 import TextTemplateYourCoinRerated from "../components/TextTemplateYourCoinRerated";
 import {
@@ -18,10 +10,9 @@ import {
   collection,
   deleteDoc,
 } from "firebase/firestore";
-import { onAuthStateChanged, signOut, getAuth } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 import { useIsFocused } from "@react-navigation/native";
 import { db } from "../components/Firebase";
-import ModalTemplete from "../components/ModalTemplete";
 
 export const Gift = () => {
   const getUserProfile = getAuth();
@@ -47,9 +38,6 @@ export const Gift = () => {
     setGiftListData(array);
   });
 
-  const FirstDay = "11/1";
-  const LastDay = "11/30";
-  const friendName = "damy-friend";
   const unit = "C";
   const [coinOwnership, setCoinOwnership] = useState(0);
   const [monthlyCoinUsage, setMonthlyCoinUsage] = useState(0);
@@ -71,7 +59,6 @@ export const Gift = () => {
     setCoinOwnership(Math.round(snapData.data().coinOwnership));
     setMonthlyCoinUsage(Math.round(snapData.data().monthlyCoinUsage));
   }, [isFocused]);
-  // () => updateData();
   const updateData = async (item) => {
     const getData = doc(db, "users", loginFilter[0].id);
     await updateDoc(getData, {
@@ -90,16 +77,12 @@ export const Gift = () => {
     <>
       <View style={styles.content}>
         <TextTemplateYourCoinRerated
-          letter="あなたの所持コイン数"
+          letter="あなたの所持コイン数："
           numberOfCoin={coinOwnership}
           unit="C"
         />
         <TextTemplateYourCoinRerated
-          letter="あなたのコイン使用量"
-          subText1="集計期間"
-          date1={FirstDay}
-          subText2="〜"
-          date2={LastDay}
+          letter="あなたのコイン使用量："
           numberOfCoin={monthlyCoinUsage}
           unit="C"
         />
@@ -181,7 +164,7 @@ const styles = StyleSheet.create({
     width: "100%",
     borderBottomWidth: 1,
     borderColor: "gray",
-    margin: 20,
+    marginTop: 20,
   },
 
   centeredView: {
