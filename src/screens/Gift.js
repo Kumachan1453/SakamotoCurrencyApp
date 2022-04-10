@@ -15,18 +15,43 @@ import { useIsFocused } from "@react-navigation/native";
 import { db } from "../components/Firebase";
 
 export const Gift = () => {
+  const [coinOwnership, setCoinOwnership] = useState(0);
+  const [monthlyCoinUsage, setMonthlyCoinUsage] = useState(0);
+  const [userId, setUserId] = useState("");
+  const [giftListData, setGiftListData] = useState([]);
+
   const getUserProfile = getAuth();
   const user = getUserProfile.currentUser;
   const email = user.email;
-  const [userId, setUserId] = useState("");
+  console.log("email", email);
 
-  const [giftListData, setGiftListData] = useState([]);
+  // useEffect(async () => {
+  //   const sendGift = collection(db, "coins");
+  //   const querySnapshot = await getDocs(sendGift);
+  //   const array = [];
+  //   querySnapshot.forEach((docs) => {
+  //     array.push({
+  //       name: docs.data().name,
+  //       sendingCoin: docs.data().sendingCoin,
+  //       subId: docs.data().subId,
+  //       recipientUserId: docs.data().recipientUserId,
+  //       id: docs.id,
+  //       time: docs.data().time,
+  //     });
+  //   });
+  //   setGiftListData(array);
+  // });
+
+  const unit = "C";
+
+  const isFocused = useIsFocused();
+
   useEffect(async () => {
     const sendGift = collection(db, "coins");
     const querySnapshot = await getDocs(sendGift);
-    const array = [];
+    const arrayCoins = [];
     querySnapshot.forEach((docs) => {
-      array.push({
+      arrayCoins.push({
         name: docs.data().name,
         sendingCoin: docs.data().sendingCoin,
         subId: docs.data().subId,
@@ -35,22 +60,14 @@ export const Gift = () => {
         time: docs.data().time,
       });
     });
-    setGiftListData(array);
-  });
+    setGiftListData(arrayCoins);
 
-  const unit = "C";
-  const [coinOwnership, setCoinOwnership] = useState(0);
-  const [monthlyCoinUsage, setMonthlyCoinUsage] = useState(0);
-
-  const isFocused = useIsFocused();
-
-  useEffect(async () => {
     const getCollection = await getDocs(collection(db, "users"));
-    const array = [];
+    const arrayUsers = [];
     getCollection.forEach((docs) => {
-      array.push({ email: docs.data().email, id: docs.id });
+      arrayUsers.push({ email: docs.data().email, id: docs.id });
     });
-    const loginFilter = array.filter((login) => {
+    const loginFilter = arrayUsers.filter((login) => {
       return email === login.email;
     });
     const getData = doc(db, "users", loginFilter[0].id);
