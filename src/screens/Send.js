@@ -26,15 +26,11 @@ import { onAuthStateChanged, signOut, getAuth } from "firebase/auth";
 
 const Stack = createNativeStackNavigator();
 
-export const Send = ({ navigation: { navigate } }) => {
-  const textPattern = "/^([1-9]d*|0)$/";
-
+export const Send = ({ navigation }) => {
   const getUserProfile = getAuth();
   const user = getUserProfile.currentUser;
   const email = user.email;
-
-  const FirstDay = "11/1";
-  const LastDay = "11/30";
+  console.log("email", email);
   const [sendingCoin, setSendingCoin] = useState(0);
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -52,8 +48,6 @@ export const Send = ({ navigation: { navigate } }) => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
   const [subId, setSubId] = useState(0);
-
-  const [textInput, setTextInput] = useState(0);
 
   const route = useRoute();
   const isFocused = useIsFocused();
@@ -75,6 +69,7 @@ export const Send = ({ navigation: { navigate } }) => {
   }, [isFocused]);
 
   const updateData = async () => {
+    console.log("updateData");
     const getCollection = await getDocs(collection(db, "users"));
     const array = [];
     getCollection.forEach((docs) => {
@@ -201,7 +196,7 @@ export const Send = ({ navigation: { navigate } }) => {
                 (text) =>
                   setSendingCoin(parseInt(isNaN(text) ? sendingCoin : text)) //要確認
               }
-              value={textInput}
+              // value={sendingCoin}
               type="number"
               placeholder="数字を入力"
               keyboardType="number-pad"
@@ -230,13 +225,16 @@ export const Send = ({ navigation: { navigate } }) => {
               setModalVisible(!modalVisible);
               updateData();
               pressOkButton();
+              // navigation.goBack();
               // navigate("FriendList");
             }}
           />
           <View style={styles.alignItemsCenter}>
             <Button
               content="コインを送る"
-              onPress={() => setModalVisible(true)}
+              onPress={() => {
+                setModalVisible(true);
+              }}
               isButtonDisabled={isButtonDisabled}
             />
           </View>
