@@ -15,7 +15,7 @@ export const FriendButton = ({
       <View>
         <View style={styles.contentsPlacement}>
           <Text style={styles.listStyleText}>{ranking}</Text>
-          <CircleIcon />
+          {/* <CircleIcon /> */}
           <Text style={styles.listStyleText}>{friendName}</Text>
           <View style={styles.coinTextPlacement}>
             <Text style={styles.coinText}>{coin}</Text>

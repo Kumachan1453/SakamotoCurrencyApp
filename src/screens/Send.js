@@ -30,8 +30,8 @@ export const Send = ({ navigation }) => {
   const getUserProfile = getAuth();
   const user = getUserProfile.currentUser;
   const email = user.email;
-  console.log("email", email);
   const [sendingCoin, setSendingCoin] = useState(0);
+  console.log("sendingCoin", sendingCoin);
 
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -98,7 +98,6 @@ export const Send = ({ navigation }) => {
 
   const pressOkButton = () => {
     setSubId(subId + 1);
-    // console.log("subId", subId);
   };
 
   useEffect(async () => {
@@ -127,6 +126,7 @@ export const Send = ({ navigation }) => {
       //   ...sendGift,
       // });
       // console.log("Document written with ID: ", sendGift.id);
+      navigation.goBack();
     }
   }, [subId]);
 
