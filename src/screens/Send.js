@@ -111,6 +111,7 @@ export const Send = ({ navigation }) => {
     });
     const getData = doc(db, "users", loginFilter[0].id);
     const snapData = await getDoc(getData);
+    console.log("loginFilter", loginFilter);
     if (sendingCoin === 0 || isNaN(sendingCoin)) {
       // console.log("処理を阻止");
     } else {

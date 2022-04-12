@@ -19,6 +19,7 @@ export const Gift = () => {
   const [monthlyCoinUsage, setMonthlyCoinUsage] = useState(0);
   const [userId, setUserId] = useState("");
   const [giftListData, setGiftListData] = useState([]);
+  const [updateId, setUpdateId] = useState(0);
 
   const getUserProfile = getAuth();
   const user = getUserProfile.currentUser;
@@ -70,13 +71,23 @@ export const Gift = () => {
     const loginFilter = arrayUsers.filter((login) => {
       return email === login.email;
     });
+    console.log("loginFilter", loginFilter);
     const getData = doc(db, "users", loginFilter[0].id);
     const snapData = await getDoc(getData);
     setUserId(loginFilter[0].id);
     setCoinOwnership(Math.round(snapData.data().coinOwnership));
     setMonthlyCoinUsage(Math.round(snapData.data().monthlyCoinUsage));
   }, [isFocused]);
+
   const updateData = async (item) => {
+    const getCollection = await getDocs(collection(db, "users"));
+    const arrayUsers = [];
+    getCollection.forEach((docs) => {
+      arrayUsers.push({ email: docs.data().email, id: docs.id });
+    });
+    const loginFilter = arrayUsers.filter((login) => {
+      return email === login.email;
+    });
     const getData = doc(db, "users", loginFilter[0].id);
     await updateDoc(getData, {
       coinOwnership: coinOwnership + item.sendingCoin,
@@ -88,7 +99,37 @@ export const Gift = () => {
   const onPressAction = async (item) => {
     updateData(item);
     deleteData(item);
+    setUpdateId(updateId + 1);
   };
+
+  useEffect(async () => {
+    const getCollection = await getDocs(collection(db, "users"));
+    const arrayUsers = [];
+    getCollection.forEach((docs) => {
+      arrayUsers.push({ email: docs.data().email, id: docs.id });
+    });
+    const loginFilter = arrayUsers.filter((login) => {
+      return email === login.email;
+    });
+    const getUserData = doc(db, "users", loginFilter[0].id);
+    const snapUsersData = await getDoc(getUserData);
+    setCoinOwnership(Math.round(snapUsersData.data().coinOwnership));
+    setMonthlyCoinUsage(Math.round(snapUsersData.data().monthlyCoinUsage));
+    const sendGift = collection(db, "coins");
+    const querySnapshot = await getDocs(sendGift);
+    const arrayCoins = [];
+    querySnapshot.forEach((docs) => {
+      arrayCoins.push({
+        name: docs.data().name,
+        sendingCoin: docs.data().sendingCoin,
+        subId: docs.data().subId,
+        recipientUserId: docs.data().recipientUserId,
+        id: docs.id,
+        time: docs.data().time,
+      });
+    });
+    setGiftListData(arrayCoins);
+  }, [updateId]);
 
   return (
     <>
