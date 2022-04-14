@@ -22,6 +22,10 @@ export const Home = () => {
   const getUserProfile = getAuth();
   const user = getUserProfile.currentUser;
   const email = user.email;
+  const date = new Date();
+  const month = date.getMonth();
+  const howMuchDouYouUseYourCoinThisMonth =
+    "あなたの" + month + "月のコイン使用量：";
 
   onAuthStateChanged(auth, (user) => {
     if (user) {
@@ -60,11 +64,19 @@ export const Home = () => {
     <ScrollView>
       <View style={styles.content}>
         <View style={styles.center}>
-          <CircleIcon style={styles.CircleIconPlacement} />
-          <Text style={styles.headingText}>ユーザー名</Text>
-          <Text style={styles.headingText}>{name}</Text>
-          <Text style={styles.headingText}>メールアドレス</Text>
-          <Text style={styles.headingText}>{email}</Text>
+          <View style={styles.alignItemsCenter}>
+            <CircleIcon style={styles.CircleIconPlacement} />
+          </View>
+          <View style={styles.profile}>
+            <View style={styles.profileCategory}>
+              <Text style={styles.headingText}>ユーザー名</Text>
+              <Text style={styles.profileText}>{name}</Text>
+            </View>
+            <View style={styles.profileCategory}>
+              <Text style={styles.headingText}>メールアドレス</Text>
+              <Text style={styles.profileText}>{email}</Text>
+            </View>
+          </View>
           <View style={styles.line} />
         </View>
         <TextTemplateYourCoinRerated
@@ -74,7 +86,7 @@ export const Home = () => {
         />
         <View style={styles.line} />
         <TextTemplateYourCoinRerated
-          letter="あなたのコイン使用量："
+          letter={howMuchDouYouUseYourCoinThisMonth}
           numberOfCoin={monthlyCoinUsage}
           unit="C"
         />
@@ -89,8 +101,20 @@ export const Home = () => {
 
 const styles = StyleSheet.create({
   center: {
-    alignItems: "center",
+    // alignItems: "center",
     marginTop: 10,
+  },
+  alignItemsCenter: {
+    alignItems: "center",
+  },
+  profile: {
+    // marginLeft: 10,
+  },
+  profileCategory: {
+    margin: 15,
+  },
+  profileText: {
+    fontSize: 28,
   },
   CircleIconPlacement: {
     marginTop: 30,
