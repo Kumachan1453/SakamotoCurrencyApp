@@ -16,7 +16,7 @@ export const FriendButton = ({
         <View style={styles.contentsPlacement}>
           <Text style={styles.listStyleText}>{ranking}</Text>
           {/* <CircleIcon /> */}
-          <Text style={styles.listStyleText}>{friendName}</Text>
+          <Text style={styles.friendNameText}>{friendName}</Text>
           <View style={styles.coinTextPlacement}>
             <Text style={styles.coinText}>{coin}</Text>
             <Text style={styles.coinText}>{unit}</Text>
@@ -53,21 +53,24 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginLeft: 10,
   },
-  circleIconPlacement: {
-    marginTop: 20,
+  // circleIconPlacement: {
+  //   marginTop: 20,
+  // },
+  friendNameText: {
+    fontSize: 28,
   },
   listStyleText: {
     fontSize: 22,
     fontWeight: "400",
-    marginLeft: 20,
+    marginLeft: 10,
+    marginRight: 20,
   },
-  // 以下のスタイルコードに問題がある可能性が高い。
   coinTextPlacement: {
     flexDirection: "row",
-    // 以下の一行が問題点
-    marginLeft: 100,
+    margin: 30,
   },
   coinText: {
+    textAlign: "right",
     color: "gray",
   },
 });

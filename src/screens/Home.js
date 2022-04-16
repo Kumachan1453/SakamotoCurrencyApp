@@ -8,11 +8,10 @@ import { onAuthStateChanged, signOut, getAuth } from "firebase/auth";
 import { auth } from "../components/Firebase";
 import { db } from "../components/Firebase";
 import { useIsFocused } from "@react-navigation/native";
+import { howMuchDouYouUseYourCoinThisMonth } from "../components/PatternText";
 
 export const Home = () => {
   const isFocused = useIsFocused();
-  const FirstDay = "11/1";
-  const LastDay = "11/30";
 
   const [name, setName] = useState("");
   const [coinOwnership, setCoinOwnership] = useState(0);
@@ -22,10 +21,6 @@ export const Home = () => {
   const getUserProfile = getAuth();
   const user = getUserProfile.currentUser;
   const email = user.email;
-  const date = new Date();
-  const month = date.getMonth();
-  const howMuchDouYouUseYourCoinThisMonth =
-    "あなたの" + month + "月のコイン使用量：";
 
   onAuthStateChanged(auth, (user) => {
     if (user) {
@@ -64,9 +59,9 @@ export const Home = () => {
     <ScrollView>
       <View style={styles.content}>
         <View style={styles.center}>
-          <View style={styles.alignItemsCenter}>
+          {/* <View style={styles.alignItemsCenter}>
             <CircleIcon style={styles.CircleIconPlacement} />
-          </View>
+          </View> */}
           <View style={styles.profile}>
             <View style={styles.profileCategory}>
               <Text style={styles.headingText}>ユーザー名</Text>
@@ -132,6 +127,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     marginTop: 20,
     marginBottom: 10,
+    color: "gray",
   },
   bigCoinText: {
     fontWeight: "bold",

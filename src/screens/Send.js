@@ -18,11 +18,11 @@ import {
   addDoc,
 } from "firebase/firestore";
 import { useIsFocused, useRoute } from "@react-navigation/native";
-import FriendList from "../screens/FriendList";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ModalTemplete from "../components/ModalTemplete";
 import { db } from "../components/Firebase";
-import { onAuthStateChanged, signOut, getAuth } from "firebase/auth";
+import { getAuth } from "firebase/auth";
+import { howMuchDouYouUseYourCoinThisMonth } from "../components/PatternText";
 
 const Stack = createNativeStackNavigator();
 
@@ -168,24 +168,28 @@ export const Send = ({ navigation }) => {
             numberOfCoin={coinOwnership}
             unit="C"
           />
-          <TextTemplateYourCoinRerated
-            letter="残額："
-            numberOfCoin={balance}
-            unit="C"
-          />
+          {sendingCoin > 0 && (
+            <TextTemplateYourCoinRerated
+              letter="残額："
+              numberOfCoin={balance}
+              unit="C"
+            />
+          )}
         </View>
         <View style={styles.line} />
         <View>
           <TextTemplateYourCoinRerated
-            letter="コイン使用量："
+            letter={howMuchDouYouUseYourCoinThisMonth}
             numberOfCoin={monthlyCoinUsage}
             unit="C"
           />
-          <TextTemplateYourCoinRerated
-            letter="使用後の使用量："
-            numberOfCoin={futureMonthlyCoinUsage}
-            unit="C"
-          />
+          {sendingCoin > 0 && (
+            <TextTemplateYourCoinRerated
+              letter="使用後の使用量："
+              numberOfCoin={futureMonthlyCoinUsage}
+              unit="C"
+            />
+          )}
         </View>
         <View style={styles.line} />
         <View style={styles.alignItemsCenter}>

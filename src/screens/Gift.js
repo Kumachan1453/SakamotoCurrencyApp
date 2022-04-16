@@ -13,6 +13,7 @@ import {
 import { getAuth } from "firebase/auth";
 import { useIsFocused } from "@react-navigation/native";
 import { db } from "../components/Firebase";
+import { howMuchDouYouUseYourCoinThisMonth } from "../components/PatternText";
 
 export const Gift = () => {
   const [coinOwnership, setCoinOwnership] = useState(0);
@@ -24,7 +25,7 @@ export const Gift = () => {
   const getUserProfile = getAuth();
   const user = getUserProfile.currentUser;
   const email = user.email;
-  console.log("email", email);
+  // console.log("email", email);
 
   // useEffect(async () => {
   //   const sendGift = collection(db, "coins");
@@ -71,7 +72,6 @@ export const Gift = () => {
     const loginFilter = arrayUsers.filter((login) => {
       return email === login.email;
     });
-    console.log("loginFilter", loginFilter);
     const getData = doc(db, "users", loginFilter[0].id);
     const snapData = await getDoc(getData);
     setUserId(loginFilter[0].id);
@@ -140,7 +140,7 @@ export const Gift = () => {
           unit="C"
         />
         <TextTemplateYourCoinRerated
-          letter="あなたのコイン使用量："
+          letter={howMuchDouYouUseYourCoinThisMonth}
           numberOfCoin={monthlyCoinUsage}
           unit="C"
         />
