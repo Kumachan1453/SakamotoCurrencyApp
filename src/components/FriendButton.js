@@ -70,6 +70,8 @@ const styles = StyleSheet.create({
     margin: 30,
   },
   coinText: {
+    // display: "flex",
+    // justifyContent: "flex-end",
     textAlign: "right",
     color: "gray",
   },
