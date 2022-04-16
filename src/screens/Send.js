@@ -161,6 +161,13 @@ export const Send = ({ navigation }) => {
       <View>
         <View>
           <TextTemplateYourCoinRerated
+            letter="送る相手："
+            numberOfCoin={route.params.name}
+          />
+        </View>
+        <View style={styles.line} />
+        <View>
+          <TextTemplateYourCoinRerated
             letter="所持コイン数："
             numberOfCoin={coinOwnership}
             unit="C"
