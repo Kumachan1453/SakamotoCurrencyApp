@@ -23,6 +23,7 @@ import ModalTemplete from "../components/ModalTemplete";
 import { db } from "../components/Firebase";
 import { getAuth } from "firebase/auth";
 import { howMuchDouYouUseYourCoinThisMonth } from "../components/PatternText";
+import { Warning } from "../components/Warning";
 
 const Stack = createNativeStackNavigator();
 
@@ -31,7 +32,6 @@ export const Send = ({ navigation }) => {
   const user = getUserProfile.currentUser;
   const email = user.email;
   const [sendingCoin, setSendingCoin] = useState(0);
-  console.log("sendingCoin", sendingCoin);
 
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -69,7 +69,6 @@ export const Send = ({ navigation }) => {
   }, [isFocused]);
 
   const updateData = async () => {
-    console.log("updateData");
     const getCollection = await getDocs(collection(db, "users"));
     const array = [];
     getCollection.forEach((docs) => {
@@ -111,9 +110,7 @@ export const Send = ({ navigation }) => {
     });
     const getData = doc(db, "users", loginFilter[0].id);
     const snapData = await getDoc(getData);
-    console.log("loginFilter", loginFilter);
     if (sendingCoin === 0 || isNaN(sendingCoin)) {
-      // console.log("処理を阻止");
     } else {
       const sendGift = await addDoc(collection(db, "coins"), {
         name: snapData.data().name,
@@ -168,7 +165,7 @@ export const Send = ({ navigation }) => {
             numberOfCoin={coinOwnership}
             unit="C"
           />
-          {sendingCoin > 0 && (
+          {sendingCoin > 0 && sendingCoin <= coinOwnership && (
             <TextTemplateYourCoinRerated
               letter="残額："
               numberOfCoin={balance}
@@ -183,7 +180,7 @@ export const Send = ({ navigation }) => {
             numberOfCoin={monthlyCoinUsage}
             unit="C"
           />
-          {sendingCoin > 0 && (
+          {sendingCoin > 0 && sendingCoin <= coinOwnership && (
             <TextTemplateYourCoinRerated
               letter="使用後の使用量："
               numberOfCoin={futureMonthlyCoinUsage}
@@ -207,6 +204,9 @@ export const Send = ({ navigation }) => {
               keyboardType="number-pad"
             />
             <Text style={styles.bigCoinText}>C</Text>
+            {sendingCoin > coinOwnership && (
+              <Warning letter={"残額を上回ってます"} />
+            )}
           </View>
         </View>
         <View style={styles.borderLine} />
