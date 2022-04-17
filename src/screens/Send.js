@@ -155,6 +155,7 @@ export const Send = ({ navigation }) => {
       setIsButtonDisabled(true);
     }
   }
+  console.log("sendingCoin", sendingCoin);
 
   return (
     <ScrollView>
@@ -167,11 +168,13 @@ export const Send = ({ navigation }) => {
         </View>
         <View style={styles.line} />
         <View>
-          <TextTemplateYourCoinRerated
-            letter="所持コイン数："
-            numberOfCoin={coinOwnership}
-            unit="C"
-          />
+          {sendingCoin === 0 && (
+            <TextTemplateYourCoinRerated
+              letter="所持コイン数："
+              numberOfCoin={coinOwnership}
+              unit="C"
+            />
+          )}
           {sendingCoin > 0 && sendingCoin <= coinOwnership && (
             <TextTemplateYourCoinRerated
               letter="残額："
@@ -182,11 +185,13 @@ export const Send = ({ navigation }) => {
         </View>
         <View style={styles.line} />
         <View>
-          <TextTemplateYourCoinRerated
-            letter={howMuchDouYouUseYourCoinThisMonth}
-            numberOfCoin={monthlyCoinUsage}
-            unit="C"
-          />
+          {sendingCoin === 0 && (
+            <TextTemplateYourCoinRerated
+              letter={howMuchDouYouUseYourCoinThisMonth}
+              numberOfCoin={monthlyCoinUsage}
+              unit="C"
+            />
+          )}
           {sendingCoin > 0 && sendingCoin <= coinOwnership && (
             <TextTemplateYourCoinRerated
               letter="使用後の使用量："
@@ -202,8 +207,7 @@ export const Send = ({ navigation }) => {
             <TextInput
               style={isButtonDisabled ? styles.errorInput : styles.input}
               onChangeText={
-                (text) =>
-                  setSendingCoin(parseInt(isNaN(text) ? sendingCoin : text)) //要確認
+                (text) => setSendingCoin(parseInt(text === "" ? 0 : text)) //要確認
               }
               // value={sendingCoin}
               type="number"
