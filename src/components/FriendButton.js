@@ -12,19 +12,22 @@ export const FriendButton = ({
 }) => {
   return (
     <TouchableOpacity onPress={onPress} style={styles.friendButton}>
-      <View>
+      <View style={styles.flexDirectionRow}>
         <View style={styles.contentsPlacement}>
-          <Text style={styles.listStyleText}>{ranking}</Text>
-          {/* <CircleIcon /> */}
-          <Text style={styles.friendNameText}>{friendName}</Text>
-          <View style={styles.coinTextPlacement}>
-            <Text style={styles.coinText}>{coin}</Text>
-            <Text style={styles.coinText}>{unit}</Text>
+          <View style={styles.leftPlacement}>
+            <Text style={styles.listStyleText}>{ranking}</Text>
+            <Text style={styles.friendNameText}>{friendName}</Text>
+          </View>
+          <View style={styles.rightPlacement}>
+            <View style={styles.coinTextPlacement}>
+              <Text style={styles.coinText}>{coin}</Text>
+              <Text style={styles.coinText}>{unit}</Text>
+            </View>
           </View>
         </View>
-        <View>
+        {/* <View>
           <Text>{time}</Text>
-        </View>
+        </View> */}
       </View>
     </TouchableOpacity>
   );
@@ -36,7 +39,7 @@ const styles = StyleSheet.create({
     width: "95%",
     height: 80,
     margin: 10,
-    backgroundColor: "white",
+    backgroundColor: "gray",
     borderWidth: 1,
     borderRadius: 10,
     shadowColor: "black",
@@ -46,18 +49,29 @@ const styles = StyleSheet.create({
     },
     shadowRadius: 2,
     shadowOpacity: 1,
-    flexDirection: "row",
+    justifyContent: "center",
   },
   contentsPlacement: {
     flexDirection: "row",
+    // alignItems: "center",
+    backgroundColor: "lightgreen",
+  },
+  rightPlacement: {
+    justifyContent: "center",
+  },
+  leftPlacement: {
+    flexDirection: "row",
     alignItems: "center",
-    marginLeft: 10,
+    // marginLeft: 10,
+    backgroundColor: "lightblue",
+    // justifyContent: "flex-end",
   },
   // circleIconPlacement: {
   //   marginTop: 20,
   // },
   friendNameText: {
     fontSize: 28,
+    backgroundColor: "pink",
   },
   listStyleText: {
     fontSize: 22,
@@ -66,12 +80,17 @@ const styles = StyleSheet.create({
     marginRight: 20,
   },
   coinTextPlacement: {
-    flexDirection: "row",
-    margin: 30,
+    // flexDirection: "row",
+    // width: 200,
+    // marginRight: 5,
+    backgroundColor: "tomato",
+    // alignItems: "stretch",
+    // justifyContent: "center",
   },
   coinText: {
     // display: "flex",
     // justifyContent: "flex-end",
+    justifyContent: "center",
     textAlign: "right",
     color: "gray",
   },
