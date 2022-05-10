@@ -1,33 +1,23 @@
 import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import CircleIcon from "./CircleIcon";
+import { Ionicons } from "@expo/vector-icons";
 
-export const FriendButton = ({
-  friendName,
-  onPress,
-  coin,
-  unit,
-  ranking,
-  time,
-}) => {
+export const FriendButton = ({ friendName, onPress, coin, unit, ranking }) => {
   return (
     <TouchableOpacity onPress={onPress} style={styles.friendButton}>
-      <View style={styles.flexDirectionRow}>
-        <View style={styles.contentsPlacement}>
-          <View style={styles.leftPlacement}>
-            <Text style={styles.listStyleText}>{ranking}</Text>
-            <Text style={styles.friendNameText}>{friendName}</Text>
-          </View>
-          <View style={styles.rightPlacement}>
-            <View style={styles.coinTextPlacement}>
-              <Text style={styles.coinText}>{coin}</Text>
-              <Text style={styles.coinText}>{unit}</Text>
-            </View>
+      <View style={styles.contentsPlacement}>
+        <View style={styles.leftPlacement}>
+          {ranking <= 3 && <Ionicons name="ios-medal" />}
+          {ranking > 3 && <Text style={styles.listStyleText}>{ranking}</Text>}
+          <Text style={styles.friendNameText}>{friendName}</Text>
+        </View>
+        <View style={styles.rightPlacement}>
+          <View style={styles.coinTextPlacement}>
+            <Text style={styles.coinText}>{coin}</Text>
+            <Text style={styles.coinText}>{unit}</Text>
           </View>
         </View>
-        {/* <View>
-          <Text>{time}</Text>
-        </View> */}
       </View>
     </TouchableOpacity>
   );
@@ -53,8 +43,8 @@ const styles = StyleSheet.create({
   },
   contentsPlacement: {
     flexDirection: "row",
-    // alignItems: "center",
     backgroundColor: "lightgreen",
+    justifyContent: "space-between",
   },
   rightPlacement: {
     justifyContent: "center",
@@ -62,13 +52,8 @@ const styles = StyleSheet.create({
   leftPlacement: {
     flexDirection: "row",
     alignItems: "center",
-    // marginLeft: 10,
     backgroundColor: "lightblue",
-    // justifyContent: "flex-end",
   },
-  // circleIconPlacement: {
-  //   marginTop: 20,
-  // },
   friendNameText: {
     fontSize: 28,
     backgroundColor: "pink",
@@ -80,19 +65,15 @@ const styles = StyleSheet.create({
     marginRight: 20,
   },
   coinTextPlacement: {
-    // flexDirection: "row",
-    // width: 200,
-    // marginRight: 5,
+    flexDirection: "row",
     backgroundColor: "tomato",
-    // alignItems: "stretch",
-    // justifyContent: "center",
   },
   coinText: {
-    // display: "flex",
-    // justifyContent: "flex-end",
     justifyContent: "center",
     textAlign: "right",
     color: "gray",
+    fontSize: 25,
+    marginRight: 3,
   },
 });
 
