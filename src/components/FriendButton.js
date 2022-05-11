@@ -8,7 +8,30 @@ export const FriendButton = ({ friendName, onPress, coin, unit, ranking }) => {
     <TouchableOpacity onPress={onPress} style={styles.friendButton}>
       <View style={styles.contentsPlacement}>
         <View style={styles.leftPlacement}>
-          {ranking <= 3 && <Ionicons name="ios-medal" />}
+          {ranking === 3 && (
+            <Ionicons
+              name="ios-medal"
+              size={30}
+              color="#ac6b25"
+              style={styles.medalIcon}
+            />
+          )}
+          {ranking === 2 && (
+            <Ionicons
+              name="ios-medal"
+              size={30}
+              color="silver"
+              style={styles.medalIcon}
+            />
+          )}
+          {ranking === 1 && (
+            <Ionicons
+              name="ios-medal"
+              size={30}
+              color="gold"
+              style={styles.medalIcon}
+            />
+          )}
           {ranking > 3 && <Text style={styles.listStyleText}>{ranking}</Text>}
           <Text style={styles.friendNameText}>{friendName}</Text>
         </View>
@@ -29,7 +52,7 @@ const styles = StyleSheet.create({
     width: "95%",
     height: 80,
     margin: 10,
-    backgroundColor: "gray",
+    // backgroundColor: "gray",
     borderWidth: 1,
     borderRadius: 10,
     shadowColor: "black",
@@ -38,12 +61,12 @@ const styles = StyleSheet.create({
       width: 1,
     },
     shadowRadius: 2,
-    shadowOpacity: 1,
+    shadowOpacity: 0.2,
     justifyContent: "center",
   },
   contentsPlacement: {
     flexDirection: "row",
-    backgroundColor: "lightgreen",
+    // backgroundColor: "lightgreen",
     justifyContent: "space-between",
   },
   rightPlacement: {
@@ -52,11 +75,11 @@ const styles = StyleSheet.create({
   leftPlacement: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "lightblue",
+    // backgroundColor: "lightblue",
   },
   friendNameText: {
     fontSize: 28,
-    backgroundColor: "pink",
+    // backgroundColor: "pink",
   },
   listStyleText: {
     fontSize: 22,
@@ -66,7 +89,7 @@ const styles = StyleSheet.create({
   },
   coinTextPlacement: {
     flexDirection: "row",
-    backgroundColor: "tomato",
+    // backgroundColor: "tomato",
   },
   coinText: {
     justifyContent: "center",
@@ -74,6 +97,9 @@ const styles = StyleSheet.create({
     color: "gray",
     fontSize: 25,
     marginRight: 3,
+  },
+  medalIcon: {
+    padding: 10,
   },
 });
 
