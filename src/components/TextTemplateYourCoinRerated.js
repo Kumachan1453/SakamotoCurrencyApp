@@ -36,15 +36,12 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   bigText: {
-    // fontWeight: "bold",
     fontSize: 18,
     margin: 10,
     marginTop: 10,
   },
   bigCoinText: {
-    // fontWeight: "bold",
     fontSize: 18,
-    // marginTop: 10,
     marginBottom: 10,
   },
   subText: {
@@ -58,32 +55,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     borderColor: "gray",
   },
-  // content: {
-  //   alignItems: "center",
-  // },
-  // bigText: {
-  //   fontWeight: "bold",
-  //   fontSize: 20,
-  //   margin: 10,
-  //   marginTop: 20,
-  // },
-  // bigCoinText: {
-  //   fontWeight: "bold",
-  //   fontSize: 20,
-  //   marginTop: 10,
-  //   marginBottom: 30,
-  // },
-  // subText: {
-  //   color: "#808080",
-  // },
-  // flexDirectionRow: {
-  //   flexDirection: "row",
-  // },
-  // line: {
-  //   width: "100%",
-  //   borderBottomWidth: 1,
-  //   borderColor: "gray",
-  // },
 });
 
 export default TextTemplateYourCoinRerated;

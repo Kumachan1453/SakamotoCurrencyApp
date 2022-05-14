@@ -83,7 +83,6 @@ export const Send = ({ navigation }) => {
     } else if (coinOwnership - sendingCoin >= 0) {
       setSendingCoin(sendingCoin);
       await updateDoc(getData, {
-        // sendingCoin: sendingCoin,
         coinOwnership: coinOwnership - sendingCoin,
         monthlyCoinUsage: monthlyCoinUsage + sendingCoin,
         sumCoinUsage: sumCoinUsage + sendingCoin,
@@ -115,15 +114,10 @@ export const Send = ({ navigation }) => {
       const sendGift = await addDoc(collection(db, "coins"), {
         name: snapData.data().name,
         sendingCoin: sendingCoin,
-        // id: sendGift.id,
         subId: subId,
         recipientUserId: route.params.id,
         time: new Date().toLocaleString(),
       });
-      // collection.doc(id).set({
-      //   ...sendGift,
-      // });
-      // console.log("Document written with ID: ", sendGift.id);
       navigation.goBack();
     }
   }, [subId]);
@@ -206,10 +200,9 @@ export const Send = ({ navigation }) => {
           <View style={styles.flexDirectionRow}>
             <TextInput
               style={isButtonDisabled ? styles.errorInput : styles.input}
-              onChangeText={
-                (text) => setSendingCoin(parseInt(text === "" ? 0 : text)) //要確認
+              onChangeText={(text) =>
+                setSendingCoin(parseInt(text === "" ? 0 : text))
               }
-              // value={sendingCoin}
               type="number"
               placeholder="数字を入力"
               keyboardType="number-pad"
@@ -241,8 +234,6 @@ export const Send = ({ navigation }) => {
               setModalVisible(!modalVisible);
               updateData();
               pressOkButton();
-              // navigation.goBack();
-              // navigate("FriendList");
             }}
           />
           <View style={styles.alignItemsCenter}>

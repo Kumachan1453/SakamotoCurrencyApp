@@ -19,7 +19,6 @@ export const GetIdentificationUserData = () => {
   const uid = user.uid;
 
   const addUid = async () => {
-    // const usersCollection = doc(db, "users", "xAFCeUpu18qNypFv9Q0w");
     const usersCollection = collection(db, "users");
     const querySnapshot = await getDocs(usersCollection);
     await updateDoc(querySnapshot, {

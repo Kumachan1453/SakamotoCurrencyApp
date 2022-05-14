@@ -68,22 +68,20 @@ export const Ranking = () => {
   });
 
   return (
-    <View>
-      <FlatList
-        data={rankingListData}
-        renderItem={({ item }) => {
-          return (
-            <FriendButton
-              ranking={item.ranking}
-              friendName={item.name}
-              coin={item.monthlyCoinUsage}
-              unit="C"
-            />
-          );
-        }}
-        keyExtractor={(item) => item.id}
-      />
-    </View>
+    <FlatList
+      data={rankingListData}
+      renderItem={({ item }) => {
+        return (
+          <FriendButton
+            ranking={item.ranking}
+            friendName={item.name}
+            coin={item.monthlyCoinUsage}
+            unit="C"
+          />
+        );
+      }}
+      keyExtractor={(item) => item.id}
+    />
   );
 };
 

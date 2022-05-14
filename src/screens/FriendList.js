@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, View, FlatList } from "react-native";
 import { FriendButton } from "../components/FriendButton";
 import { db } from "../components/Firebase";
-import { doc, collection, getDocs, query } from "firebase/firestore";
-import { onAuthStateChanged, signOut, getAuth } from "firebase/auth";
+import { collection, getDocs, query } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 
 export const FriendList = ({ navigation }) => {
   const [listData, setListData] = useState([]);

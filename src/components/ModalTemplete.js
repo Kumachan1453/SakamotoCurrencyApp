@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  StyleSheet,
-  animationType,
-  View,
-  Text,
-  Modal,
-  TouchableOpacity,
-} from "react-native";
+import { StyleSheet, View, Text, Modal, TouchableOpacity } from "react-native";
 
 export const ModalTemplete = ({
   transparent,

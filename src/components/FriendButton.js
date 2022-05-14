@@ -1,6 +1,5 @@
 import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
-import CircleIcon from "./CircleIcon";
 import { Ionicons } from "@expo/vector-icons";
 
 export const FriendButton = ({ friendName, onPress, coin, unit, ranking }) => {
@@ -46,13 +45,11 @@ export const FriendButton = ({ friendName, onPress, coin, unit, ranking }) => {
   );
 };
 
-// このスタイル内に問題がある。
 const styles = StyleSheet.create({
   friendButton: {
     width: "95%",
     height: 80,
     margin: 10,
-    // backgroundColor: "gray",
     borderWidth: 1,
     borderRadius: 10,
     shadowColor: "black",
@@ -66,7 +63,6 @@ const styles = StyleSheet.create({
   },
   contentsPlacement: {
     flexDirection: "row",
-    // backgroundColor: "lightgreen",
     justifyContent: "space-between",
   },
   rightPlacement: {
@@ -75,11 +71,10 @@ const styles = StyleSheet.create({
   leftPlacement: {
     flexDirection: "row",
     alignItems: "center",
-    // backgroundColor: "lightblue",
   },
   friendNameText: {
     fontSize: 28,
-    // backgroundColor: "pink",
+    marginLeft: 10,
   },
   listStyleText: {
     fontSize: 22,
@@ -89,7 +84,6 @@ const styles = StyleSheet.create({
   },
   coinTextPlacement: {
     flexDirection: "row",
-    // backgroundColor: "tomato",
   },
   coinText: {
     justifyContent: "center",

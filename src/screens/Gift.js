@@ -25,25 +25,6 @@ export const Gift = () => {
   const getUserProfile = getAuth();
   const user = getUserProfile.currentUser;
   const email = user.email;
-  // console.log("email", email);
-
-  // useEffect(async () => {
-  //   const sendGift = collection(db, "coins");
-  //   const querySnapshot = await getDocs(sendGift);
-  //   const array = [];
-  //   querySnapshot.forEach((docs) => {
-  //     array.push({
-  //       name: docs.data().name,
-  //       sendingCoin: docs.data().sendingCoin,
-  //       subId: docs.data().subId,
-  //       recipientUserId: docs.data().recipientUserId,
-  //       id: docs.id,
-  //       time: docs.data().time,
-  //     });
-  //   });
-  //   setGiftListData(array);
-  // });
-
   const unit = "C";
 
   const isFocused = useIsFocused();
@@ -146,60 +127,28 @@ export const Gift = () => {
         />
         <View style={styles.line} />
       </View>
-
-      <View style={styles.centeredView}>
-        <FlatList
-          data={giftListData}
-          renderItem={({ item }) => {
-            if (item.recipientUserId === userId) {
-              return (
-                <>
-                  {/* <ModalTemplete
-                    transparent={false}
-                    visible={modalVisible}
-                    onRequestClose={() => {
-                      Alert.alert("Modal has been closed.");
-                      setModalVisible(!modalVisible);
-                    }}
-                    centerText={{ item } + "Cを受け取りますか？"}
-                    // subCenterText={subCenterText}
-                    buttonPlacement={true}
-                    leftText={"受け取らない"}
-                    rightText={"受け取る"}
-                    leftOnPress={() => {
-                      setModalVisible(!modalVisible);
-                    }}
-                    rightOnPress={() => {
-                      setModalVisible(!modalVisible);
-                      // deleteTask(item);
-                      setItemId(item.id);
-                      updateData();
-                      console.log("item.id -inRightOnPress", item.id);
-                    }}
-                  /> */}
-                  <FriendButton
-                    onPress={() => onPressAction(item)}
-                    friendName={item.name}
-                    coin={item.sendingCoin}
-                    unit={unit}
-                    time={item.time}
-                  />
-                </>
-              );
-            }
-          }}
-          // keyExtractor={(item) => item.key}
-          keyExtractor={(item) => item.id}
-        />
-      </View>
+      <FlatList
+        data={giftListData}
+        renderItem={({ item }) => {
+          if (item.recipientUserId === userId) {
+            return (
+              <FriendButton
+                onPress={() => onPressAction(item)}
+                friendName={item.name}
+                coin={item.sendingCoin}
+                unit={unit}
+                time={item.time}
+              />
+            );
+          }
+        }}
+        keyExtractor={(item) => item.id}
+      />
     </>
   );
 };
 
 const styles = StyleSheet.create({
-  // content: {
-  //   alignItems: "center",
-  // },
   bigText: {
     fontWeight: "bold",
     fontSize: 20,
@@ -223,12 +172,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: "gray",
     marginTop: 20,
-  },
-
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
   },
   modalView: {
     margin: 20,

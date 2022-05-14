@@ -14,7 +14,6 @@ export const OnboardingTextInput = ({
   <View>
     <View style={styles.view}>
       <TextInput
-        //style={setSignError(true) ? styles.errorTextInput : styles.textInput}と記述すると無限ループに関するエラーが発生する。
         style={signError ? styles.errorTextInput : styles.textInput}
         onChangeText={onChangeText}
         value={value}

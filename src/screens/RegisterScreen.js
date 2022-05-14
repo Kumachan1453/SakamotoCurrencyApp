@@ -12,7 +12,6 @@ import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 import { jpCheck, blankCheck } from "../components/IfText";
 import { auth, db } from "../components/Firebase";
 import { addDoc, collection, query, getDocs } from "firebase/firestore";
-// import { Button } from "../components/Button";
 
 export const RegisterScreen = () => {
   const [email, setEmail] = useState("");
@@ -31,16 +30,6 @@ export const RegisterScreen = () => {
   const isJapanese = jpCheck(email);
   const isBlankEmail = blankCheck(email);
   const isBlankPassword = blankCheck(password);
-
-  // const getDocId = async () => {
-  //   const q = query(collection(db, "users"));
-
-  //   const querySnapshot = await getDocs(q);
-  //   querySnapshot.forEach((doc) => {
-  //     console.log("doc.id:", doc.id, " => ", "doc.data():", doc.data());
-  //   });
-  // };
-  // getDocId();
 
   if (!email || !password || isJapanese || isBlankEmail || isBlankPassword) {
     if (isButtonDisabled) {
@@ -122,7 +111,6 @@ export const RegisterScreen = () => {
       <Text style={styles.textUsersRegister}>ユーザ登録画面</Text>
       <View style={styles.view}>
         <TextInput
-          //style={setSignError(true) ? styles.errorTextInput : styles.textInput}と記述すると無限ループに関するエラーが発生する。
           style={signError ? styles.errorTextInput : styles.textInput}
           onChangeText={setEmail}
           value={email}
@@ -134,7 +122,6 @@ export const RegisterScreen = () => {
       <View style={styles.view}>
         <TextInput
           style={signError ? styles.errorTextInput : styles.textInput}
-          // style={styles.textInput}
           onChangeText={setPassword}
           value={password}
           placeholder="パスワード（6文字以上）"
@@ -151,11 +138,6 @@ export const RegisterScreen = () => {
           autoCapitalize="none"
         />
       </View>
-      {/* <Button
-        content="サインイン"
-        onPress={signUp}
-        isButtonDisabled={isButtonDisabled}
-      /> */}
       <TouchableOpacity
         style={styles.touchableOpacity}
         onPress={signUp}

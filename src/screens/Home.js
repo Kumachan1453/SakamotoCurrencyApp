@@ -59,9 +59,6 @@ export const Home = () => {
     <ScrollView>
       <View style={styles.content}>
         <View style={styles.center}>
-          {/* <View style={styles.alignItemsCenter}>
-            <CircleIcon style={styles.CircleIconPlacement} />
-          </View> */}
           <View style={styles.profile}>
             <View style={styles.profileCategory}>
               <Text style={styles.headingText}>ユーザー名</Text>
@@ -96,14 +93,10 @@ export const Home = () => {
 
 const styles = StyleSheet.create({
   center: {
-    // alignItems: "center",
     marginTop: 10,
   },
   alignItemsCenter: {
     alignItems: "center",
-  },
-  profile: {
-    // marginLeft: 10,
   },
   profileCategory: {
     margin: 15,

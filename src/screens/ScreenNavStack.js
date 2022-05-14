@@ -18,7 +18,6 @@ const Stack = createNativeStackNavigator();
 const getData = async () => {
   const getDatas = collection(db, "users");
   const querySnapshot = await getDocs(getDatas);
-  // console.log("querySnapshot", querySnapshot);
 };
 getData();
 
@@ -47,7 +46,7 @@ export const ScreenNavStack = () => {
         component={Send}
         options={{
           headerShown: true,
-          title: `コインを送る`, // 「route.params.name」は読み込まれていない
+          title: `コインを送る`,
           headerStyle: {
             backgroundColor: "#ff9900",
           },
