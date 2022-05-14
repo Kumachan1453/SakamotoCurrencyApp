@@ -19,7 +19,6 @@ export const LoginScreen = ({ navigation }) => {
       await signInWithEmailAndPassword(auth, email, password);
     } catch (error) {
       alert("メールアドレスもしくはパスワードが間違っています。");
-      console.log(error.message);
     }
   };
 
