@@ -43,7 +43,7 @@ export const Gift = () => {
         time: docs.data().time,
       });
     });
-    setGiftListData(arrayCoins);
+    setGiftListData(arrayCoins); //arrayCoinsを並べ替える。
 
     const getCollection = await getDocs(collection(db, "users"));
     const arrayUsers = [];
@@ -61,6 +61,7 @@ export const Gift = () => {
   }, [isFocused]);
 
   const updateData = async (item) => {
+    console.log("updateData: 1"); //1回ボタンを押したらボタンを押せなくするという機能。
     const getCollection = await getDocs(collection(db, "users"));
     const arrayUsers = [];
     getCollection.forEach((docs) => {
@@ -70,19 +71,24 @@ export const Gift = () => {
       return email === login.email;
     });
     const getData = doc(db, "users", loginFilter[0].id);
+    console.log("updateData: 2");
     await updateDoc(getData, {
       coinOwnership: coinOwnership + item.sendingCoin,
     });
+    console.log("updateData: 3");
   };
   const deleteData = async (item) => {
+    console.log("deleteData: 1");
+    //ここに条件文を作るなど
     await deleteDoc(doc(db, "coins", item.id));
+    console.log("deleteData: 2");
   };
   const onPressAction = async (item) => {
     updateData(item);
     deleteData(item);
     setUpdateId(updateId + 1);
+    console.log("setUpdateId");
   };
-
   useEffect(async () => {
     const getCollection = await getDocs(collection(db, "users"));
     const arrayUsers = [];
@@ -128,7 +134,7 @@ export const Gift = () => {
         <View style={styles.line} />
       </View>
       <FlatList
-        data={giftListData}
+        data={giftListData} //giftListDataを並べ替える。
         renderItem={({ item }) => {
           if (item.recipientUserId === userId) {
             return (
@@ -138,6 +144,7 @@ export const Gift = () => {
                 coin={item.sendingCoin}
                 unit={unit}
                 time={item.time}
+                isButtonDisable={isButtonDisable}
               />
             );
           }

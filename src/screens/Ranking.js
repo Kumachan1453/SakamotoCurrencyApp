@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { View, FlatList } from "react-native";
-import { doc, getDoc, getDocs, collection } from "firebase/firestore";
+import { FlatList } from "react-native";
+import { getDocs, collection } from "firebase/firestore";
 import { db } from "../components/Firebase";
 import { useIsFocused } from "@react-navigation/native";
 import { getAuth } from "firebase/auth";
@@ -10,11 +10,7 @@ export const Ranking = () => {
   const isFocused = useIsFocused();
   const getUserProfile = getAuth();
   const user = getUserProfile.currentUser;
-  const email = user.email;
-  const [coinOwnership, setCoinOwnership] = useState(0);
-  const [monthlyCoinUsage, setMonthlyCoinUsage] = useState(0);
   const [rankingListData, setRankingListData] = useState([]);
-  const [ranking, setRanking] = useState(0);
   useEffect(async () => {
     const getDatas = collection(db, "users");
     const rankingQuerySnapshot = await getDocs(getDatas);
@@ -28,22 +24,6 @@ export const Ranking = () => {
       });
     });
     setRankingListData(rankingArray);
-  }, []);
-
-  useEffect(async () => {
-    const getCollection = await getDocs(collection(db, "users"));
-    const array = [];
-    getCollection.forEach((docs) => {
-      array.push({ email: docs.data().email, id: docs.id });
-    });
-    const loginFilter = array.filter((login) => {
-      return email === login.email;
-    });
-    const getData = doc(db, "users", loginFilter[0].id);
-    const snapData = await getDoc(getData);
-    setCoinOwnership(Math.round(snapData.data().coinOwnership));
-    setMonthlyCoinUsage(Math.round(snapData.data().monthlyCoinUsage));
-    setRanking(Math.round(snapData.data().ranking));
   }, [isFocused]);
 
   rankingListData.monthlyCoinUsage = rankingListData.sort((a, b) => {
