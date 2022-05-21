@@ -56,7 +56,7 @@ export const Ranking = () => {
             ranking={item.ranking}
             friendName={item.name}
             coin={item.monthlyCoinUsage}
-            unit="C"
+            unit="K"
           />
         );
       }}

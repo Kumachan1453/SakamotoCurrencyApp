@@ -21,6 +21,7 @@ export const Gift = () => {
   const [userId, setUserId] = useState("");
   const [giftListData, setGiftListData] = useState([]);
   const [updateId, setUpdateId] = useState(0);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   const getUserProfile = getAuth();
   const user = getUserProfile.currentUser;
@@ -62,6 +63,9 @@ export const Gift = () => {
 
   const updateData = async (item) => {
     console.log("updateData: 1"); //1回ボタンを押したらボタンを押せなくするという機能。
+    if (isButtonDisabled === false) {
+      setIsButtonDisabled(true);
+    }
     const getCollection = await getDocs(collection(db, "users"));
     const arrayUsers = [];
     getCollection.forEach((docs) => {
@@ -71,24 +75,25 @@ export const Gift = () => {
       return email === login.email;
     });
     const getData = doc(db, "users", loginFilter[0].id);
-    console.log("updateData: 2");
+    //ここに条件文を作るなど
     await updateDoc(getData, {
       coinOwnership: coinOwnership + item.sendingCoin,
     });
-    console.log("updateData: 3");
   };
   const deleteData = async (item) => {
     console.log("deleteData: 1");
-    //ここに条件文を作るなど
     await deleteDoc(doc(db, "coins", item.id));
     console.log("deleteData: 2");
+    setTimeout(() => {
+      setIsButtonDisabled(false);
+    }, 1000);
   };
   const onPressAction = async (item) => {
     updateData(item);
     deleteData(item);
     setUpdateId(updateId + 1);
-    console.log("setUpdateId");
   };
+
   useEffect(async () => {
     const getCollection = await getDocs(collection(db, "users"));
     const arrayUsers = [];
@@ -124,12 +129,12 @@ export const Gift = () => {
         <TextTemplateYourCoinRerated
           letter="あなたの所持コイン数："
           numberOfCoin={coinOwnership}
-          unit="C"
+          unit="K"
         />
         <TextTemplateYourCoinRerated
           letter={howMuchDouYouUseYourCoinThisMonth}
           numberOfCoin={monthlyCoinUsage}
-          unit="C"
+          unit="K"
         />
         <View style={styles.line} />
       </View>
@@ -144,7 +149,7 @@ export const Gift = () => {
                 coin={item.sendingCoin}
                 unit={unit}
                 time={item.time}
-                isButtonDisable={isButtonDisable}
+                disabled={isButtonDisabled}
               />
             );
           }

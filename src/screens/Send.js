@@ -149,7 +149,6 @@ export const Send = ({ navigation }) => {
       setIsButtonDisabled(true);
     }
   }
-  console.log("sendingCoin", sendingCoin);
 
   return (
     <ScrollView>
@@ -166,14 +165,14 @@ export const Send = ({ navigation }) => {
             <TextTemplateYourCoinRerated
               letter="所持コイン数："
               numberOfCoin={coinOwnership}
-              unit="C"
+              unit="K"
             />
           )}
           {sendingCoin > 0 && sendingCoin <= coinOwnership && (
             <TextTemplateYourCoinRerated
               letter="残額："
               numberOfCoin={balance}
-              unit="C"
+              unit="K"
             />
           )}
         </View>
@@ -183,14 +182,14 @@ export const Send = ({ navigation }) => {
             <TextTemplateYourCoinRerated
               letter={howMuchDouYouUseYourCoinThisMonth}
               numberOfCoin={monthlyCoinUsage}
-              unit="C"
+              unit="K"
             />
           )}
           {sendingCoin > 0 && sendingCoin <= coinOwnership && (
             <TextTemplateYourCoinRerated
               letter="使用後の使用量："
               numberOfCoin={futureMonthlyCoinUsage}
-              unit="C"
+              unit="K"
             />
           )}
         </View>

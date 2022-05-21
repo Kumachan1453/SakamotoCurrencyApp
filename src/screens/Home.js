@@ -74,13 +74,13 @@ export const Home = () => {
         <TextTemplateYourCoinRerated
           letter="あなたの所持コイン数："
           numberOfCoin={coinOwnership}
-          unit="C"
+          unit="K"
         />
         <View style={styles.line} />
         <TextTemplateYourCoinRerated
           letter={howMuchDouYouUseYourCoinThisMonth}
           numberOfCoin={monthlyCoinUsage}
-          unit="C"
+          unit="K"
         />
         <View style={styles.line} />
         <View style={styles.logoutPlacement}>

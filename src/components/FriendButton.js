@@ -2,9 +2,20 @@ import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-export const FriendButton = ({ friendName, onPress, coin, unit, ranking }) => {
+export const FriendButton = ({
+  disabled,
+  friendName,
+  onPress,
+  coin,
+  unit,
+  ranking,
+}) => {
   return (
-    <TouchableOpacity onPress={onPress} style={styles.friendButton}>
+    <TouchableOpacity
+      onPress={onPress}
+      style={disabled ? styles.trueFriendButton : styles.falseFriendButton}
+      disabled={disabled}
+    >
       <View style={styles.contentsPlacement}>
         <View style={styles.leftPlacement}>
           {ranking === 3 && (
@@ -46,7 +57,7 @@ export const FriendButton = ({ friendName, onPress, coin, unit, ranking }) => {
 };
 
 const styles = StyleSheet.create({
-  friendButton: {
+  falseFriendButton: {
     width: "95%",
     height: 80,
     margin: 10,
@@ -60,6 +71,22 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     shadowOpacity: 0.2,
     justifyContent: "center",
+  },
+  trueFriendButton: {
+    width: "95%",
+    height: 80,
+    margin: 10,
+    borderWidth: 1,
+    borderRadius: 10,
+    shadowColor: "black",
+    shadowOffset: {
+      height: 1,
+      width: 1,
+    },
+    shadowRadius: 2,
+    shadowOpacity: 0.2,
+    justifyContent: "center",
+    backgroundColor: "red",
   },
   contentsPlacement: {
     flexDirection: "row",
