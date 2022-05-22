@@ -206,7 +206,7 @@ export const Send = ({ navigation }) => {
               placeholder="数字を入力"
               keyboardType="number-pad"
             />
-            <Text style={styles.bigCoinText}>C</Text>
+            <Text style={styles.bigCoinText}>K</Text>
             {sendingCoin > coinOwnership && (
               <Warning letter={"残額を上回ってます"} />
             )}

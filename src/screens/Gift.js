@@ -26,7 +26,7 @@ export const Gift = () => {
   const getUserProfile = getAuth();
   const user = getUserProfile.currentUser;
   const email = user.email;
-  const unit = "C";
+  const unit = "K";
 
   const isFocused = useIsFocused();
 
@@ -44,7 +44,7 @@ export const Gift = () => {
         time: docs.data().time,
       });
     });
-    setGiftListData(arrayCoins); //arrayCoinsを並べ替える。
+    setGiftListData(arrayCoins);
 
     const getCollection = await getDocs(collection(db, "users"));
     const arrayUsers = [];
@@ -62,10 +62,6 @@ export const Gift = () => {
   }, [isFocused]);
 
   const updateData = async (item) => {
-    console.log("updateData: 1"); //1回ボタンを押したらボタンを押せなくするという機能。
-    if (isButtonDisabled === false) {
-      setIsButtonDisabled(true);
-    }
     const getCollection = await getDocs(collection(db, "users"));
     const arrayUsers = [];
     getCollection.forEach((docs) => {
@@ -75,22 +71,21 @@ export const Gift = () => {
       return email === login.email;
     });
     const getData = doc(db, "users", loginFilter[0].id);
-    //ここに条件文を作るなど
-    await updateDoc(getData, {
+    updateDoc(getData, {
       coinOwnership: coinOwnership + item.sendingCoin,
     });
   };
+
   const deleteData = async (item) => {
-    console.log("deleteData: 1");
-    await deleteDoc(doc(db, "coins", item.id));
-    console.log("deleteData: 2");
-    setTimeout(() => {
-      setIsButtonDisabled(false);
-    }, 1000);
+    deleteDoc(doc(db, "coins", item.id));
   };
+
   const onPressAction = async (item) => {
-    updateData(item);
-    deleteData(item);
+    if (isButtonDisabled === false) {
+      setIsButtonDisabled(true);
+    }
+    await deleteData(item);
+    await updateData(item);
     setUpdateId(updateId + 1);
   };
 
@@ -121,6 +116,7 @@ export const Gift = () => {
       });
     });
     setGiftListData(arrayCoins);
+    setIsButtonDisabled(false);
   }, [updateId]);
 
   return (
