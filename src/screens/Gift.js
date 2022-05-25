@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { StyleSheet, View, FlatList } from "react-native";
 import { FriendButton } from "../components/FriendButton";
 import TextTemplateYourCoinRerated from "../components/TextTemplateYourCoinRerated";
@@ -74,10 +74,12 @@ export const Gift = () => {
     updateDoc(getData, {
       coinOwnership: coinOwnership + item.sendingCoin,
     });
+    console.log("1:updateData;");
   };
 
   const deleteData = async (item) => {
     deleteDoc(doc(db, "coins", item.id));
+    console.log("2:deleteData;");
   };
 
   const onPressAction = async (item) => {
@@ -116,7 +118,10 @@ export const Gift = () => {
       });
     });
     setGiftListData(arrayCoins);
-    setIsButtonDisabled(false);
+    setTimeout(() => {
+      setIsButtonDisabled(false);
+    }, 2000);
+    console.log("3: updateId", updateId);
   }, [updateId]);
 
   return (
