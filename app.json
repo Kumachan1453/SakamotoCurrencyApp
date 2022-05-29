@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "SakamotoCurrencyGithubApp",
-    "slug": "archive",
+    "name": "KonCurrencyApp",
+    "slug": "KonCurrencyApp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -16,7 +16,7 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "archive"
+      "bundleIdentifier": "com.Distribution.SNS.CurrencyApp"
     },
     "android": {
       "adaptiveIcon": {
