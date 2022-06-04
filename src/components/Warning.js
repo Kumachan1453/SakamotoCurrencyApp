@@ -11,7 +11,7 @@ export const Warning = ({ letter }) => {
 
 const styles = StyleSheet.create({
   warning: {
-    padding: 10,
+    padding: 5,
   },
   warningText: {
     color: "red",

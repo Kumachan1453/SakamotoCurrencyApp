@@ -8,18 +8,24 @@ import {
   Alert,
 } from "react-native";
 import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
-import { jpCheck, blankCheck } from "../components/IfText";
+import {
+  jpCheck,
+  blankCheck,
+  checkNgWord,
+  checkEmailFormat,
+} from "../components/IfText";
 import { RegisterButton } from "../components/RegisterButton";
 import { LoginButton } from "../components/LoginButton";
 import { auth, db } from "../components/Firebase";
 import { addDoc, collection, query, getDocs } from "firebase/firestore";
+import { Warning } from "../components/Warning";
+// import checkNameConflict from "../components/CheckNameConflict";
 
 export const RegisterScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userName, setUserName] = useState("");
   const [signError, setSignError] = useState(false);
-  // const [disabled, setDisabled] = useState(true);
 
   const [coinOwnership, setCoinOwnership] = useState(10000);
   const [monthlyCoinUsage, setMonthlyCoinUsage] = useState(0);
@@ -30,29 +36,22 @@ export const RegisterScreen = ({ navigation }) => {
 
   const isJapanese = jpCheck(email);
   const isBlankUserName = blankCheck(userName);
+  // const isNameConflict = checkNameConflict(userName);
   const isBlankEmail = blankCheck(email);
+  const isEmailFormat = checkEmailFormat(email);
   const isBlankPassword = blankCheck(password);
-
-  // if (!email || !password || isJapanese || isBlankEmail || isBlankPassword) {
-  //   if (disabled) {
-  //     const setDisabledTrue = () => {
-  //       setDisabled(true);
-  //       console.log("true");
-  //     };
-  //     setDisabledTrue;
-  //   }
-  // } else {
-  //   if (!disabled) {
-  //     const setDisabledFalse = () => {
-  //       setDisabled(false);
-  //       console.log("false");
-  //     };
-  //     setDisabledFalse;
-  //   }
-  // }
+  const isNgWord = checkNgWord(userName);
 
   const signUp = () => {
-    if (isJapanese || isBlankEmail || isBlankPassword) {
+    if (
+      isJapanese ||
+      isBlankEmail ||
+      isEmailFormat ||
+      isBlankPassword ||
+      isBlankUserName ||
+      isNameConflict ||
+      isNgWord
+    ) {
       setSignError(true);
       return;
     } else {
@@ -103,7 +102,7 @@ export const RegisterScreen = ({ navigation }) => {
       signUp;
     }, 0);
     return () => clearTimeout(timerId);
-  }, [email || password]);
+  }, [userName || email || password]);
 
   return (
     <KeyboardAvoidingView
@@ -115,29 +114,43 @@ export const RegisterScreen = ({ navigation }) => {
       <View style={styles.view}>
         <Text>名前</Text>
         <TextInput
-          style={styles.textInput}
+          style={isNgWord ? styles.errorTextInput : styles.textInput}
           onChangeText={setUserName}
           value={userName}
           placeholder="お名前を入力してください"
           autoCapitalize="none"
         />
+        {isNgWord && (
+          <Warning letter={"名前の中で不適切な用語が使われています"} />
+        )}
+        {/* {isNameConflict && (
+          <Warning letter={"名前が他のユーザーと重複しています"} />
+        )} */}
       </View>
       <View style={styles.view}>
         <Text>メールアドレス</Text>
         <TextInput
-          style={signError ? styles.errorTextInput : styles.textInput}
+          style={
+            isJapanese || (!isBlankEmail && isEmailFormat)
+              ? styles.errorTextInput
+              : styles.textInput
+          }
           onChangeText={setEmail}
           value={email}
           placeholder="メールアドレスを入力してください"
           autoCapitalize="none"
           autoCorrect={false}
         />
+        {isJapanese && <Warning letter={"日本語が含まれています"} />}
+        {!isBlankEmail && !isJapanese && isEmailFormat && (
+          <Warning letter={"メールアドレスの形式が間違っています"} />
+        )}
       </View>
 
       <View style={styles.view}>
         <Text>パスワード（6文字以上）</Text>
         <TextInput
-          style={signError ? styles.errorTextInput : styles.textInput}
+          style={styles.textInput}
           onChangeText={setPassword}
           value={password}
           placeholder="パスワードを入力してください"
@@ -157,8 +170,10 @@ export const RegisterScreen = ({ navigation }) => {
             !password ||
             isJapanese ||
             isBlankEmail ||
+            isEmailFormat ||
             isBlankPassword ||
-            isBlankUserName
+            isBlankUserName ||
+            isNgWord
           }
           text={"新規登録"}
         />
