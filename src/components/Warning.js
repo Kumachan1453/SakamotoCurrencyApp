@@ -15,6 +15,6 @@ const styles = StyleSheet.create({
   },
   warningText: {
     color: "red",
-    fontSize: 15,
+    fontSize: 12,
   },
 });

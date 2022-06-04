@@ -19,7 +19,7 @@ export const RegisterScreen = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [userName, setUserName] = useState("");
   const [signError, setSignError] = useState(false);
-  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  // const [disabled, setDisabled] = useState(true);
 
   const [coinOwnership, setCoinOwnership] = useState(10000);
   const [monthlyCoinUsage, setMonthlyCoinUsage] = useState(0);
@@ -29,26 +29,27 @@ export const RegisterScreen = ({ navigation }) => {
   const [updateNumber, setUpdateNumber] = useState(0);
 
   const isJapanese = jpCheck(email);
+  const isBlankUserName = blankCheck(userName);
   const isBlankEmail = blankCheck(email);
   const isBlankPassword = blankCheck(password);
 
-  if (!email || !password || isJapanese || isBlankEmail || isBlankPassword) {
-    if (isButtonDisabled) {
-      const setIsButtonDisabledTrue = () => {
-        setIsButtonDisabled(true);
-        console.log("true");
-      };
-      setIsButtonDisabledTrue;
-    }
-  } else {
-    if (!isButtonDisabled) {
-      const setIsButtonDisabledFalse = () => {
-        setIsButtonDisabled(false);
-        console.log("false");
-      };
-      setIsButtonDisabledFalse;
-    }
-  }
+  // if (!email || !password || isJapanese || isBlankEmail || isBlankPassword) {
+  //   if (disabled) {
+  //     const setDisabledTrue = () => {
+  //       setDisabled(true);
+  //       console.log("true");
+  //     };
+  //     setDisabledTrue;
+  //   }
+  // } else {
+  //   if (!disabled) {
+  //     const setDisabledFalse = () => {
+  //       setDisabled(false);
+  //       console.log("false");
+  //     };
+  //     setDisabledFalse;
+  //   }
+  // }
 
   const signUp = () => {
     if (isJapanese || isBlankEmail || isBlankPassword) {
@@ -152,7 +153,12 @@ export const RegisterScreen = ({ navigation }) => {
         <RegisterButton
           onPress={signUp}
           disabled={
-            !email || !password || isJapanese || isBlankEmail || isBlankPassword
+            !email ||
+            !password ||
+            isJapanese ||
+            isBlankEmail ||
+            isBlankPassword ||
+            isBlankUserName
           }
           text={"新規登録"}
         />
