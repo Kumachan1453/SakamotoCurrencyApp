@@ -2,15 +2,15 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, TextInput, ScrollView } from "react-native";
 import CircleIcon from "../components/CircleIcon";
 import TextTemplateYourCoinRerated from "../components/TextTemplateYourCoinRerated";
-import LogoutButton from "../components/LogoutButton";
 import { getDoc, doc, collection, query, getDocs } from "firebase/firestore";
 import { onAuthStateChanged, signOut, getAuth } from "firebase/auth";
 import { auth } from "../components/Firebase";
 import { db } from "../components/Firebase";
 import { useIsFocused } from "@react-navigation/native";
 import { howMuchDouYouUseYourCoinThisMonth } from "../components/PatternText";
+import { LongButton } from "../components/LongButton";
 
-export const Home = () => {
+export const Home = ({ navigation }) => {
   const isFocused = useIsFocused();
 
   const [name, setName] = useState("");
@@ -91,8 +91,14 @@ export const Home = () => {
             </View>
           </View>
         </View>
+        {/* <View style={styles.logoutPlacement}>
+          <LongButton
+            onPress={() => navigation.navigate("History")}
+            letter={"履歴を見る"}
+          />
+        </View> */}
         <View style={styles.logoutPlacement}>
-          <LogoutButton onPress={handleLogout} />
+          <LongButton onPress={handleLogout} letter={"ログアウト"} />
         </View>
       </View>
     </ScrollView>
@@ -159,6 +165,9 @@ const styles = StyleSheet.create({
   unit: {
     fontSize: 28,
     marginLeft: 7,
+  },
+  backgroundColorChange: {
+    backgroundColor: "red",
   },
 });
 

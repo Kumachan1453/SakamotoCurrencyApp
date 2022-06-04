@@ -117,6 +117,17 @@ export const Gift = () => {
         time: docs.data().time,
       });
     });
+    arrayCoins.time = arrayCoins.sort((a, b) => {
+      const x = a["time"];
+      const y = b["time"];
+      if (x > y) {
+        return -1;
+      }
+      if (x < y) {
+        return 1;
+      }
+      return 0;
+    });
     setGiftListData(arrayCoins);
     setTimeout(() => {
       setIsButtonDisabled(false);
@@ -140,7 +151,7 @@ export const Gift = () => {
         <View style={styles.line} />
       </View>
       <FlatList
-        data={giftListData} //giftListDataを並べ替える。
+        data={giftListData}
         renderItem={({ item }) => {
           if (item.recipientUserId === userId) {
             return (

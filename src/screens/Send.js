@@ -118,6 +118,14 @@ export const Send = ({ navigation }) => {
         recipientUserId: route.params.id,
         time: new Date().toLocaleString(),
       });
+
+      const sendHistory = await addDoc(collection(db, "usersHistory"), {
+        name: snapData.data().name,
+        email: snapData.data().email,
+        sendingCoin: sendingCoin,
+        recipientUserName: route.params.name,
+        time: new Date().toLocaleString(),
+      });
       navigation.goBack();
     }
   }, [subId]);

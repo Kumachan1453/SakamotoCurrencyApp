@@ -1,11 +1,11 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 
-export const LogoutButton = ({ onPress }) => {
+export const LongButton = ({ onPress, letter }) => {
   return (
     <View>
       <TouchableOpacity onPress={onPress} style={styles.touchableOpacity}>
-        <Text style={styles.textLogOut}>ログアウト</Text>
+        <Text style={styles.textLogOut}>{letter}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: "#88cb7f",
     borderRadius: 10,
-    width: 150,
+    width: 270,
     height: 70,
   },
   textLogOut: {
@@ -29,4 +29,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LogoutButton;
+export default LongButton;
