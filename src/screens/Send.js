@@ -163,7 +163,7 @@ export const Send = ({ navigation }) => {
         <View>
           {sendingCoin === 0 && (
             <TextTemplateYourCoinRerated
-              letter="所持コイン数："
+              letter="所持「Kon」数："
               numberOfCoin={coinOwnership}
               unit="K"
             />

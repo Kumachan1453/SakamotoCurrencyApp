@@ -128,7 +128,7 @@ export const Gift = () => {
     <>
       <View style={styles.content}>
         <TextTemplateYourCoinRerated
-          letter="あなたの所持コイン数："
+          letter="あなたの所持「Kon」数："
           numberOfCoin={coinOwnership}
           unit="K"
         />

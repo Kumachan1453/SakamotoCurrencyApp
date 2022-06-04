@@ -1,4 +1,4 @@
 const date = new Date();
 const month = date.getMonth();
 export const howMuchDouYouUseYourCoinThisMonth =
-  "あなたの" + month + "月のコイン使用量：";
+  "あなたが" + month + "月中に使用した「Kon」の数:";

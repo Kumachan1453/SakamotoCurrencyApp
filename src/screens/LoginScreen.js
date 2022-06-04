@@ -8,7 +8,6 @@ import {
 } from "react-native";
 import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
 import { auth } from "../components/Firebase";
-import { jpCheck, blankCheck } from "../components/IfText";
 import { LoginButton } from "../components/LoginButton";
 import { RegisterButton } from "../components/RegisterButton";
 

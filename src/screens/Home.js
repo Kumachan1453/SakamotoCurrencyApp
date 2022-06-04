@@ -70,19 +70,27 @@ export const Home = () => {
             </View>
           </View>
           <View style={styles.line} />
+          <View style={styles.profile}>
+            <View style={styles.profileCategory}>
+              <Text style={styles.headingText}>
+                あなたが所持している「Kon」の数
+              </Text>
+              <View style={styles.unitFlexDirectionRow}>
+                <Text style={styles.profileText}>{coinOwnership}</Text>
+                <Text style={styles.unit}>K</Text>
+              </View>
+            </View>
+            <View style={styles.profileCategory}>
+              <Text style={styles.headingText}>
+                {howMuchDouYouUseYourCoinThisMonth}
+              </Text>
+              <View style={styles.unitFlexDirectionRow}>
+                <Text style={styles.profileText}>{monthlyCoinUsage}</Text>
+                <Text style={styles.unit}>K</Text>
+              </View>
+            </View>
+          </View>
         </View>
-        <TextTemplateYourCoinRerated
-          letter="あなたの所持コイン数："
-          numberOfCoin={coinOwnership}
-          unit="K"
-        />
-        <View style={styles.line} />
-        <TextTemplateYourCoinRerated
-          letter={howMuchDouYouUseYourCoinThisMonth}
-          numberOfCoin={monthlyCoinUsage}
-          unit="K"
-        />
-        <View style={styles.line} />
         <View style={styles.logoutPlacement}>
           <LogoutButton onPress={handleLogout} />
         </View>
@@ -143,6 +151,14 @@ const styles = StyleSheet.create({
   logoutPlacement: {
     alignItems: "center",
     marginTop: 50,
+  },
+  unitFlexDirectionRow: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+  },
+  unit: {
+    fontSize: 28,
+    marginLeft: 7,
   },
 });
 
