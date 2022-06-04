@@ -3,17 +3,18 @@ import {
   View,
   TextInput,
   Text,
-  TouchableOpacity,
   KeyboardAvoidingView,
   StyleSheet,
   Alert,
 } from "react-native";
 import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 import { jpCheck, blankCheck } from "../components/IfText";
+import { RegisterButton } from "../components/RegisterButton";
+import { LoginButton } from "../components/LoginButton";
 import { auth, db } from "../components/Firebase";
 import { addDoc, collection, query, getDocs } from "firebase/firestore";
 
-export const RegisterScreen = () => {
+export const RegisterScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userName, setUserName] = useState("");
@@ -108,45 +109,54 @@ export const RegisterScreen = () => {
       behavior="padding"
       style={styles.keyboardAvoidingView}
     >
-      <Text style={styles.textUsersRegister}>ユーザ登録画面</Text>
+      <Text style={styles.textUsersRegister}>新規登録画面</Text>
+
       <View style={styles.view}>
-        <TextInput
-          style={signError ? styles.errorTextInput : styles.textInput}
-          onChangeText={setEmail}
-          value={email}
-          placeholder="メールアドレス"
-          autoCapitalize="none"
-          autoCorrect={false}
-        />
-      </View>
-      <View style={styles.view}>
-        <TextInput
-          style={signError ? styles.errorTextInput : styles.textInput}
-          onChangeText={setPassword}
-          value={password}
-          placeholder="パスワード（6文字以上）"
-          secureTextEntry={true}
-          autoCapitalize="none"
-        />
-      </View>
-      <View style={styles.view}>
+        <Text>名前</Text>
         <TextInput
           style={styles.textInput}
           onChangeText={setUserName}
           value={userName}
-          placeholder="名前"
+          placeholder="お名前を入力してください"
           autoCapitalize="none"
         />
       </View>
-      <TouchableOpacity
-        style={styles.touchableOpacity}
-        onPress={signUp}
-        disabled={
-          !email || !password || isJapanese || isBlankEmail || isBlankPassword
-        }
-      >
-        <Text style={styles.textStyleInTouchableOpacity}>登録する</Text>
-      </TouchableOpacity>
+      <View style={styles.view}>
+        <Text>メールアドレス</Text>
+        <TextInput
+          style={signError ? styles.errorTextInput : styles.textInput}
+          onChangeText={setEmail}
+          value={email}
+          placeholder="メールアドレスを入力してください"
+          autoCapitalize="none"
+          autoCorrect={false}
+        />
+      </View>
+
+      <View style={styles.view}>
+        <Text>パスワード（6文字以上）</Text>
+        <TextInput
+          style={signError ? styles.errorTextInput : styles.textInput}
+          onChangeText={setPassword}
+          value={password}
+          placeholder="パスワードを入力してください"
+          secureTextEntry={true}
+          autoCapitalize="none"
+        />
+      </View>
+      <View style={styles.LoginAndRegister}>
+        <LoginButton
+          onPress={() => navigation.navigate("Login")}
+          text={"ログイン"}
+        />
+        <RegisterButton
+          onPress={signUp}
+          disabled={
+            !email || !password || isJapanese || isBlankEmail || isBlankPassword
+          }
+          text={"新規登録"}
+        />
+      </View>
     </KeyboardAvoidingView>
   );
 };
@@ -167,6 +177,7 @@ const styles = StyleSheet.create({
   textInput: {
     width: 250,
     borderWidth: 1,
+    borderRadius: 10,
     padding: 5,
     borderColor: "gray",
   },
@@ -176,13 +187,8 @@ const styles = StyleSheet.create({
     padding: 5,
     borderColor: "red",
   },
-  touchableOpacity: {
-    padding: 10,
-    backgroundColor: "#88cb7f",
-    borderRadius: 10,
-  },
-  textStyleInTouchableOpacity: {
-    color: "white",
+  LoginAndRegister: {
+    flexDirection: "row",
   },
 });
 

@@ -25,6 +25,7 @@ export const Onboarding = () => {
     });
     return () => unsubscribe();
   }, []);
+
   if (loading) {
     return <LoadingScreen />;
   } else {
@@ -38,8 +39,8 @@ export const Onboarding = () => {
           <Stack.Screen name="ScreenNavTab" component={ScreenNavTab} />
         ) : (
           <>
-            <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="Register" component={RegisterScreen} />
+            <Stack.Screen name="Login" component={LoginScreen} />
           </>
         )}
       </Stack.Navigator>

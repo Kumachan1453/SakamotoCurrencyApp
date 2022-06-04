@@ -3,12 +3,14 @@ import {
   View,
   TextInput,
   Text,
-  TouchableOpacity,
   KeyboardAvoidingView,
   StyleSheet,
 } from "react-native";
 import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
 import { auth } from "../components/Firebase";
+import { jpCheck, blankCheck } from "../components/IfText";
+import { LoginButton } from "../components/LoginButton";
+import { RegisterButton } from "../components/RegisterButton";
 
 export const LoginScreen = ({ navigation }) => {
   const getUserProfile = getAuth();
@@ -29,8 +31,9 @@ export const LoginScreen = ({ navigation }) => {
     >
       <Text style={styles.textUsersLogin}>ログイン画面</Text>
       <View style={styles.view}>
+        <Text>メールアドレス</Text>
         <TextInput
-          style={styles.textInputEmail}
+          style={styles.textInput}
           onChangeText={setEmail}
           value={email}
           placeholder="メールアドレスを入力してください"
@@ -39,8 +42,9 @@ export const LoginScreen = ({ navigation }) => {
         />
       </View>
       <View style={styles.view}>
+        <Text>パスワード</Text>
         <TextInput
-          style={styles.textInputPassword}
+          style={styles.textInput}
           onChangeText={setPassword}
           value={password}
           placeholder="パスワードを入力してください"
@@ -48,19 +52,17 @@ export const LoginScreen = ({ navigation }) => {
           autoCapitalize="none"
         />
       </View>
-      <TouchableOpacity
-        style={styles.touchableOpacity}
-        onPress={handleLogin}
-        disabled={!email || !password}
-      >
-        <Text style={styles.textStyleInTouchableOpacity}>ログイン</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={{ marginTop: 10 }}
-        onPress={() => navigation.navigate("Register")}
-      >
-        <Text>ユーザ登録はこちら</Text>
-      </TouchableOpacity>
+      <View style={styles.LoginAndRegister}>
+        <RegisterButton
+          onPress={() => navigation.navigate("Register")}
+          text={"新規登録"}
+        />
+        <LoginButton
+          onPress={handleLogin}
+          disabled={!email || !password}
+          text={"ログイン"}
+        />
+      </View>
     </KeyboardAvoidingView>
   );
 };
@@ -78,24 +80,14 @@ const styles = StyleSheet.create({
   view: {
     marginBottom: 20,
   },
-  textInputEmail: {
+  textInput: {
     width: 250,
     borderWidth: 1,
-    padding: 5,
-    borderColor: "gray",
-  },
-  textInputPassword: {
-    width: 250,
-    borderWidth: 1,
-    padding: 5,
-    borderColor: "gray",
-  },
-  touchableOpacity: {
-    padding: 10,
-    backgroundColor: "#88cb7f",
     borderRadius: 10,
+    padding: 5,
+    borderColor: "gray",
   },
-  textStyleInTouchableOpacity: {
-    color: "white",
+  LoginAndRegister: {
+    flexDirection: "row",
   },
 });
