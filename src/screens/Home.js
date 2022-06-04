@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text, TextInput, ScrollView } from "react-native";
-import CircleIcon from "../components/CircleIcon";
-import TextTemplateYourCoinRerated from "../components/TextTemplateYourCoinRerated";
-import { getDoc, doc, collection, query, getDocs } from "firebase/firestore";
+import { StyleSheet, View, Text, ScrollView } from "react-native";
+import { getDoc, doc, collection, getDocs } from "firebase/firestore";
 import { onAuthStateChanged, signOut, getAuth } from "firebase/auth";
 import { auth } from "../components/Firebase";
 import { db } from "../components/Firebase";
@@ -10,7 +8,7 @@ import { useIsFocused } from "@react-navigation/native";
 import { howMuchDouYouUseYourCoinThisMonth } from "../components/PatternText";
 import { LongButton } from "../components/LongButton";
 
-export const Home = ({ navigation }) => {
+export const Home = () => {
   const isFocused = useIsFocused();
 
   const [name, setName] = useState("");

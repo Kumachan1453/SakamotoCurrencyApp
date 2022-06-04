@@ -4,12 +4,14 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { collection, getDocs, doc } from "firebase/firestore";
 import { db } from "../components/Firebase";
 import { getAuth } from "firebase/auth";
-// import FriendButton from "../components/FriendButton";
+import { useIsFocused } from "@react-navigation/native";
 import { HistoryList } from "../components/HistoryList";
 
 const Stack = createNativeStackNavigator();
 
 export const History = () => {
+  const isFocused = useIsFocused();
+
   const [historyListData, setHistoryListData] = useState([]);
   const getUserProfile = getAuth();
   const user = getUserProfile.currentUser;
@@ -25,11 +27,6 @@ export const History = () => {
       return email === login.email;
     });
     const getUserData = doc(db, "users", loginFilter[0].id);
-    // const snapUsersData = await getDoc(getUserData);
-    // setCoinOwnership(Math.round(snapUsersData.data().coinOwnership));
-    // setMonthlyCoinUsage(Math.round(snapUsersData.data().monthlyCoinUsage));
-    // const sendGift = collection(db, "coins");
-    // const querySnapshot = await getDocs(sendGift);
     const sendHistory = collection(db, "usersHistory");
     const querySnapshotHistory = await getDocs(sendHistory);
     const arrayCoins = [];
@@ -45,7 +42,7 @@ export const History = () => {
     const arrayCoinsFilter = arrayCoins.filter((login) => {
       return email === login.email;
     });
-    arrayCoinsFilter.time = arrayCoins.sort((a, b) => {
+    arrayCoinsFilter.time = arrayCoinsFilter.sort((a, b) => {
       const x = a["time"];
       const y = b["time"];
       if (x > y) {
@@ -57,18 +54,14 @@ export const History = () => {
       return 0;
     });
     setHistoryListData(arrayCoinsFilter);
-  }, []);
+  }, [isFocused]);
 
   return (
-    <View>
+    <View style={styles.content}>
       <FlatList
         data={historyListData}
         renderItem={({ item }) => {
           return (
-            // <FriendButton
-            //   friendName={item.name}
-            //   onPress={() => navigation.navigate("Send", item)}
-            // />
             <HistoryList
               friendName={item.recipientUserName}
               sontCoin={item.sendingCoin}
@@ -83,6 +76,10 @@ export const History = () => {
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  content: {
+    height: "100%",
+  },
+});
 
 export default History;
