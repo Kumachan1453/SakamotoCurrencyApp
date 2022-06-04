@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, FlatList, View } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, doc } from "firebase/firestore";
 import { db } from "../components/Firebase";
+import { getAuth } from "firebase/auth";
+// import FriendButton from "../components/FriendButton";
+import { HistoryList } from "../components/HistoryList";
 
 const Stack = createNativeStackNavigator();
 
 export const History = () => {
   const [historyListData, setHistoryListData] = useState([]);
+  const getUserProfile = getAuth();
+  const user = getUserProfile.currentUser;
+  const email = user.email;
 
   useEffect(async () => {
     const getCollection = await getDocs(collection(db, "users"));
@@ -30,7 +36,7 @@ export const History = () => {
     querySnapshotHistory.forEach((docs) => {
       arrayCoins.push({
         name: docs.data().name,
-        email: snapData.data().email,
+        email: docs.data().email,
         sendingCoin: docs.data().sendingCoin,
         recipientUserName: docs.data().recipientUserName,
         time: docs.data().time,
@@ -59,9 +65,15 @@ export const History = () => {
         data={historyListData}
         renderItem={({ item }) => {
           return (
-            <FriendButton
-              friendName={item.name}
-              onPress={() => navigation.navigate("Send", item)}
+            // <FriendButton
+            //   friendName={item.name}
+            //   onPress={() => navigation.navigate("Send", item)}
+            // />
+            <HistoryList
+              friendName={item.recipientUserName}
+              sontCoin={item.sendingCoin}
+              unit={"K"}
+              time={item.time}
             />
           );
         }}

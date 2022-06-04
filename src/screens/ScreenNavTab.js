@@ -5,6 +5,7 @@ import { Home } from "./Home";
 import { Ionicons } from "@expo/vector-icons";
 import Gift from "./Gift";
 import Ranking from "./Ranking";
+import History from "./History";
 
 const Tab = createBottomTabNavigator();
 
@@ -33,6 +34,8 @@ export const ScreenNavTab = () => {
             iconName = focused ? "ios-gift" : "ios-gift-outline";
           } else if (route.name === "ランキング") {
             iconName = focused ? "ios-list" : "ios-list-outline";
+          } else if (route.name === "履歴") {
+            iconName = focused ? "ios-map" : "ios-map-outline";
           }
 
           return <Ionicons name={iconName} size={size} color={color} />;
@@ -90,6 +93,21 @@ export const ScreenNavTab = () => {
       <Tab.Screen
         name="ランキング"
         component={Ranking}
+        options={{
+          headerShown: true,
+          headerStyle: {
+            backgroundColor: "#ff9900",
+          },
+          headerTintColor: "#fff",
+          headerTitleStyle: {
+            fontWeight: "bold",
+            fontSize: 20,
+          },
+        }}
+      />
+      <Tab.Screen
+        name="履歴"
+        component={History}
         options={{
           headerShown: true,
           headerStyle: {

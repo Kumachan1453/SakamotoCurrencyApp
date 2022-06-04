@@ -91,12 +91,6 @@ export const Home = ({ navigation }) => {
             </View>
           </View>
         </View>
-        {/* <View style={styles.logoutPlacement}>
-          <LongButton
-            onPress={() => navigation.navigate("History")}
-            letter={"履歴を見る"}
-          />
-        </View> */}
         <View style={styles.logoutPlacement}>
           <LongButton onPress={handleLogout} letter={"ログアウト"} />
         </View>
