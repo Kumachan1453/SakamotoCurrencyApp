@@ -3,7 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { ScreenNavTab } from "../screens/ScreenNavTab";
 import { RegisterScreen } from "../screens/RegisterScreen";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "../components/Firebase/Firebase";
+import { auth } from "../components/Firebase";
 import { LoginScreen } from "./LoginScreen";
 import { LoadingScreen } from "../components/LoadingScreen";
 
