@@ -20,10 +20,9 @@ import { LoginButton } from "../components/LoginButton";
 import { auth, db } from "../components/Firebase";
 import { addDoc, collection, query, getDocs } from "firebase/firestore";
 import { Warning } from "../components/Warning";
-import { UserData } from "../components/UserData";
+// import { UserData } from "../components/UserData";
 
 export const RegisterScreen = ({ navigation }) => {
-  console.log("UserData", UserData);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userName, setUserName] = useState("");
@@ -45,6 +44,11 @@ export const RegisterScreen = ({ navigation }) => {
 
   const isNameConflict = checkNameConflict(userName);
   console.log("isNameConflict", isNameConflict);
+
+  // const A = ["B", "C", "D", "D"];
+  // console.log("A", A);
+  // const trueOrFalse = A.includes("D");
+  // console.log("trueOrFalse", trueOrFalse);
 
   const signUp = () => {
     if (
