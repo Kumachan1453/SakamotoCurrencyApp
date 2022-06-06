@@ -7,6 +7,7 @@ import { db } from "../components/Firebase";
 import { useIsFocused } from "@react-navigation/native";
 import { howMuchDouYouUseYourCoinThisMonth } from "../components/PatternText";
 import { LongButton } from "../components/LongButton";
+import { UserDataIdAndEmail } from "../components/UserData";
 
 export const Home = () => {
   const isFocused = useIsFocused();
@@ -27,14 +28,19 @@ export const Home = () => {
     }
   });
   useEffect(async () => {
-    const getCollection = await getDocs(collection(db, "users"));
+    // const getCollection = await getDocs(collection(db, "users"));
     const array = [];
     getCollection.forEach((docs) => {
       array.push({ email: docs.data().email, id: docs.id });
     });
+    console.log("array", array);
     const loginFilter = array.filter((login) => {
       return email === login.email;
     });
+    // const loginFilter = UserDataIdAndEmail.filter((login) => {
+    //   return email === login.email;
+    // });
+    console.log("loginFilter", loginFilter);
     const getData = doc(db, "users", loginFilter[0].id);
     const snapData = await getDoc(getData);
     setName(snapData.data().name);

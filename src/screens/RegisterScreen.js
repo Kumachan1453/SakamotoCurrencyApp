@@ -19,9 +19,10 @@ import { LoginButton } from "../components/LoginButton";
 import { auth, db } from "../components/Firebase";
 import { addDoc, collection, query, getDocs } from "firebase/firestore";
 import { Warning } from "../components/Warning";
-// import checkNameConflict from "../components/CheckNameConflict";
+import { UserData } from "../components/UserData";
 
 export const RegisterScreen = ({ navigation }) => {
+  console.log("UserData", UserData);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userName, setUserName] = useState("");
@@ -49,7 +50,7 @@ export const RegisterScreen = ({ navigation }) => {
       isEmailFormat ||
       isBlankPassword ||
       isBlankUserName ||
-      isNameConflict ||
+      // isNameConflict ||
       isNgWord
     ) {
       setSignError(true);
