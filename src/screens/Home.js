@@ -28,7 +28,7 @@ export const Home = () => {
     }
   });
   useEffect(async () => {
-    // const getCollection = await getDocs(collection(db, "users"));
+    const getCollection = await getDocs(collection(db, "users"));
     const array = [];
     getCollection.forEach((docs) => {
       array.push({ email: docs.data().email, id: docs.id });
