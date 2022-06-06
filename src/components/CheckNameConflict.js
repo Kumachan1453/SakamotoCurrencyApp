@@ -1,5 +1,5 @@
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "../components/Firebase";
+import { db } from "./Firebase/Firebase";
 
 const checkNameConflict = async (userName) => {
   const getCollection = await getDocs(collection(db, "users"));

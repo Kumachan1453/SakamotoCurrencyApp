@@ -1,5 +1,5 @@
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "../Firebase";
+import { db } from "./Firebase";
 import { getAuth } from "firebase/auth";
 
 const getUserProfile = getAuth();
