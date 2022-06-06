@@ -7,7 +7,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
-import { auth } from "../components/Firebase";
+import { auth } from "../components/Firebase/Firebase";
 import { LoginButton } from "../components/LoginButton";
 import { RegisterButton } from "../components/RegisterButton";
 
