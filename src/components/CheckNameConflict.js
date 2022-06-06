@@ -1,6 +1,11 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "./Firebase/Firebase";
+=======
+// import { collection, getDocs } from "firebase/firestore";
+// import { db } from "../components/Firebase";
+>>>>>>> parent of 698fa074 (フォルダ移動した。Firebaseフォルダを作成)
 =======
 // import { collection, getDocs } from "firebase/firestore";
 // import { db } from "../components/Firebase";
