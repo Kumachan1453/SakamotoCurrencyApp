@@ -13,6 +13,7 @@ import {
   blankCheck,
   checkNgWord,
   checkEmailFormat,
+  checkNameConflict,
 } from "../components/IfText";
 import { RegisterButton } from "../components/RegisterButton";
 import { LoginButton } from "../components/LoginButton";
@@ -37,11 +38,13 @@ export const RegisterScreen = ({ navigation }) => {
 
   const isJapanese = jpCheck(email);
   const isBlankUserName = blankCheck(userName);
-  // const isNameConflict = checkNameConflict(userName);
   const isBlankEmail = blankCheck(email);
   const isEmailFormat = checkEmailFormat(email);
   const isBlankPassword = blankCheck(password);
   const isNgWord = checkNgWord(userName);
+
+  const isNameConflict = checkNameConflict(userName);
+  console.log("isNameConflict", isNameConflict);
 
   const signUp = () => {
     if (
@@ -124,9 +127,9 @@ export const RegisterScreen = ({ navigation }) => {
         {isNgWord && (
           <Warning letter={"名前の中で不適切な用語が使われています"} />
         )}
-        {/* {isNameConflict && (
+        {isNameConflict && (
           <Warning letter={"名前が他のユーザーと重複しています"} />
-        )} */}
+        )}
       </View>
       <View style={styles.view}>
         <Text>メールアドレス</Text>
