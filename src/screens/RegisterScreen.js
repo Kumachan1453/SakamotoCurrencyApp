@@ -19,8 +19,7 @@ import { LoginButton } from "../components/LoginButton";
 import { auth, db } from "../components/Firebase";
 import { addDoc, collection, query, getDocs } from "firebase/firestore";
 import { Warning } from "../components/Warning";
-import checkNameConflict from "../components/CheckNameConflict";
-import { UserData } from "../components/Firebase/UserData";
+// import checkNameConflict from "../components/CheckNameConflict";
 
 export const RegisterScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -37,18 +36,11 @@ export const RegisterScreen = ({ navigation }) => {
 
   const isJapanese = jpCheck(email);
   const isBlankUserName = blankCheck(userName);
+  // const isNameConflict = checkNameConflict(userName);
   const isBlankEmail = blankCheck(email);
   const isEmailFormat = checkEmailFormat(email);
   const isBlankPassword = blankCheck(password);
   const isNgWord = checkNgWord(userName);
-
-  // const isNameConflict = Promise(checkNameConflict(userName));
-  console.log("UserData", UserData);
-
-  const isNameConflict = checkNameConflict(userName);
-  console.log("isNameConflict", isNameConflict);
-
-  // console.log("userName:", userName);
 
   const signUp = () => {
     if (
@@ -131,9 +123,9 @@ export const RegisterScreen = ({ navigation }) => {
         {isNgWord && (
           <Warning letter={"名前の中で不適切な用語が使われています"} />
         )}
-        {isNameConflict && (
+        {/* {isNameConflict && (
           <Warning letter={"名前が他のユーザーと重複しています"} />
-        )}
+        )} */}
       </View>
       <View style={styles.view}>
         <Text>メールアドレス</Text>

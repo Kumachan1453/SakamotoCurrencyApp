@@ -1,22 +1,21 @@
+<<<<<<< HEAD
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "./Firebase/Firebase";
+=======
+// import { collection, getDocs } from "firebase/firestore";
+// import { db } from "../components/Firebase";
+>>>>>>> parent of 698fa074 (フォルダ移動した。Firebaseフォルダを作成)
 
-const checkNameConflict = async (userName) => {
-  const getCollection = await getDocs(collection(db, "users"));
-  console.log("getCollection:", getCollection);
-  const array = [];
-  getCollection.forEach((docs) => {
-    array.push({ userName: docs.data().name });
-  });
-  console.log("array", array);
-  console.log("userName:", userName);
+// const checkNameConflict = async (userName) => {
+//   const getCollection = await getDocs(collection(db, "users"));
+//   const array = [];
+//   getCollection.forEach((docs) => {
+//     array.push({ userName: docs.data().name });
+//   });
+//   console.log("array", array);
 
-  const regexUserName = array;
-  const user = "デモアカウント";
-  const conflictName = regexUserName[1].userName === user;
-  console.log("userName:", userName);
-  return conflictName;
-  // return regexUserName;
-};
+//   const regexUserName = array;
+//   return regexUserName.match(userName);
+// };
 
-export default checkNameConflict;
+// export default checkNameConflict;

@@ -37,7 +37,6 @@ export const History = () => {
         sendingCoin: docs.data().sendingCoin,
         recipientUserName: docs.data().recipientUserName,
         time: docs.data().time,
-        subId: docs.data().subId,
       });
     });
     const arrayCoinsFilter = arrayCoins.filter((login) => {
