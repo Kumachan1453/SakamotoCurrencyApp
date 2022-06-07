@@ -7,18 +7,28 @@ import { getAuth } from "firebase/auth";
 import { useIsFocused } from "@react-navigation/native";
 import { HistoryList } from "../components/HistoryList";
 import { UserDataIdAndEmail } from "../components/UserData";
-import { history } from "../components/HistoryUserData";
+// import { history } from "../components/HistoryUserData";
+import { UpDownButton } from "../components/UpDownButton";
 
 const Stack = createNativeStackNavigator();
 
 export const History = () => {
-  console.log("history", history);
+  // console.log("history", history);
   const isFocused = useIsFocused();
+  const [buttonUpOrDown, setButtonUpOrDown] = useState(false);
 
   const [historyListData, setHistoryListData] = useState([]);
   const getUserProfile = getAuth();
   const user = getUserProfile.currentUser;
   const email = user.email;
+
+  const getButtonUpOrDown = () => {
+    if (buttonUpOrDown === false) {
+      setButtonUpOrDown(true);
+    } else if (buttonUpOrDown === true) {
+      setButtonUpOrDown(false);
+    }
+  };
 
   useEffect(async () => {
     const loginFilter = UserDataIdAndEmail.filter((login) => {
@@ -41,22 +51,42 @@ export const History = () => {
     const historyFilter = arrayhistory.filter((login) => {
       return email === login.email;
     });
-    historyFilter.time = historyFilter.sort((a, b) => {
-      const x = a["time"];
-      const y = b["time"];
-      if (x > y) {
-        return -1;
-      }
-      if (x < y) {
-        return 1;
-      }
-      return 0;
-    });
-    setHistoryListData(historyFilter);
+
+    if (buttonUpOrDown === false) {
+      historyFilter.time = historyFilter.sort((a, b) => {
+        const x = a["time"];
+        const y = b["time"];
+        if (x > y) {
+          return -1;
+        }
+        if (x < y) {
+          return 1;
+        }
+        return 0;
+      });
+      setHistoryListData(historyFilter);
+    } else if (buttonUpOrDown === true) {
+      historyFilter.time = historyFilter.sort((a, b) => {
+        const x = a["time"];
+        const y = b["time"];
+        if (x > y) {
+          return 1;
+        }
+        if (x < y) {
+          return -1;
+        }
+        return 0;
+      });
+      setHistoryListData(historyFilter);
+    }
   }, [isFocused]);
 
   return (
     <View style={styles.content}>
+      <UpDownButton
+        onPress={getButtonUpOrDown}
+        buttonUpOrDown={buttonUpOrDown}
+      />
       <FlatList
         data={historyListData}
         renderItem={({ item }) => {

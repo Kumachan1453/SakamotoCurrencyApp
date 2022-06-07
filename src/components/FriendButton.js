@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     shadowOpacity: 0.2,
     justifyContent: "center",
-    backgroundColor: "#DDDDDD",
+    backgroundColor: "#EEEEEE",
   },
   contentsPlacement: {
     flexDirection: "row",

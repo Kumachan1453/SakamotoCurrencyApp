@@ -53,6 +53,7 @@ export const Ranking = () => {
       renderItem={({ item }) => {
         return (
           <FriendButton
+            disabled={true}
             ranking={item.ranking}
             friendName={item.name}
             coin={item.monthlyCoinUsage}
