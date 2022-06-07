@@ -20,6 +20,7 @@ export const FriendList = ({ navigation }) => {
         name: docs.data().name,
         email: docs.data().email,
         id: docs.id,
+        newRecipientUserId: docs.data().newRecipientUserId,
       });
     });
     const loginFilter = array.filter((login) => {

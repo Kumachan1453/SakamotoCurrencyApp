@@ -6,10 +6,13 @@ import { db } from "../components/Firebase";
 import { getAuth } from "firebase/auth";
 import { useIsFocused } from "@react-navigation/native";
 import { HistoryList } from "../components/HistoryList";
+import { UserDataIdAndEmail } from "../components/UserData";
+import { history } from "../components/HistoryUserData";
 
 const Stack = createNativeStackNavigator();
 
 export const History = () => {
+  console.log("history", history);
   const isFocused = useIsFocused();
 
   const [historyListData, setHistoryListData] = useState([]);
@@ -18,31 +21,27 @@ export const History = () => {
   const email = user.email;
 
   useEffect(async () => {
-    const getCollection = await getDocs(collection(db, "users"));
-    const arrayUsers = [];
-    getCollection.forEach((docs) => {
-      arrayUsers.push({ email: docs.data().email, id: docs.id });
-    });
-    const loginFilter = arrayUsers.filter((login) => {
+    const loginFilter = UserDataIdAndEmail.filter((login) => {
       return email === login.email;
     });
     const getUserData = doc(db, "users", loginFilter[0].id);
     const sendHistory = collection(db, "usersHistory");
     const querySnapshotHistory = await getDocs(sendHistory);
-    const arrayCoins = [];
+    const arrayhistory = [];
     querySnapshotHistory.forEach((docs) => {
-      arrayCoins.push({
+      arrayhistory.push({
         name: docs.data().name,
         email: docs.data().email,
         sendingCoin: docs.data().sendingCoin,
         recipientUserName: docs.data().recipientUserName,
         time: docs.data().time,
+        id: docs.id,
       });
     });
-    const arrayCoinsFilter = arrayCoins.filter((login) => {
+    const historyFilter = arrayhistory.filter((login) => {
       return email === login.email;
     });
-    arrayCoinsFilter.time = arrayCoinsFilter.sort((a, b) => {
+    historyFilter.time = historyFilter.sort((a, b) => {
       const x = a["time"];
       const y = b["time"];
       if (x > y) {
@@ -53,7 +52,7 @@ export const History = () => {
       }
       return 0;
     });
-    setHistoryListData(arrayCoinsFilter);
+    setHistoryListData(historyFilter);
   }, [isFocused]);
 
   return (

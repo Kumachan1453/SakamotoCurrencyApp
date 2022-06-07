@@ -7,7 +7,8 @@ import { db } from "../components/Firebase";
 import { useIsFocused } from "@react-navigation/native";
 import { howMuchDouYouUseYourCoinThisMonth } from "../components/PatternText";
 import { LongButton } from "../components/LongButton";
-import { UserDataIdAndEmail } from "../components/UserData";
+// import { UserDataIdAndEmail } from "../components/UserData";
+// import LeafCoin from "../components/LeafCoin";
 
 export const Home = () => {
   const isFocused = useIsFocused();
@@ -90,6 +91,7 @@ export const Home = () => {
               </Text>
               <View style={styles.unitFlexDirectionRow}>
                 <Text style={styles.profileText}>{monthlyCoinUsage}</Text>
+                {/* <LeafCoin /> */}
                 <Text style={styles.unit}>K</Text>
               </View>
             </View>

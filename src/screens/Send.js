@@ -126,6 +126,10 @@ export const Send = ({ navigation }) => {
         recipientUserName: route.params.name,
         time: new Date().toLocaleString(),
       });
+
+      // const updateFriendList = await updateDoc(getData, {
+      //   newRecipientUserId: route.params.id,
+      // });
       navigation.goBack();
     }
   }, [subId]);
