@@ -1,16 +1,39 @@
 import React from "react";
-import { View, TouchableOpacity } from "react-native";
+import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 export const UpDownButton = ({ onPress, buttonUpOrDown }) => {
   return (
     <View>
       <TouchableOpacity onPress={onPress}>
-        {!onPress && <Ionicons name="ios-arrow-down" size={60} color="blue" />}
-        {onPress && <Ionicons name="ios-arrow-up" size={60} color="red" />}
+        {buttonUpOrDown === true && (
+          <View style={styles.downBlue}>
+            <Text style={styles.Text}>降順</Text>
+          </View>
+          // <Ionicons name="ios-arrow-down" size={60} color="blue" />
+        )}
+        {buttonUpOrDown === false && (
+          <View style={styles.upRed}>
+            <Text style={styles.Text}>昇順</Text>
+          </View>
+          // <Ionicons name="ios-arrow-up" size={60} color="red" />
+        )}
       </TouchableOpacity>
     </View>
   );
 };
+const styles = StyleSheet.create({
+  downBlue: {
+    backgroundColor: "#BAD3FF",
+  },
+  upRed: {
+    backgroundColor: "#FFBBFF",
+  },
+  Text: {
+    color: "black",
+    fontSize: 35,
+    textAlign: "center",
+  },
+});
 
 export default UpDownButton;

@@ -13,7 +13,6 @@ import { UpDownButton } from "../components/UpDownButton";
 const Stack = createNativeStackNavigator();
 
 export const History = () => {
-  // console.log("history", history);
   const isFocused = useIsFocused();
   const [buttonUpOrDown, setButtonUpOrDown] = useState(false);
 
@@ -79,7 +78,7 @@ export const History = () => {
       });
       setHistoryListData(historyFilter);
     }
-  }, [isFocused]);
+  }, [isFocused, buttonUpOrDown]);
 
   return (
     <View style={styles.content}>
