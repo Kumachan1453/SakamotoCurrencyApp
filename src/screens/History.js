@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, FlatList, View } from "react-native";
+import { StyleSheet, FlatList, View, TouchableOpacity } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { collection, getDocs, doc } from "firebase/firestore";
 import { db } from "../components/Firebase";
@@ -7,14 +7,14 @@ import { getAuth } from "firebase/auth";
 import { useIsFocused } from "@react-navigation/native";
 import { HistoryList } from "../components/HistoryList";
 import { UserDataIdAndEmail } from "../components/UserData";
-// import { history } from "../components/HistoryUserData";
-import { UpDownButton } from "../components/UpDownButton";
+import { TrueOrFalseButton } from "../components/TrueOrFalseButton";
 
 const Stack = createNativeStackNavigator();
-
 export const History = () => {
   const isFocused = useIsFocused();
   const [buttonUpOrDown, setButtonUpOrDown] = useState(false);
+  const [plusFilter, setPlusFilter] = useState(false);
+  const [minusFilter, setMinusFilter] = useState(false);
 
   const [historyListData, setHistoryListData] = useState([]);
   const getUserProfile = getAuth();
@@ -26,6 +26,22 @@ export const History = () => {
       setButtonUpOrDown(true);
     } else if (buttonUpOrDown === true) {
       setButtonUpOrDown(false);
+    }
+  };
+
+  const getPlusFilter = () => {
+    if (plusFilter === false) {
+      setPlusFilter(true);
+    } else if (plusFilter === true) {
+      setPlusFilter(false);
+    }
+  };
+
+  const getMinusFilter = () => {
+    if (minusFilter === false) {
+      setMinusFilter(true);
+    } else if (minusFilter === true) {
+      setMinusFilter(false);
     }
   };
 
@@ -44,6 +60,7 @@ export const History = () => {
         sendingCoin: docs.data().sendingCoin,
         recipientUserName: docs.data().recipientUserName,
         time: docs.data().time,
+        sendOrGift: docs.data().sendOrGift,
         id: docs.id,
       });
     });
@@ -78,14 +95,50 @@ export const History = () => {
       });
       setHistoryListData(historyFilter);
     }
-  }, [isFocused, buttonUpOrDown]);
+
+    if (plusFilter === true) {
+      const historyPlusFilter = historyFilter.filter((item) => {
+        return item.sendOrGift === "+";
+      });
+      setHistoryListData(historyPlusFilter);
+    }
+
+    if (minusFilter === true) {
+      const historyMinusFilter = historyFilter.filter((item) => {
+        return item.sendOrGift === "-";
+      });
+      setHistoryListData(historyMinusFilter);
+    }
+  }, [isFocused, buttonUpOrDown, plusFilter, minusFilter]);
 
   return (
     <View style={styles.content}>
-      <UpDownButton
-        onPress={getButtonUpOrDown}
-        buttonUpOrDown={buttonUpOrDown}
-      />
+      <View style={styles.flexDirectionRow}>
+        <View>
+          <TrueOrFalseButton
+            onPress={getButtonUpOrDown}
+            buttonTrueOrFalse={buttonUpOrDown}
+            trueText={"↓"}
+            falseText={"↑"}
+          />
+        </View>
+        <View>
+          <TrueOrFalseButton
+            onPress={getPlusFilter}
+            buttonTrueOrFalse={plusFilter}
+            trueText={"+"}
+            falseText={"+"}
+          />
+        </View>
+        <View>
+          <TrueOrFalseButton
+            onPress={getMinusFilter}
+            buttonTrueOrFalse={minusFilter}
+            trueText={"-"}
+            falseText={"-"}
+          />
+        </View>
+      </View>
       <FlatList
         data={historyListData}
         renderItem={({ item }) => {
@@ -95,6 +148,7 @@ export const History = () => {
               sontCoin={item.sendingCoin}
               unit={"K"}
               time={item.time}
+              sendOrGift={item.sendOrGift}
             />
           );
         }}
@@ -107,6 +161,9 @@ export const History = () => {
 const styles = StyleSheet.create({
   content: {
     height: "100%",
+  },
+  flexDirectionRow: {
+    flexDirection: "row",
   },
 });
 

@@ -2,19 +2,24 @@ import React from "react";
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-export const UpDownButton = ({ onPress, buttonUpOrDown }) => {
+export const TrueOrFalseButton = ({
+  onPress,
+  buttonTrueOrFalse,
+  trueText,
+  falseText,
+}) => {
   return (
     <View>
       <TouchableOpacity onPress={onPress}>
-        {buttonUpOrDown === true && (
-          <View style={styles.downBlue}>
-            <Text style={styles.Text}>↓</Text>
+        {buttonTrueOrFalse === true && (
+          <View style={styles.Blue}>
+            <Text style={styles.Text}>{trueText}</Text>
           </View>
           // <Ionicons name="ios-arrow-down" size={60} color="blue" />
         )}
-        {buttonUpOrDown === false && (
-          <View style={styles.upRed}>
-            <Text style={styles.Text}>↑</Text>
+        {buttonTrueOrFalse === false && (
+          <View style={styles.Red}>
+            <Text style={styles.Text}>{falseText}</Text>
           </View>
           // <Ionicons name="ios-arrow-up" size={60} color="red" />
         )}
@@ -23,11 +28,15 @@ export const UpDownButton = ({ onPress, buttonUpOrDown }) => {
   );
 };
 const styles = StyleSheet.create({
-  downBlue: {
+  Blue: {
     backgroundColor: "#BAD3FF",
+    borderColor: "gray",
+    borderWidth: 1,
   },
-  upRed: {
+  Red: {
     backgroundColor: "#FFBBFF",
+    borderColor: "gray",
+    borderWidth: 1,
   },
   Text: {
     color: "black",
@@ -36,4 +45,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UpDownButton;
+export default TrueOrFalseButton;

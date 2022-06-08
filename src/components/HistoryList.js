@@ -1,15 +1,34 @@
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
 
-export const HistoryList = ({ friendName, sontCoin, unit, time }) => {
+export const HistoryList = ({
+  friendName,
+  sontCoin,
+  unit,
+  time,
+  sendOrGift,
+}) => {
   return (
     <View style={styles.contents}>
       <View style={styles.contentsPlacement}>
         <Text style={styles.friendNameText}>{friendName}</Text>
         <View style={styles.rightPlacement}>
           <View style={styles.coinTextPlacement}>
-            <Text style={styles.coinText}>{sontCoin}</Text>
-            <Text style={styles.coinText}>{unit}</Text>
+            <Text
+              style={sendOrGift === "+" ? styles.coinText : styles.redCointext}
+            >
+              {sendOrGift}
+            </Text>
+            <Text
+              style={sendOrGift === "+" ? styles.coinText : styles.redCointext}
+            >
+              {sontCoin}
+            </Text>
+            <Text
+              style={sendOrGift === "+" ? styles.coinText : styles.redCointext}
+            >
+              {unit}
+            </Text>
           </View>
           <View>
             <Text style={styles.timeText}>{time}</Text>
@@ -56,7 +75,14 @@ const styles = StyleSheet.create({
   coinText: {
     justifyContent: "center",
     textAlign: "right",
-    color: "gray",
+    color: "green",
+    fontSize: 25,
+    marginRight: 3,
+  },
+  redCointext: {
+    justifyContent: "center",
+    textAlign: "right",
+    color: "red",
     fontSize: 25,
     marginRight: 3,
   },

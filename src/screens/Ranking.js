@@ -5,7 +5,7 @@ import { db } from "../components/Firebase";
 import { useIsFocused } from "@react-navigation/native";
 import { getAuth } from "firebase/auth";
 import FriendButton from "../components/FriendButton";
-import { UpDownButton } from "../components/UpDownButton";
+import { TrueOrFalseButton } from "../components/TrueOrFalseButton";
 
 export const Ranking = () => {
   const isFocused = useIsFocused();
@@ -74,9 +74,11 @@ export const Ranking = () => {
 
   return (
     <View>
-      <UpDownButton
+      <TrueOrFalseButton
         onPress={getButtonUpOrDown}
-        buttonUpOrDown={buttonUpOrDown}
+        buttonTrueOrFalse={buttonUpOrDown}
+        trueText={"↓"}
+        falseText={"↑"}
       />
       <FlatList
         data={rankingListData}
