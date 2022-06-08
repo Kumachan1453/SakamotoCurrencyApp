@@ -1,16 +1,27 @@
 import React, { useState, useEffect } from "react";
-import { FlatList } from "react-native";
+import { FlatList, View } from "react-native";
 import { getDocs, collection } from "firebase/firestore";
 import { db } from "../components/Firebase";
 import { useIsFocused } from "@react-navigation/native";
 import { getAuth } from "firebase/auth";
 import FriendButton from "../components/FriendButton";
+import { UpDownButton } from "../components/UpDownButton";
 
 export const Ranking = () => {
   const isFocused = useIsFocused();
   const getUserProfile = getAuth();
   const user = getUserProfile.currentUser;
   const [rankingListData, setRankingListData] = useState([]);
+  const [buttonUpOrDown, setButtonUpOrDown] = useState(false);
+
+  const getButtonUpOrDown = () => {
+    if (buttonUpOrDown === false) {
+      setButtonUpOrDown(true);
+    } else if (buttonUpOrDown === true) {
+      setButtonUpOrDown(false);
+    }
+  };
+
   useEffect(async () => {
     const getDatas = collection(db, "users");
     const rankingQuerySnapshot = await getDocs(getDatas);
@@ -26,43 +37,63 @@ export const Ranking = () => {
     setRankingListData(rankingArray);
   }, [isFocused]);
 
-  rankingListData.monthlyCoinUsage = rankingListData.sort((a, b) => {
-    const x = a["monthlyCoinUsage"];
-    const y = b["monthlyCoinUsage"];
-    if (x > y) {
-      return -1;
-    }
-    if (x < y) {
-      return 1;
-    }
-    return 0;
-  });
-  let tmp;
-  rankingListData.monthlyCoinUsage.forEach((item, index) => {
-    if (item.monthlyCoinUsage !== tmp) {
-      item.ranking = index + 1;
-      tmp = item.monthlyCoinUsage;
-    } else if (item.monthlyCoinUsage === tmp) {
-      item.ranking = index;
-    }
-  });
+  if (buttonUpOrDown === true) {
+    rankingListData.monthlyCoinUsage = rankingListData.sort((a, b) => {
+      const x = a["monthlyCoinUsage"];
+      const y = b["monthlyCoinUsage"];
+      if (x > y) {
+        return 1;
+      }
+      if (x < y) {
+        return -1;
+      }
+      return 0;
+    });
+  } else if (buttonUpOrDown === false) {
+    rankingListData.monthlyCoinUsage = rankingListData.sort((a, b) => {
+      const x = a["monthlyCoinUsage"];
+      const y = b["monthlyCoinUsage"];
+      if (x > y) {
+        return -1;
+      }
+      if (x < y) {
+        return 1;
+      }
+      return 0;
+    });
+    let tmp;
+    rankingListData.monthlyCoinUsage.forEach((item, index) => {
+      if (item.monthlyCoinUsage !== tmp) {
+        item.ranking = index + 1;
+        tmp = item.monthlyCoinUsage;
+      } else if (item.monthlyCoinUsage === tmp) {
+        item.ranking = index;
+      }
+    });
+  }
 
   return (
-    <FlatList
-      data={rankingListData}
-      renderItem={({ item }) => {
-        return (
-          <FriendButton
-            disabled={true}
-            ranking={item.ranking}
-            friendName={item.name}
-            coin={item.monthlyCoinUsage}
-            unit="K"
-          />
-        );
-      }}
-      keyExtractor={(item) => item.id}
-    />
+    <View>
+      <UpDownButton
+        onPress={getButtonUpOrDown}
+        buttonUpOrDown={buttonUpOrDown}
+      />
+      <FlatList
+        data={rankingListData}
+        renderItem={({ item }) => {
+          return (
+            <FriendButton
+              disabled={true}
+              ranking={item.ranking}
+              friendName={item.name}
+              coin={item.monthlyCoinUsage}
+              unit="K"
+            />
+          );
+        }}
+        keyExtractor={(item) => item.id}
+      />
+    </View>
   );
 };
 
