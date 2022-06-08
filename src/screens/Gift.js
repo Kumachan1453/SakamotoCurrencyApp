@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, View, FlatList } from "react-native";
 import { FriendButton } from "../components/FriendButton";
 import TextTemplateYourCoinRerated from "../components/TextTemplateYourCoinRerated";
@@ -9,13 +9,15 @@ import {
   getDocs,
   collection,
   deleteDoc,
+  addDoc,
 } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
-import { useIsFocused } from "@react-navigation/native";
+import { useIsFocused, useRoute } from "@react-navigation/native";
 import { db } from "../components/Firebase";
 import { howMuchDouYouUseYourCoinThisMonth } from "../components/PatternText";
 
 export const Gift = () => {
+  const route = useRoute();
   const [coinOwnership, setCoinOwnership] = useState(0);
   const [monthlyCoinUsage, setMonthlyCoinUsage] = useState(0);
   const [userId, setUserId] = useState("");
@@ -71,15 +73,36 @@ export const Gift = () => {
       return email === login.email;
     });
     const getData = doc(db, "users", loginFilter[0].id);
+    const snapData = await getDoc(getData);
     updateDoc(getData, {
       coinOwnership: coinOwnership + item.sendingCoin,
     });
-    console.log("1:updateData;");
+
+    const sendGift = collection(db, "coins");
+    const querySnapshot = await getDocs(sendGift);
+    const arrayCoins = [];
+    querySnapshot.forEach((docs) => {
+      arrayCoins.push({
+        name: docs.data().name,
+        sendingCoin: docs.data().sendingCoin,
+        subId: docs.data().subId,
+        recipientUserId: docs.data().recipientUserId,
+        id: docs.id,
+        time: docs.data().time,
+      });
+    });
+    const giftHistory = await addDoc(collection(db, "usersHistory"), {
+      name: snapData.data().name,
+      email: snapData.data().email,
+      sendingCoin: item.sendingCoin,
+      recipientUserName: item.name,
+      time: new Date().toLocaleString(),
+      sendOrGift: "+",
+    });
   };
 
   const deleteData = async (item) => {
     deleteDoc(doc(db, "coins", item.id));
-    console.log("2:deleteData;");
   };
 
   const onPressAction = async (item) => {

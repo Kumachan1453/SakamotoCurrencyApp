@@ -125,6 +125,7 @@ export const Send = ({ navigation }) => {
         sendingCoin: sendingCoin,
         recipientUserName: route.params.name,
         time: new Date().toLocaleString(),
+        sendOrGift: "-",
       });
 
       // const updateFriendList = await updateDoc(getData, {
