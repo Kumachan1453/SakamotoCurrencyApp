@@ -8,13 +8,13 @@ export const UpDownButton = ({ onPress, buttonUpOrDown }) => {
       <TouchableOpacity onPress={onPress}>
         {buttonUpOrDown === true && (
           <View style={styles.downBlue}>
-            <Text style={styles.Text}>降順</Text>
+            <Text style={styles.Text}>↓</Text>
           </View>
           // <Ionicons name="ios-arrow-down" size={60} color="blue" />
         )}
         {buttonUpOrDown === false && (
           <View style={styles.upRed}>
-            <Text style={styles.Text}>昇順</Text>
+            <Text style={styles.Text}>↑</Text>
           </View>
           // <Ionicons name="ios-arrow-up" size={60} color="red" />
         )}
