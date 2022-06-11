@@ -23,15 +23,9 @@ const checkEmailFormat = (Email) => {
 const checkNameConflict = (userName) => {
   const nameList = [];
   UserDataName.forEach((docs) => {
-    nameList.push({ docs });
+    nameList.push(docs.name);
   });
-  console.log("nameList", nameList);
-  // for (const docs of UserDataName) {
-  //   console.log(docs.name);
-  // }
-  // const regexNameConflict = UserDataName[0].name === userName;
-  const regexNameConflict = nameList === userName;
-  // console.log("UserDataName[0].name", UserDataName[0].name);
+  const regexNameConflict = nameList.some((element) => element === userName);
   return regexNameConflict;
 };
 

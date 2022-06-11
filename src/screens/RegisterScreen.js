@@ -20,7 +20,6 @@ import { LoginButton } from "../components/LoginButton";
 import { auth, db } from "../components/Firebase";
 import { addDoc, collection, query, getDocs } from "firebase/firestore";
 import { Warning } from "../components/Warning";
-// import { UserData } from "../components/UserData";
 
 export const RegisterScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -41,9 +40,7 @@ export const RegisterScreen = ({ navigation }) => {
   const isEmailFormat = checkEmailFormat(email);
   const isBlankPassword = blankCheck(password);
   const isNgWord = checkNgWord(userName);
-
   const isNameConflict = checkNameConflict(userName);
-  console.log("isNameConflict", isNameConflict);
 
   const signUp = () => {
     if (
@@ -116,7 +113,11 @@ export const RegisterScreen = ({ navigation }) => {
       <View style={styles.view}>
         <Text>名前</Text>
         <TextInput
-          style={isNgWord ? styles.errorTextInput : styles.textInput}
+          style={
+            isNgWord || isNameConflict
+              ? styles.errorTextInput
+              : styles.textInput
+          }
           onChangeText={setUserName}
           value={userName}
           placeholder="お名前を入力してください"
@@ -175,7 +176,8 @@ export const RegisterScreen = ({ navigation }) => {
             isEmailFormat ||
             isBlankPassword ||
             isBlankUserName ||
-            isNgWord
+            isNgWord ||
+            isNameConflict
           }
           text={"新規登録"}
         />
