@@ -8,7 +8,6 @@ import { useIsFocused } from "@react-navigation/native";
 import { howMuchDouYouUseYourCoinThisMonth } from "../components/PatternText";
 import { LongButton } from "../components/LongButton";
 import ModalTemplete from "../components/ModalTemplete";
-import { Button } from "react-native-web";
 // import { UserDataIdAndEmail } from "../components/UserData";
 // import LeafCoin from "../components/LeafCoin";
 
