@@ -29,13 +29,20 @@ export const FriendList = ({ navigation }) => {
     setListData(loginFilter);
   }, []);
 
+  const friendNameList = [];
+  listData.forEach((docs) => {
+    friendNameList.push(docs.name);
+  });
+
   useEffect(() => {
     const timerId = setTimeout(() => {
       if (friendName !== "") {
-        const filterListData = listData.filter(() => {
-          return listData.name === friendName;
+        const filterListData = listData.filter((item) => {
+          return item.name === friendName;
         });
         setListData(filterListData);
+        console.log("filterListData", filterListData);
+        console.log("friendName", friendName);
         console.log("friendNameIF", friendName);
       } else {
         setListData(listData);
