@@ -36,14 +36,9 @@ export const Home = () => {
     getCollection.forEach((docs) => {
       array.push({ email: docs.data().email, id: docs.id });
     });
-    console.log("array", array);
     const loginFilter = array.filter((login) => {
       return email === login.email;
     });
-    // const loginFilter = UserDataIdAndEmail.filter((login) => {
-    //   return email === login.email;
-    // });
-    console.log("loginFilter", loginFilter);
     const getData = doc(db, "users", loginFilter[0].id);
     const snapData = await getDoc(getData);
     setName(snapData.data().name);

@@ -89,7 +89,6 @@ export const RegisterScreen = ({ navigation }) => {
             setSignError(true);
             Alert.alert("エラーです。異なる入力内容でもう一度お試しください");
             console.log("error.message", error.message);
-            console.log("user", user);
           }
         }
       };
