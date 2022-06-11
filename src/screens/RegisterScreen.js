@@ -113,7 +113,6 @@ export const RegisterScreen = ({ navigation }) => {
       style={styles.keyboardAvoidingView}
     >
       <Text style={styles.textUsersRegister}>新規登録画面</Text>
-
       <View style={styles.view}>
         <Text>名前</Text>
         <TextInput
@@ -181,6 +180,9 @@ export const RegisterScreen = ({ navigation }) => {
           text={"新規登録"}
         />
       </View>
+      <Text style={styles.allertText}>
+        ※新規登録後にこれらの記入事項を変更することはできません。ご注意ください。
+      </Text>
     </KeyboardAvoidingView>
   );
 };
@@ -194,6 +196,10 @@ const styles = StyleSheet.create({
   textUsersRegister: {
     fontSize: 20,
     marginBottom: 20,
+  },
+  allertText: {
+    fontSize: 18,
+    padding: 20,
   },
   view: {
     marginBottom: 20,

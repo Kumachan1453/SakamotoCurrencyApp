@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, FlatList } from "react-native";
+import { StyleSheet, View, FlatList, Text } from "react-native";
 import { FriendButton } from "../components/FriendButton";
 import TextTemplateYourCoinRerated from "../components/TextTemplateYourCoinRerated";
 import {
@@ -162,7 +162,7 @@ export const Gift = () => {
     <>
       <View style={styles.content}>
         <TextTemplateYourCoinRerated
-          letter="あなたの所持「Kon」数："
+          letter="あなたの所持「Kon」数"
           numberOfCoin={coinOwnership}
           unit="K"
         />
@@ -171,6 +171,9 @@ export const Gift = () => {
           numberOfCoin={monthlyCoinUsage}
           unit="K"
         />
+        <Text style={styles.allertText}>
+          下のバーをタッチして「Kon」を受け取ろう!
+        </Text>
         <View style={styles.line} />
       </View>
       <FlatList
@@ -213,6 +216,11 @@ const styles = StyleSheet.create({
   },
   flexDirectionRow: {
     flexDirection: "row",
+  },
+  allertText: {
+    textAlign: "center",
+    fontSize: 15,
+    color: "gray",
   },
   line: {
     width: "100%",
