@@ -21,11 +21,13 @@ const checkEmailFormat = (Email) => {
 
 //名前重複チェック（未完成）
 const checkNameConflict = (userName) => {
-  // for (let i = 0; i < UserDataName.length; i++) {
-  //   const nameList = UserDataName[i].name;
-  //   // console.log("nameList", nameList);
-  // }
-  const regexNameConflict = UserDataName[0].name === userName;
+  const nameList = [];
+  for (const docs of UserDataName) {
+    console.log(docs);
+  }
+  // const regexNameConflict = UserDataName[0].name === userName;
+  const regexNameConflict = nameList === userName;
+  // console.log("UserDataName[0].name", UserDataName[0].name);
   return regexNameConflict;
 };
 

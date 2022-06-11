@@ -29,17 +29,21 @@ export const FriendList = ({ navigation }) => {
     setListData(loginFilter);
   }, []);
 
-  // useEffect(() => {
-  //   const timerId = setTimeout(() => {
-  //     if (friendName !== "") {
-  //       const filterListData = listData.filter(() => {
-  //         return listData.name === friendName;
-  //       });
-  //       setListData(filterListData);
-  //     }
-  //   }, 0);
-  //   return () => clearTimeout(timerId);
-  // }, [friendName]);
+  useEffect(() => {
+    const timerId = setTimeout(() => {
+      if (friendName !== "") {
+        const filterListData = listData.filter(() => {
+          return listData.name === friendName;
+        });
+        setListData(filterListData);
+        console.log("friendNameIF", friendName);
+      } else {
+        setListData(listData);
+        console.log("friendNameELSE", friendName);
+      }
+    }, 0);
+    return () => clearTimeout(timerId);
+  }, [friendName]);
 
   return (
     <View style={styles.content}>

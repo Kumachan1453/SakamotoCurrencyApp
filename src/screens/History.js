@@ -31,6 +31,10 @@ export const History = () => {
 
   const getPlusFilter = () => {
     if (plusFilter === false) {
+      if (minusFilter === true) {
+        setMinusFilter(false);
+        setHistoryListData(historyListData);
+      }
       setPlusFilter(true);
     } else if (plusFilter === true) {
       setPlusFilter(false);
@@ -39,6 +43,10 @@ export const History = () => {
 
   const getMinusFilter = () => {
     if (minusFilter === false) {
+      if (plusFilter === true) {
+        setPlusFilter(false);
+        setHistoryListData(historyListData);
+      }
       setMinusFilter(true);
     } else if (minusFilter === true) {
       setMinusFilter(false);
@@ -101,9 +109,7 @@ export const History = () => {
         return item.sendOrGift === "+";
       });
       setHistoryListData(historyPlusFilter);
-    }
-
-    if (minusFilter === true) {
+    } else if (minusFilter === true) {
       const historyMinusFilter = historyFilter.filter((item) => {
         return item.sendOrGift === "-";
       });
