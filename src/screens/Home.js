@@ -7,11 +7,14 @@ import { db } from "../components/Firebase";
 import { useIsFocused } from "@react-navigation/native";
 import { howMuchDouYouUseYourCoinThisMonth } from "../components/PatternText";
 import { LongButton } from "../components/LongButton";
+import ModalTemplete from "../components/ModalTemplete";
+import { Button } from "react-native-web";
 // import { UserDataIdAndEmail } from "../components/UserData";
 // import LeafCoin from "../components/LeafCoin";
 
 export const Home = () => {
   const isFocused = useIsFocused();
+  const [modalVisible, setModalVisible] = useState(false);
 
   const [name, setName] = useState("");
   const [coinOwnership, setCoinOwnership] = useState(0);
@@ -97,8 +100,35 @@ export const Home = () => {
             </View>
           </View>
         </View>
-        <View style={styles.logoutPlacement}>
-          <LongButton onPress={handleLogout} letter={"ログアウト"} />
+
+        <View style={styles.centeredView}>
+          <ModalTemplete
+            transparent={false}
+            visible={modalVisible}
+            onRequestClose={() => {
+              Alert.alert("Modal has been closed.");
+              setModalVisible(!modalVisible);
+            }}
+            centerText={"本当にログアウトしますか？"}
+            buttonPlacement={true}
+            leftText={"キャンセル"}
+            rightText={"OK"}
+            leftOnPress={() => {
+              setModalVisible(!modalVisible);
+            }}
+            rightOnPress={() => {
+              setModalVisible(!modalVisible);
+              handleLogout();
+            }}
+          />
+          <View style={styles.logoutPlacement}>
+            <LongButton
+              onPress={() => {
+                setModalVisible(true);
+              }}
+              letter={"ログアウト"}
+            />
+          </View>
         </View>
       </View>
     </ScrollView>
