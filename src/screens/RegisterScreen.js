@@ -57,11 +57,6 @@ export const RegisterScreen = ({ navigation }) => {
     } else {
       const handleRegister = async (user) => {
         try {
-          const user = await createUserWithEmailAndPassword(
-            auth,
-            email,
-            password
-          );
           const addUser = await addDoc(collection(db, "users"), {
             name: userName,
             email: email,
@@ -73,6 +68,11 @@ export const RegisterScreen = ({ navigation }) => {
             sumCoinUsage: sumCoinUsage,
             updateNumber: updateNumber,
           });
+          const user = await createUserWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
         } catch (error) {
           if (
             error.message ===
