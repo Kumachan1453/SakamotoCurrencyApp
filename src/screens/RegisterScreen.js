@@ -13,15 +13,16 @@ import {
   blankCheck,
   checkNgWord,
   checkEmailFormat,
-  checkNameConflict,
 } from "../components/IfText";
 import { RegisterButton } from "../components/RegisterButton";
 import { LoginButton } from "../components/LoginButton";
 import { auth, db } from "../components/Firebase";
 import { addDoc, collection, query, getDocs } from "firebase/firestore";
 import { Warning } from "../components/Warning";
+import { useIsFocused } from "@react-navigation/native";
 
 export const RegisterScreen = ({ navigation }) => {
+  const isFocused = useIsFocused();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userName, setUserName] = useState("");
@@ -34,13 +35,32 @@ export const RegisterScreen = ({ navigation }) => {
   const [sumCoinUsage, setSumCoinUsage] = useState(0);
   const [updateNumber, setUpdateNumber] = useState(0);
 
+  const [userDataName, setUserDataName] = useState([]);
+
   const isJapanese = jpCheck(email);
   const isBlankUserName = blankCheck(userName);
   const isBlankEmail = blankCheck(email);
   const isEmailFormat = checkEmailFormat(email);
   const isBlankPassword = blankCheck(password);
   const isNgWord = checkNgWord(userName);
-  const isNameConflict = checkNameConflict(userName);
+
+  const usersName = [];
+  useEffect(() => {
+    (async () => {
+      const getUserData = await getDocs(collection(db, "users"));
+      getUserData.forEach((docs) => {
+        usersName.push(docs.data().name);
+      });
+      setUserDataName(usersName);
+    })();
+  }, [isFocused]);
+  const nameConflict = () => {
+    const regexNameConflict = userDataName.some(
+      (element) => element === userName
+    );
+    return regexNameConflict;
+  };
+  const isNameConflict = nameConflict(userName);
 
   const signUp = () => {
     if (

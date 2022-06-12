@@ -19,7 +19,7 @@ const checkEmailFormat = (Email) => {
   return !regexEmail.test(Email);
 };
 
-//名前重複チェック（未完成）
+//名前重複チェック
 const checkNameConflict = (userName) => {
   const nameList = [];
   UserDataName.forEach((docs) => {

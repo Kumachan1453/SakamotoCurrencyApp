@@ -26,14 +26,12 @@ export const Home = () => {
 
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      console.log("Home.js:1:onAuthStateChanged");
       const uid = user.uid;
     } else {
     }
   });
   useEffect(async () => {
     const getCollection = await getDocs(collection(db, "users"));
-    console.log("Home.js:2:useEffect");
     const array = [];
     getCollection.forEach((docs) => {
       array.push({ email: docs.data().email, id: docs.id });
@@ -50,13 +48,9 @@ export const Home = () => {
   }, [isFocused]);
 
   const handleLogout = () => {
-    signOut(auth)
-      .then(() => {
-        console.log("logout");
-      })
-      .catch((error) => {
-        console.log("error.message", error.message);
-      });
+    signOut(auth).catch((error) => {
+      console.log("error.message", error.message);
+    });
   };
 
   return (

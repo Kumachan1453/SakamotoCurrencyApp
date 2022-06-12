@@ -7,9 +7,7 @@ import { auth } from "../components/Firebase";
 export const Test = () => {
   const handleLogout = () => {
     signOut(auth)
-      .then(() => {
-        console.log("logout");
-      })
+      .then(() => {})
       .catch((error) => {
         console.log("error.message", error.message);
       });

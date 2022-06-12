@@ -17,7 +17,6 @@ export const Onboarding = () => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setLoading(false);
       if (user) {
-        console.log(user);
         setUser(user);
       } else {
         setUser("");

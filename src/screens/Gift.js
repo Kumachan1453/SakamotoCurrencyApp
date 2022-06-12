@@ -155,7 +155,6 @@ export const Gift = () => {
     setTimeout(() => {
       setIsButtonDisabled(false);
     }, 2000);
-    console.log("3: updateId", updateId);
   }, [updateId]);
 
   return (

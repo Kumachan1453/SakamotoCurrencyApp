@@ -17,7 +17,6 @@ const historicise = async () => {
     });
   });
   history.push(arrayCoins);
-  console.log("history", history);
 };
 historicise();
 

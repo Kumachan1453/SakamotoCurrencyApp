@@ -6,7 +6,7 @@ export const GetUsersId = () => {
     const q = collection(db, "users");
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
-      console.log("doc.id:", doc.id, " => ", "doc.data():", doc.data());
+      // console.log("doc.id:", doc.id, " => ", "doc.data():", doc.data());
     });
   };
   getUsersId();

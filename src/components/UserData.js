@@ -2,6 +2,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "./Firebase";
 
 const UserData = [];
+
 const getUserData = async () => {
   const getCollection = await getDocs(collection(db, "users"));
   getCollection.forEach((docs) => {
@@ -31,6 +32,7 @@ getUserDataId();
 
 const UserDataName = [];
 const getUserDataName = async () => {
+  console.log("UserData async前");
   const getCollection = await getDocs(collection(db, "users"));
   getCollection.forEach((docs) => {
     UserDataName.push({

@@ -41,12 +41,8 @@ export const FriendList = ({ navigation }) => {
           return item.name === friendName;
         });
         setListData(filterListData);
-        console.log("filterListData", filterListData);
-        console.log("friendName", friendName);
-        console.log("friendNameIF", friendName);
       } else {
         setListData(listData);
-        console.log("friendNameELSE", friendName);
       }
     }, 0);
     return () => clearTimeout(timerId);
