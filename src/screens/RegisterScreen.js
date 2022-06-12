@@ -20,6 +20,7 @@ import { auth, db } from "../components/Firebase";
 import { addDoc, collection, query, getDocs } from "firebase/firestore";
 import { Warning } from "../components/Warning";
 import { useIsFocused } from "@react-navigation/native";
+import { useStateIfMounted } from "use-state-if-mounted";
 
 export const RegisterScreen = ({ navigation }) => {
   const isFocused = useIsFocused();
@@ -35,7 +36,7 @@ export const RegisterScreen = ({ navigation }) => {
   const sumCoinUsage = 0;
   const updateNumber = 0;
 
-  const [userDataName, setUserDataName] = useState([]);
+  const [userDataName, setUserDataName] = useStateIfMounted([]);
 
   const isJapanese = jpCheck(email);
   const isBlankUserName = blankCheck(userName);
