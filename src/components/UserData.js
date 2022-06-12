@@ -32,7 +32,6 @@ getUserDataId();
 
 const UserDataName = [];
 const getUserDataName = async () => {
-  console.log("UserData async前");
   const getCollection = await getDocs(collection(db, "users"));
   getCollection.forEach((docs) => {
     UserDataName.push({
