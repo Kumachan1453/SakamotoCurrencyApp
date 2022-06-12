@@ -9,6 +9,7 @@ export const FriendButton = ({
   coin,
   unit,
   ranking,
+  time,
 }) => {
   return (
     <TouchableOpacity
@@ -50,6 +51,11 @@ export const FriendButton = ({
             <Text style={styles.coinText}>{coin}</Text>
             <Text style={styles.coinText}>{unit}</Text>
           </View>
+          {time !== "" && (
+            <View style={styles.justifyContentFlexEnd}>
+              <Text style={styles.timeText}>{time}</Text>
+            </View>
+          )}
         </View>
       </View>
     </TouchableOpacity>
@@ -94,6 +100,7 @@ const styles = StyleSheet.create({
   },
   rightPlacement: {
     justifyContent: "center",
+    marginEnd: 5,
   },
   leftPlacement: {
     flexDirection: "row",
@@ -111,16 +118,25 @@ const styles = StyleSheet.create({
   },
   coinTextPlacement: {
     flexDirection: "row",
+    justifyContent: "flex-end",
   },
   coinText: {
     justifyContent: "center",
     textAlign: "right",
     color: "gray",
-    fontSize: 20,
+    fontSize: 25,
     marginRight: 3,
   },
   medalIcon: {
+    textAlign: "right",
     padding: 10,
+  },
+  timeText: {
+    fontSize: 15,
+    color: "gray",
+  },
+  justifyContentFlexEnd: {
+    justifyContent: "flex-end",
   },
 });
 

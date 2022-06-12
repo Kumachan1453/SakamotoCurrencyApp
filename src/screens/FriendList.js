@@ -8,9 +8,34 @@ import { getAuth } from "firebase/auth";
 export const FriendList = ({ navigation }) => {
   const [listData, setListData] = useState([]);
   const [friendName, setFriendName] = useState("");
+  const [historyListData, setHistoryListData] = useState([]);
   const getUserProfile = getAuth();
   const user = getUserProfile.currentUser;
   const email = user.email;
+
+  useEffect(async () => {
+    const sendHistory = collection(db, "usersHistory");
+    const querySnapshotHistory = await getDocs(sendHistory);
+    const arrayhistoryTime = [];
+    querySnapshotHistory.forEach((docs) => {
+      arrayhistoryTime.push({
+        time: docs.data().time,
+      });
+    });
+    arrayhistoryTime.time = arrayhistoryTime.sort((a, b) => {
+      const x = a["time"];
+      const y = b["time"];
+      if (x > y) {
+        return -1;
+      }
+      if (x < y) {
+        return 1;
+      }
+      return 0;
+    });
+    setHistoryListData(arrayhistoryTime);
+    console.log("historyListData", historyListData);
+  }, []);
 
   useEffect(async () => {
     const getDatas = query(collection(db, "users"));
