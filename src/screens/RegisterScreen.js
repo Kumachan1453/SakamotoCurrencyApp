@@ -37,6 +37,7 @@ export const RegisterScreen = ({ navigation }) => {
   const updateNumber = 0;
 
   const [userDataName, setUserDataName] = useStateIfMounted([]);
+  const [userDataEmail, setUserDataEmail] = useStateIfMounted([]);
 
   const isJapanese = jpCheck(email);
   const isBlankUserName = blankCheck(userName);
@@ -63,6 +64,29 @@ export const RegisterScreen = ({ navigation }) => {
   };
   const isNameConflict = nameConflict(userName);
 
+  const usersEmail = [];
+  useEffect(() => {
+    (async () => {
+      console.log("Register async 前");
+      const getUserData = await getDocs(collection(db, "users"));
+      console.log("Register async うしろ");
+      getUserData.forEach((docs) => {
+        usersEmail.push(docs.data().email);
+      });
+      console.log("usersEmail", usersEmail);
+      setUserDataEmail(usersEmail);
+      console.log("userDataEmail", userDataEmail);
+    })();
+  }, [isFocused]);
+  const emailConflict = () => {
+    const regexEmailConflict = userDataEmail.some(
+      (element) => element === email
+    );
+    return regexEmailConflict;
+  };
+  const isEmailConflict = emailConflict(email);
+  console.log("isEmailConflict", isEmailConflict);
+
   const signUp = () => {
     if (
       isJapanese ||
@@ -71,6 +95,7 @@ export const RegisterScreen = ({ navigation }) => {
       isBlankPassword ||
       isBlankUserName ||
       isNameConflict ||
+      isEmailConflict ||
       isNgWord
     ) {
       setSignError(true);
@@ -155,7 +180,7 @@ export const RegisterScreen = ({ navigation }) => {
         <Text>メールアドレス</Text>
         <TextInput
           style={
-            isJapanese || (!isBlankEmail && isEmailFormat)
+            isJapanese || (!isBlankEmail && isEmailFormat) || isEmailConflict
               ? styles.errorTextInput
               : styles.textInput
           }
@@ -168,6 +193,9 @@ export const RegisterScreen = ({ navigation }) => {
         {isJapanese && <Warning letter={"日本語が含まれています"} />}
         {!isBlankEmail && !isJapanese && isEmailFormat && (
           <Warning letter={"メールアドレスの形式が間違っています"} />
+        )}
+        {isEmailConflict && (
+          <Warning letter={"メールアドレスが他のユーザーと重複しています"} />
         )}
       </View>
 
@@ -198,7 +226,8 @@ export const RegisterScreen = ({ navigation }) => {
             isBlankPassword ||
             isBlankUserName ||
             isNgWord ||
-            isNameConflict
+            isNameConflict ||
+            isEmailConflict
           }
           text={"新規登録"}
         />
