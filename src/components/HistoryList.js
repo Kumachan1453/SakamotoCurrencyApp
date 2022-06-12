@@ -11,7 +11,13 @@ export const HistoryList = ({
   return (
     <View style={styles.contents}>
       <View style={styles.contentsPlacement}>
-        <Text style={styles.friendNameText}>{friendName}</Text>
+        <Text
+          style={styles.friendNameText}
+          numberOfLines={2}
+          ellipsizeMode="tail"
+        >
+          {friendName}
+        </Text>
         <View style={styles.rightPlacement}>
           <View style={styles.coinTextPlacement}>
             <Text
@@ -58,7 +64,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   friendNameText: {
-    fontSize: 40,
+    fontSize: 28,
     marginLeft: 10,
   },
   listStyleText: {

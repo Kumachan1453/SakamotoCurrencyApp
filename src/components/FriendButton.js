@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   friendNameText: {
-    fontSize: 28,
+    fontSize: 26,
     marginLeft: 10,
   },
   listStyleText: {
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     textAlign: "right",
     color: "gray",
-    fontSize: 25,
+    fontSize: 20,
     marginRight: 3,
   },
   medalIcon: {

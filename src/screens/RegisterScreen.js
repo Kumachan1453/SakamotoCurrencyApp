@@ -130,7 +130,7 @@ export const RegisterScreen = ({ navigation }) => {
     >
       <Text style={styles.textUsersRegister}>新規登録画面</Text>
       <View style={styles.view}>
-        <Text>名前</Text>
+        <Text>名前（8文字以内）</Text>
         <TextInput
           style={
             isNgWord || isNameConflict
@@ -141,6 +141,7 @@ export const RegisterScreen = ({ navigation }) => {
           value={userName}
           placeholder="お名前を入力してください"
           autoCapitalize="none"
+          maxLength={8}
         />
         {isNgWord && (
           <Warning letter={"名前の中で不適切な用語が使われています"} />
