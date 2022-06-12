@@ -29,6 +29,9 @@ export const RegisterScreen = ({ navigation }) => {
   const [userName, setUserName] = useState("");
   const [signError, setSignError] = useState(false);
 
+  const userNameLength = userName.length;
+  const userPasswordLength = password.length;
+
   const coinOwnership = 10000;
   const monthlyCoinUsage = 0;
   const sendingCoin = 0;
@@ -67,15 +70,11 @@ export const RegisterScreen = ({ navigation }) => {
   const usersEmail = [];
   useEffect(() => {
     (async () => {
-      console.log("Register async 前");
       const getUserData = await getDocs(collection(db, "users"));
-      console.log("Register async うしろ");
       getUserData.forEach((docs) => {
         usersEmail.push(docs.data().email);
       });
-      console.log("usersEmail", usersEmail);
       setUserDataEmail(usersEmail);
-      console.log("userDataEmail", userDataEmail);
     })();
   }, [isFocused]);
   const emailConflict = () => {
@@ -85,7 +84,6 @@ export const RegisterScreen = ({ navigation }) => {
     return regexEmailConflict;
   };
   const isEmailConflict = emailConflict(email);
-  console.log("isEmailConflict", isEmailConflict);
 
   const signUp = () => {
     if (
@@ -96,7 +94,9 @@ export const RegisterScreen = ({ navigation }) => {
       isBlankUserName ||
       isNameConflict ||
       isEmailConflict ||
-      isNgWord
+      isNgWord ||
+      userNameLength > 8 ||
+      userPasswordLength < 6
     ) {
       setSignError(true);
       return;
@@ -159,7 +159,7 @@ export const RegisterScreen = ({ navigation }) => {
         <Text>名前（8文字以内）</Text>
         <TextInput
           style={
-            isNgWord || isNameConflict
+            isNgWord || isNameConflict || userNameLength > 8
               ? styles.errorTextInput
               : styles.textInput
           }
@@ -167,7 +167,6 @@ export const RegisterScreen = ({ navigation }) => {
           value={userName}
           placeholder="お名前を入力してください"
           autoCapitalize="none"
-          maxLength={8}
         />
         {isNgWord && (
           <Warning letter={"名前の中で不適切な用語が使われています"} />
@@ -175,6 +174,7 @@ export const RegisterScreen = ({ navigation }) => {
         {isNameConflict && (
           <Warning letter={"名前が他のユーザーと重複しています"} />
         )}
+        {userNameLength > 8 && <Warning letter={"名前が8文字を超えています"} />}
       </View>
       <View style={styles.view}>
         <Text>メールアドレス</Text>
@@ -202,13 +202,20 @@ export const RegisterScreen = ({ navigation }) => {
       <View style={styles.view}>
         <Text>パスワード（6文字以上）</Text>
         <TextInput
-          style={styles.textInput}
+          style={
+            userPasswordLength < 6 && !isBlankPassword
+              ? styles.errorTextInput
+              : styles.textInput
+          }
           onChangeText={setPassword}
           value={password}
           placeholder="パスワードを入力してください"
           secureTextEntry={true}
           autoCapitalize="none"
         />
+        {!isBlankPassword && userPasswordLength < 6 && (
+          <Warning letter={"パスワードは6文字以上にしてください"} />
+        )}
       </View>
       <View style={styles.LoginAndRegister}>
         <LoginButton
@@ -227,7 +234,9 @@ export const RegisterScreen = ({ navigation }) => {
             isBlankUserName ||
             isNgWord ||
             isNameConflict ||
-            isEmailConflict
+            isEmailConflict ||
+            userNameLength > 8 ||
+            userPasswordLength < 6
           }
           text={"新規登録"}
         />

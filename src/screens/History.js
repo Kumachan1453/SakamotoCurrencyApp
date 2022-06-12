@@ -54,10 +54,6 @@ export const History = () => {
   };
 
   useEffect(async () => {
-    const loginFilter = UserDataIdAndEmail.filter((login) => {
-      return email === login.email;
-    });
-    const getUserData = doc(db, "users", loginFilter[0].id);
     const sendHistory = collection(db, "usersHistory");
     const querySnapshotHistory = await getDocs(sendHistory);
     const arrayhistory = [];
