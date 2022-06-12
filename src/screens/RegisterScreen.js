@@ -28,12 +28,12 @@ export const RegisterScreen = ({ navigation }) => {
   const [userName, setUserName] = useState("");
   const [signError, setSignError] = useState(false);
 
-  const [coinOwnership, setCoinOwnership] = useState(10000);
-  const [monthlyCoinUsage, setMonthlyCoinUsage] = useState(0);
-  const [sendingCoin, setSendingCoin] = useState(0);
-  const [ranking, setRanking] = useState(0);
-  const [sumCoinUsage, setSumCoinUsage] = useState(0);
-  const [updateNumber, setUpdateNumber] = useState(0);
+  const coinOwnership = 10000;
+  const monthlyCoinUsage = 0;
+  const sendingCoin = 0;
+  const ranking = 0;
+  const sumCoinUsage = 0;
+  const updateNumber = 0;
 
   const [userDataName, setUserDataName] = useState([]);
 
