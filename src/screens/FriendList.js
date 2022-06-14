@@ -4,8 +4,10 @@ import { FriendButton } from "../components/FriendButton";
 import { db } from "../components/Firebase";
 import { collection, getDocs, query } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
+import TrueOrFalseButton from "../components/TrueOrFalseButton";
 
 export const FriendList = ({ navigation }) => {
+  const [buttonTrueOrFalse, setButtonTrueOrFalse] = useState(false);
   const [listData, setListData] = useState([]);
   const [friendName, setFriendName] = useState("");
   const [historyListData, setHistoryListData] = useState([]);
@@ -13,16 +15,33 @@ export const FriendList = ({ navigation }) => {
   const user = getUserProfile.currentUser;
   const email = user.email;
 
+  const getButtonTrueOrFalse = () => {
+    if (buttonTrueOrFalse === false) {
+      setButtonTrueOrFalse(true);
+    } else if (buttonTrueOrFalse === true) {
+      setButtonTrueOrFalse(false);
+    }
+  };
+
   useEffect(async () => {
     const sendHistory = collection(db, "usersHistory");
     const querySnapshotHistory = await getDocs(sendHistory);
-    const arrayhistoryTime = [];
+    const arrayhistory = [];
     querySnapshotHistory.forEach((docs) => {
-      arrayhistoryTime.push({
+      arrayhistory.push({
+        name: docs.data().name,
+        email: docs.data().email,
+        sendingCoin: docs.data().sendingCoin,
+        recipientUserName: docs.data().recipientUserName,
         time: docs.data().time,
+        sendOrGift: docs.data().sendOrGift,
+        id: docs.id,
       });
     });
-    arrayhistoryTime.time = arrayhistoryTime.sort((a, b) => {
+    const historyFilter = arrayhistory.filter((login) => {
+      return email === login.email;
+    });
+    historyFilter.time = historyFilter.sort((a, b) => {
       const x = a["time"];
       const y = b["time"];
       if (x > y) {
@@ -33,9 +52,8 @@ export const FriendList = ({ navigation }) => {
       }
       return 0;
     });
-    setHistoryListData(arrayhistoryTime);
-    console.log("historyListData", historyListData);
-  }, []);
+    setHistoryListData(historyFilter);
+  }, [buttonTrueOrFalse]);
 
   useEffect(async () => {
     const getDatas = query(collection(db, "users"));
@@ -52,7 +70,7 @@ export const FriendList = ({ navigation }) => {
       return email !== login.email;
     });
     setListData(loginFilter);
-  }, []);
+  }, [buttonTrueOrFalse]);
 
   const friendNameList = [];
   listData.forEach((docs) => {
@@ -84,12 +102,20 @@ export const FriendList = ({ navigation }) => {
           autoCapitalize="none"
         />
       </View>
+      <TrueOrFalseButton
+        onPress={getButtonTrueOrFalse}
+        buttonTrueOrFalse={buttonTrueOrFalse}
+        trueText={"すべてのフレンド"}
+        falseText={"最近のフレンド"}
+      />
       <FlatList
-        data={listData}
+        data={buttonTrueOrFalse === true ? listData : historyListData}
         renderItem={({ item }) => {
           return (
             <FriendButton
-              friendName={item.name}
+              friendName={
+                buttonTrueOrFalse === true ? item.name : item.recipientUserName
+              }
               onPress={() => navigation.navigate("Send", item)}
             />
           );
