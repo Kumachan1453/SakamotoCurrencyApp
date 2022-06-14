@@ -4,24 +4,14 @@ import { FriendButton } from "../components/FriendButton";
 import { db } from "../components/Firebase";
 import { collection, getDocs, query } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
-import TrueOrFalseButton from "../components/TrueOrFalseButton";
 
 export const FriendList = ({ navigation }) => {
-  const [buttonTrueOrFalse, setButtonTrueOrFalse] = useState(false);
   const [listData, setListData] = useState([]);
   const [friendName, setFriendName] = useState("");
   const [historyListData, setHistoryListData] = useState([]);
   const getUserProfile = getAuth();
   const user = getUserProfile.currentUser;
   const email = user.email;
-
-  const getButtonTrueOrFalse = () => {
-    if (buttonTrueOrFalse === false) {
-      setButtonTrueOrFalse(true);
-    } else if (buttonTrueOrFalse === true) {
-      setButtonTrueOrFalse(false);
-    }
-  };
 
   useEffect(async () => {
     const sendHistory = collection(db, "usersHistory");
@@ -53,7 +43,7 @@ export const FriendList = ({ navigation }) => {
       return 0;
     });
     setHistoryListData(historyFilter);
-  }, [buttonTrueOrFalse]);
+  }, []);
 
   useEffect(async () => {
     const getDatas = query(collection(db, "users"));
@@ -70,7 +60,7 @@ export const FriendList = ({ navigation }) => {
       return email !== login.email;
     });
     setListData(loginFilter);
-  }, [buttonTrueOrFalse]);
+  }, []);
 
   const friendNameList = [];
   listData.forEach((docs) => {
@@ -102,20 +92,12 @@ export const FriendList = ({ navigation }) => {
           autoCapitalize="none"
         />
       </View>
-      <TrueOrFalseButton
-        onPress={getButtonTrueOrFalse}
-        buttonTrueOrFalse={buttonTrueOrFalse}
-        trueText={"すべてのフレンド"}
-        falseText={"最近のフレンド"}
-      />
       <FlatList
-        data={buttonTrueOrFalse === true ? listData : historyListData}
+        data={listData}
         renderItem={({ item }) => {
           return (
             <FriendButton
-              friendName={
-                buttonTrueOrFalse === true ? item.name : item.recipientUserName
-              }
+              friendName={item.name}
               onPress={() => navigation.navigate("Send", item)}
             />
           );
