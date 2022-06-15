@@ -113,6 +113,7 @@ export const RegisterScreen = ({ navigation }) => {
             ranking: ranking,
             sumCoinUsage: sumCoinUsage,
             updateNumber: updateNumber,
+            time: new Date().toLocaleString(),
           });
           const user = await createUserWithEmailAndPassword(
             auth,

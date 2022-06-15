@@ -9,8 +9,8 @@ export const TrueOrFalseButton = ({
   falseText,
 }) => {
   return (
-    <View>
-      <TouchableOpacity onPress={onPress}>
+    <View style={styles.content}>
+      <TouchableOpacity onPress={onPress} style={styles.ButtonSize}>
         {buttonTrueOrFalse === true && (
           <View style={styles.Blue}>
             <Text style={styles.Text}>{trueText}</Text>
@@ -28,6 +28,12 @@ export const TrueOrFalseButton = ({
   );
 };
 const styles = StyleSheet.create({
+  content: {
+    width: "100%",
+  },
+  ButtonSize: {
+    width: "100%",
+  },
   Blue: {
     backgroundColor: "#BAD3FF",
     borderColor: "gray",

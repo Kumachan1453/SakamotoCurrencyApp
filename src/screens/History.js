@@ -115,7 +115,7 @@ export const History = () => {
 
   return (
     <View style={styles.content}>
-      <View style={styles.flexDirectionRow}>
+      <View style={styles.headButton}>
         <View>
           <TrueOrFalseButton
             onPress={getButtonUpOrDown}
@@ -164,7 +164,9 @@ const styles = StyleSheet.create({
   content: {
     height: "100%",
   },
-  flexDirectionRow: {
+  headButton: {
+    backgroundColor: "red",
+    width: "100%",
     flexDirection: "row",
   },
 });
