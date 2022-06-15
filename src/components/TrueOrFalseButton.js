@@ -1,6 +1,5 @@
 import React from "react";
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 
 export const TrueOrFalseButton = ({
   onPress,
@@ -12,40 +11,37 @@ export const TrueOrFalseButton = ({
     <View style={styles.content}>
       <TouchableOpacity onPress={onPress} style={styles.ButtonSize}>
         {buttonTrueOrFalse === true && (
-          <View style={styles.Blue}>
-            <Text style={styles.Text}>{trueText}</Text>
+          <View style={styles.true}>
+            <Text style={styles.TrueText}>{trueText}</Text>
           </View>
-          // <Ionicons name="ios-arrow-down" size={60} color="blue" />
         )}
         {buttonTrueOrFalse === false && (
-          <View style={styles.Red}>
-            <Text style={styles.Text}>{falseText}</Text>
+          <View style={styles.false}>
+            <Text style={styles.FalseText}>{falseText}</Text>
           </View>
-          // <Ionicons name="ios-arrow-up" size={60} color="red" />
         )}
       </TouchableOpacity>
     </View>
   );
 };
 const styles = StyleSheet.create({
-  content: {
-    width: "100%",
-  },
-  ButtonSize: {
-    width: "100%",
-  },
-  Blue: {
-    backgroundColor: "#BAD3FF",
+  true: {
     borderColor: "gray",
     borderWidth: 1,
+    backgroundColor: "orange",
   },
-  Red: {
-    backgroundColor: "#FFBBFF",
+  false: {
     borderColor: "gray",
     borderWidth: 1,
+    backgroundColor: "gainsboro",
   },
-  Text: {
-    color: "black",
+  TrueText: {
+    color: "white",
+    fontSize: 35,
+    textAlign: "center",
+  },
+  FalseText: {
+    color: "gray",
     fontSize: 35,
     textAlign: "center",
   },

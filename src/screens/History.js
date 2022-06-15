@@ -115,32 +115,12 @@ export const History = () => {
 
   return (
     <View style={styles.content}>
-      <View style={styles.headButton}>
-        <View>
-          <TrueOrFalseButton
-            onPress={getButtonUpOrDown}
-            buttonTrueOrFalse={buttonUpOrDown}
-            trueText={"↓"}
-            falseText={"↑"}
-          />
-        </View>
-        <View>
-          <TrueOrFalseButton
-            onPress={getPlusFilter}
-            buttonTrueOrFalse={plusFilter}
-            trueText={"+"}
-            falseText={"+"}
-          />
-        </View>
-        <View>
-          <TrueOrFalseButton
-            onPress={getMinusFilter}
-            buttonTrueOrFalse={minusFilter}
-            trueText={"-"}
-            falseText={"-"}
-          />
-        </View>
-      </View>
+      <TrueOrFalseButton
+        onPress={getButtonUpOrDown}
+        buttonTrueOrFalse={buttonUpOrDown}
+        trueText={"↓"}
+        falseText={"↑"}
+      />
       <FlatList
         data={historyListData}
         renderItem={({ item }) => {
@@ -156,6 +136,25 @@ export const History = () => {
         }}
         keyExtractor={(item) => item.id}
       />
+
+      <View style={styles.headButton}>
+        <View style={styles.buttonSize}>
+          <TrueOrFalseButton
+            onPress={getPlusFilter}
+            buttonTrueOrFalse={plusFilter}
+            trueText={"+"}
+            falseText={"+"}
+          />
+        </View>
+        <View style={styles.buttonSize}>
+          <TrueOrFalseButton
+            onPress={getMinusFilter}
+            buttonTrueOrFalse={minusFilter}
+            trueText={"-"}
+            falseText={"-"}
+          />
+        </View>
+      </View>
     </View>
   );
 };
@@ -165,9 +164,11 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   headButton: {
-    backgroundColor: "red",
     width: "100%",
     flexDirection: "row",
+  },
+  buttonSize: {
+    width: "50%",
   },
 });
 
