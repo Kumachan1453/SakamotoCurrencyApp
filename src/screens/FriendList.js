@@ -53,11 +53,23 @@ export const FriendList = ({ navigation }) => {
       array.push({
         name: docs.data().name,
         email: docs.data().email,
+        time: docs.data().time,
         id: docs.id,
       });
     });
     const loginFilter = array.filter((login) => {
       return email !== login.email;
+    });
+    loginFilter.time = loginFilter.sort((a, b) => {
+      const x = a["time"];
+      const y = b["time"];
+      if (x > y) {
+        return -1;
+      }
+      if (x < y) {
+        return 1;
+      }
+      return 0;
     });
     setListData(loginFilter);
   }, []);
