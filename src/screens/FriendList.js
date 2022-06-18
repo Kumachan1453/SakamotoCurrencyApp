@@ -4,8 +4,10 @@ import { FriendButton } from "../components/FriendButton";
 import { db } from "../components/Firebase";
 import { collection, getDocs, query } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
+import { useIsFocused } from "@react-navigation/native";
 
 export const FriendList = ({ navigation }) => {
+  const isFocused = useIsFocused();
   const [listData, setListData] = useState([]);
   const [friendName, setFriendName] = useState("");
   const [historyListData, setHistoryListData] = useState([]);
@@ -83,15 +85,47 @@ export const FriendList = ({ navigation }) => {
     const timerId = setTimeout(() => {
       if (friendName !== "") {
         const filterListData = listData.filter((item) => {
+          console.log("item.name", item.name);
+          console.log("friendName", friendName);
           return item.name === friendName;
         });
         setListData(filterListData);
+        console.log("filterListData", filterListData);
       } else {
-        setListData(listData);
+        const friendList = async () => {
+          const getDatas = query(collection(db, "users"));
+          const querySnapshot = await getDocs(getDatas);
+          const array = [];
+          querySnapshot.forEach((docs) => {
+            array.push({
+              name: docs.data().name,
+              email: docs.data().email,
+              time: docs.data().time,
+              id: docs.id,
+            });
+          });
+          const loginFilter = array.filter((login) => {
+            return email !== login.email;
+          });
+          loginFilter.time = loginFilter.sort((a, b) => {
+            const x = a["time"];
+            const y = b["time"];
+            if (x > y) {
+              return -1;
+            }
+            if (x < y) {
+              return 1;
+            }
+            return 0;
+          });
+          setListData(loginFilter);
+          console.log("listData", listData);
+        };
+        friendList();
       }
     }, 0);
     return () => clearTimeout(timerId);
-  }, [friendName]);
+  }, [friendName, isFocused]);
 
   return (
     <View style={styles.content}>
