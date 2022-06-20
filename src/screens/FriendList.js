@@ -21,19 +21,39 @@ export const FriendList = ({ navigation }) => {
     const arrayhistory = [];
     querySnapshotHistory.forEach((docs) => {
       arrayhistory.push({
-        name: docs.data().name,
         email: docs.data().email,
-        sendingCoin: docs.data().sendingCoin,
         recipientUserName: docs.data().recipientUserName,
         time: docs.data().time,
-        sendOrGift: docs.data().sendOrGift,
         id: docs.id,
       });
     });
-    const historyFilter = arrayhistory.filter((login) => {
+    const historyLoginFilter = arrayhistory.filter((login) => {
       return email === login.email;
     });
-    historyFilter.time = historyFilter.sort((a, b) => {
+
+    // const arr = ["A", "B", "C", "A", "B"];
+    // const newArr = arr.filter((element, index) => {
+    //   console.log("arr.indexOf(element):", arr.indexOf(element));
+    //   console.log("index", index);
+    //   arr.indexOf(element) === index;
+    // });
+    // console.log("newArr", newArr);
+
+    // const historyFilter = historyLoginFilter.filter((gift, index, history) => {
+    //   console.log("historyLoginFilter.indexOf(gift)", history.indexOf(gift));
+    //   console.log("index", index);
+    //   console.log("history", history);
+    //   history.indexOf(gift) === index;
+    // });
+    // console.log("historyFilter", historyFilter);
+    // const historyFilter = Array.from(new Set(historyLoginFilter));
+
+    const historyFilter = new Map(
+      historyLoginFilter.map((list) => [list.recipientUserName, list])
+    );
+    console.log("historyFilter", historyFilter);
+
+    historyLoginFilter.time = historyLoginFilter.sort((a, b) => {
       const x = a["time"];
       const y = b["time"];
       if (x > y) {
@@ -44,8 +64,10 @@ export const FriendList = ({ navigation }) => {
       }
       return 0;
     });
-    setHistoryListData(historyFilter);
+    setHistoryListData(historyLoginFilter);
   }, []);
+  console.log("historyListData", historyListData);
+  console.log("listData", listData);
 
   useEffect(async () => {
     const getDatas = query(collection(db, "users"));
@@ -85,12 +107,9 @@ export const FriendList = ({ navigation }) => {
     const timerId = setTimeout(() => {
       if (friendName !== "") {
         const filterListData = listData.filter((item) => {
-          console.log("item.name", item.name);
-          console.log("friendName", friendName);
           return item.name === friendName;
         });
         setListData(filterListData);
-        console.log("filterListData", filterListData);
       } else {
         const friendList = async () => {
           const getDatas = query(collection(db, "users"));
@@ -119,7 +138,6 @@ export const FriendList = ({ navigation }) => {
             return 0;
           });
           setListData(loginFilter);
-          console.log("listData", listData);
         };
         friendList();
       }

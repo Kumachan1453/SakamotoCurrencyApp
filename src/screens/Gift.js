@@ -96,6 +96,7 @@ export const Gift = () => {
       email: snapData.data().email,
       sendingCoin: item.sendingCoin,
       recipientUserName: item.name,
+      recipientUserId: item.id,
       time: new Date().toLocaleString(),
       sendOrGift: "+",
     });
