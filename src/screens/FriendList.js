@@ -39,19 +39,32 @@ export const FriendList = ({ navigation }) => {
     // });
     // console.log("newArr", newArr);
 
-    // const historyFilter = historyLoginFilter.filter((gift, index, history) => {
-    //   console.log("historyLoginFilter.indexOf(gift)", history.indexOf(gift));
+    // const historyFilter = historyLoginFilter.filter((gift, index) => {
+    //   // console.log("historyLoginFilter.indexOf(gift)", history.indexOf(gift));
     //   console.log("index", index);
-    //   console.log("history", history);
-    //   history.indexOf(gift) === index;
+    //   // console.log("history", history);
+    //   historyFilter.indexOf(gift) === index;
     // });
     // console.log("historyFilter", historyFilter);
-    // const historyFilter = Array.from(new Set(historyLoginFilter));
+
+    // const array1 = ["A", "D", "C", "A", "D", "C"];
+    // const array2 = [...new Set(array1)];
+    // console.log("array2", array2); // [ "A", "D", "C" ]
 
     const historyFilter = new Map(
-      historyLoginFilter.map((list) => [list.recipientUserName, list])
+      historyLoginFilter.map((value) => [value.recipientUserName, value])
     );
-    console.log("historyFilter", historyFilter);
+    // console.log("historyFilter", historyFilter);
+    const historyFilterObject = Object.fromEntries(historyFilter);
+    // console.log("historyFilterObject:", historyFilterObject);
+    const historyFilterArray = Object.entries(historyFilterObject);
+    // const historyFilterArray = [historyFilterObject];
+    console.log("historyFilterArray:", historyFilterArray);
+    // const historyFilterArrayShift = historyFilterArray.shift();
+    // console.log("historyFilterArrayShift:", historyFilterArrayShift);
+    for (let step = 0; step < historyFilterArray.length; step++) {
+      console.log("historyFilterArrayShift:", historyFilterArray[step].shift());
+    }
 
     historyLoginFilter.time = historyLoginFilter.sort((a, b) => {
       const x = a["time"];
