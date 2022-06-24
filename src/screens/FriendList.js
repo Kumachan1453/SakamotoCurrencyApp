@@ -5,15 +5,26 @@ import { db } from "../components/Firebase";
 import { collection, getDocs, query } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { useIsFocused } from "@react-navigation/native";
+import TrueOrFalseButton from "../components/TrueOrFalseButton";
 
 export const FriendList = ({ navigation }) => {
   const isFocused = useIsFocused();
   const [listData, setListData] = useState([]);
   const [friendName, setFriendName] = useState("");
   const [historyListData, setHistoryListData] = useState([]);
+  const [buttonTrueOrFalse, setButtonTrueOrFalse] = useState(false);
+
   const getUserProfile = getAuth();
   const user = getUserProfile.currentUser;
   const email = user.email;
+
+  const getButtonTrueOrFalse = () => {
+    if (buttonTrueOrFalse === false) {
+      setButtonTrueOrFalse(true);
+    } else if (buttonTrueOrFalse === true) {
+      setButtonTrueOrFalse(false);
+    }
+  };
 
   useEffect(async () => {
     const sendHistory = collection(db, "usersHistory");
@@ -51,20 +62,20 @@ export const FriendList = ({ navigation }) => {
     // const array2 = [...new Set(array1)];
     // console.log("array2", array2); // [ "A", "D", "C" ]
 
-    const historyFilter = new Map(
-      historyLoginFilter.map((value) => [value.recipientUserName, value])
-    );
-    // console.log("historyFilter", historyFilter);
-    const historyFilterObject = Object.fromEntries(historyFilter);
-    // console.log("historyFilterObject:", historyFilterObject);
-    const historyFilterArray = Object.entries(historyFilterObject);
-    // const historyFilterArray = [historyFilterObject];
-    console.log("historyFilterArray:", historyFilterArray);
+    // const historyFilter = new Map(
+    //   historyLoginFilter.map((value) => [value.recipientUserName, value])
+    // );
+    // // console.log("historyFilter", historyFilter);
+    // const historyFilterObject = Object.fromEntries(historyFilter);
+    // // console.log("historyFilterObject:", historyFilterObject);
+    // const historyFilterArray = Object.entries(historyFilterObject);
+    // // const historyFilterArray = [historyFilterObject];
+    // console.log("historyFilterArray:", historyFilterArray);
     // const historyFilterArrayShift = historyFilterArray.shift();
     // console.log("historyFilterArrayShift:", historyFilterArrayShift);
-    for (let step = 0; step < historyFilterArray.length; step++) {
-      console.log("historyFilterArrayShift:", historyFilterArray[step].shift());
-    }
+    // for (let step = 0; step < historyFilterArray.length; step++) {
+    //   console.log("historyFilterArrayShift:", historyFilterArray[step].shift());
+    // }
 
     historyLoginFilter.time = historyLoginFilter.sort((a, b) => {
       const x = a["time"];
@@ -78,7 +89,7 @@ export const FriendList = ({ navigation }) => {
       return 0;
     });
     setHistoryListData(historyLoginFilter);
-  }, []);
+  }, [buttonTrueOrFalse]);
   console.log("historyListData", historyListData);
   console.log("listData", listData);
 
@@ -169,12 +180,21 @@ export const FriendList = ({ navigation }) => {
           autoCapitalize="none"
         />
       </View>
+      <TrueOrFalseButton
+        onPress={getButtonTrueOrFalse}
+        buttonTrueOrFalse={buttonTrueOrFalse}
+        trueText={"すべてのフレンド"}
+        falseText={"最近のフレンド"}
+      />
+
       <FlatList
-        data={listData}
+        data={buttonTrueOrFalse === true ? listData : historyListData}
         renderItem={({ item }) => {
           return (
             <FriendButton
-              friendName={item.name}
+              friendName={
+                buttonTrueOrFalse === true ? item.name : item.recipientUserName
+              }
               onPress={() => navigation.navigate("Send", item)}
             />
           );

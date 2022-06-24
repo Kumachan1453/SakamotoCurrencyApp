@@ -24,10 +24,16 @@ import { db } from "../components/Firebase";
 import { getAuth } from "firebase/auth";
 import { howMuchDouYouUseYourCoinThisMonth } from "../components/PatternText";
 import { Warning } from "../components/Warning";
+import { RecentlyExchangedFriendsDataRecipientUserId } from "../components/RecentlyExchangedFriendsData";
 
 const Stack = createNativeStackNavigator();
 
 export const Send = ({ navigation }) => {
+  console.log(
+    "RecentlyExchangedFriendsDataRecipientUserId",
+    RecentlyExchangedFriendsDataRecipientUserId
+  );
+
   const getUserProfile = getAuth();
   const user = getUserProfile.currentUser;
   const email = user.email;
@@ -51,6 +57,37 @@ export const Send = ({ navigation }) => {
 
   const route = useRoute();
   const isFocused = useIsFocused();
+
+  const [recentlyExchangedFriendsId, setRecentlyExchangedFriendsId] =
+    useState("");
+  setRecentlyExchangedFriendsId(route.params.id);
+
+  const RecentlyExchangedFriendsDataRecipientUserId = [];
+
+  useEffect(() => {
+    (async () => {
+      const getCollection = await getDocs(
+        collection(db, "recentlyExchangedFriends")
+      );
+      getCollection.forEach((docs) => {
+        RecentlyExchangedFriendsDataRecipientUserId.push({
+          recipientUserId: docs.data().recipientUserId,
+        });
+      });
+      setUserDataName(RecentlyExchangedFriendsDataRecipientUserId);
+    })();
+  }, [isFocused]);
+
+  const checkRecentlyExchangedFriendsDataIdConflict = () => {
+    const idList = [];
+    RecentlyExchangedFriendsDataRecipientUserId.forEach((item) => {
+      idList.push(item.id);
+    });
+    const regexIdConflict = idList.some(
+      (element) => element === recentlyExchangedFriendsId
+    );
+    return regexIdConflict;
+  };
 
   useEffect(async () => {
     const getCollection = await getDocs(collection(db, "users"));
@@ -128,6 +165,29 @@ export const Send = ({ navigation }) => {
         time: new Date().toLocaleString(),
         sendOrGift: "-",
       });
+
+      if (checkFriendsIdConflict === true) {
+        console.log("checkFriendsIdConflict true", checkFriendsIdConflict);
+        const updateRecentlyExchangedFriends = await updateDoc(
+          collection(db, "recentlyExchangedFriends"),
+          {
+            time: new Date().toLocaleString(),
+          }
+        );
+      } else {
+        console.log("checkFriendsIdConflict false", checkFriendsIdConflict);
+        const addRecentlyExchangedFriends = await addDoc(
+          collection(db, "recentlyExchangedFriends"),
+          {
+            name: snapData.data().name,
+            email: snapData.data().email,
+            recipientUserName: route.params.name,
+            recipientUserId: route.params.id,
+            time: new Date().toLocaleString(),
+          }
+        );
+      }
+
       navigation.goBack();
     }
   }, [subId]);
