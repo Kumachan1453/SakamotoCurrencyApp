@@ -125,6 +125,7 @@ export const Gift = () => {
       return email === login.email;
     });
     const getUserData = doc(db, "users", loginFilter[0].id);
+    // console.log("loginFilter[0].email", loginFilter[0].email);
     const snapUsersData = await getDoc(getUserData);
     setCoinOwnership(Math.round(snapUsersData.data().coinOwnership));
     setMonthlyCoinUsage(Math.round(snapUsersData.data().monthlyCoinUsage));
@@ -134,6 +135,7 @@ export const Gift = () => {
     querySnapshot.forEach((docs) => {
       arrayCoins.push({
         name: docs.data().name,
+        email: docs.data().email,
         sendingCoin: docs.data().sendingCoin,
         subId: docs.data().subId,
         recipientUserId: docs.data().recipientUserId,
