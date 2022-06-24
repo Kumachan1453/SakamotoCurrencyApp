@@ -102,7 +102,6 @@ export const FriendList = ({ navigation }) => {
         name: docs.data().name,
         email: docs.data().email,
         recipientUserName: docs.data().recipientUserName,
-        recipientUserId: docs.data().recipientUserId,
         time: new Date().toLocaleString(),
         id: docs.id,
       });
@@ -110,18 +109,26 @@ export const FriendList = ({ navigation }) => {
     const loginFilter = array.filter((login) => {
       return email !== login.email;
     });
-    loginFilter.time = loginFilter.sort((a, b) => {
-      const x = a["time"];
-      const y = b["time"];
-      if (x > y) {
-        return -1;
+    const mapFilter = new Map(loginFilter.map((value) => [value.name, value]));
+    const mapFilterObject = Object.fromEntries(mapFilter);
+    const mapFilterArray = Object.entries(mapFilterObject);
+    // const mapFilterArray2 = [historyFilterObject];
+    console.log("mapFilterArray:", mapFilterArray);
+    const mapFilterArrayTime = (mapFilterArray.time = mapFilterArray.sort(
+      (a, b) => {
+        const x = a["time"];
+        const y = b["time"];
+        if (x > y) {
+          return -1;
+        }
+        if (x < y) {
+          return 1;
+        }
+        return 0;
       }
-      if (x < y) {
-        return 1;
-      }
-      return 0;
-    });
-    setRecentListData(loginFilter);
+    ));
+    setRecentListData(mapFilterArrayTime);
+    console.log("recentListData", recentListData);
   }, [buttonTrueOrFalse]);
 
   useEffect(async () => {
