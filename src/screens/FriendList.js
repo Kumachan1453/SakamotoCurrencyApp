@@ -154,8 +154,8 @@ export const FriendList = ({ navigation }) => {
         return 0;
       }
     ));
-    setRecentListData(recentLoginFilter);
-    console.log("recentListData", recentListData);
+    setRecentListData(mapFilterArrayTime);
+    console.log("mapFilterArrayTime", mapFilterArrayTime);
   }, [buttonTrueOrFalse]);
 
   useEffect(async () => {
