@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, View, FlatList, TextInput } from "react-native";
 import { FriendButton } from "../components/FriendButton";
 import { db } from "../components/Firebase";
-import { collection, getDocs, query } from "firebase/firestore";
+import { collection, getDocs, query, addDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { useIsFocused } from "@react-navigation/native";
 import TrueOrFalseButton from "../components/TrueOrFalseButton";
+import { async } from "@firebase/util";
 
 export const FriendList = ({ navigation }) => {
   const isFocused = useIsFocused();
@@ -26,6 +27,30 @@ export const FriendList = ({ navigation }) => {
       setButtonTrueOrFalse(false);
     }
   };
+
+  // const testFunction = async () => {
+  //   const subTestId = "QAdS3BFLz2dbv5Vc3udc";
+  //   const subTestData = collection(db, "test", subTestId, "subTest");
+  //   const getSubTestData = await getDocs(subTestData);
+  //   const subTestArray = [];
+  //   getSubTestData.forEach((docs) => {
+  //     subTestArray.push({
+  //       subTest: docs.data(),
+  //     });
+  //   });
+  //   console.log("subTestArray", subTestArray);
+
+  //   const testData = collection(db, "test");
+  //   const getTestData = await getDocs(testData);
+  //   const testArray = [];
+  //   getTestData.forEach((docs) => {
+  //     testArray.push({
+  //       con: docs.data(),
+  //     });
+  //   });
+  //   console.log("testArray", testArray);
+  // };
+  // testFunction();
 
   useEffect(async () => {
     const sendHistory = collection(db, "usersHistory");
@@ -106,10 +131,12 @@ export const FriendList = ({ navigation }) => {
         id: docs.id,
       });
     });
-    const loginFilter = array.filter((login) => {
+    const recentLoginFilter = array.filter((login) => {
       return email !== login.email;
     });
-    const mapFilter = new Map(loginFilter.map((value) => [value.name, value]));
+    const mapFilter = new Map(
+      recentLoginFilter.map((value) => [value.name, value])
+    );
     const mapFilterObject = Object.fromEntries(mapFilter);
     const mapFilterArray = Object.entries(mapFilterObject);
     // const mapFilterArray2 = [historyFilterObject];
@@ -127,7 +154,7 @@ export const FriendList = ({ navigation }) => {
         return 0;
       }
     ));
-    setRecentListData(mapFilterArrayTime);
+    setRecentListData(recentLoginFilter);
     console.log("recentListData", recentListData);
   }, [buttonTrueOrFalse]);
 

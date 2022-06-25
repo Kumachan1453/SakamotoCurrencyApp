@@ -125,7 +125,7 @@ export const Gift = () => {
       return email === login.email;
     });
     const getUserData = doc(db, "users", loginFilter[0].id);
-    // console.log("loginFilter[0].email", loginFilter[0].email);
+    // console.log("loginFilter[0].id", loginFilter[0].id);
     const snapUsersData = await getDoc(getUserData);
     setCoinOwnership(Math.round(snapUsersData.data().coinOwnership));
     setMonthlyCoinUsage(Math.round(snapUsersData.data().monthlyCoinUsage));
@@ -181,7 +181,7 @@ export const Gift = () => {
       <FlatList
         data={giftListData}
         renderItem={({ item }) => {
-          if (item.recipientUserId === userId) {
+          if (item.recipientUserEmail === userId) {
             return (
               <FriendButton
                 onPress={() => onPressAction(item)}
