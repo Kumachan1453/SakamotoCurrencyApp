@@ -73,9 +73,12 @@ export const Gift = () => {
       return email === login.email;
     });
     const getData = doc(db, "users", loginFilter[0].id);
+    const getItemData = doc(db, "users", item.id);
+    console.log("getItemData", getItemData);
     const snapData = await getDoc(getData);
     updateDoc(getData, {
       coinOwnership: coinOwnership + item.sendingCoin,
+      time: new Date().toLocaleString(),
     });
 
     const sendGift = collection(db, "coins");
@@ -181,7 +184,7 @@ export const Gift = () => {
       <FlatList
         data={giftListData}
         renderItem={({ item }) => {
-          if (item.recipientUserEmail === userId) {
+          if (item.recipientUserId === userId) {
             return (
               <FriendButton
                 onPress={() => onPressAction(item)}

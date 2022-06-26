@@ -107,6 +107,7 @@ export const Send = ({ navigation }) => {
       return email === login.email;
     });
     const getData = doc(db, "users", loginFilter[0].id);
+    const getParamsData = doc(db, "users", route.params.id);
     if (sendingCoin < 0) {
       alert("数字が0以下です");
     } else if (coinOwnership - sendingCoin >= 0) {
@@ -115,6 +116,10 @@ export const Send = ({ navigation }) => {
         coinOwnership: coinOwnership - sendingCoin,
         monthlyCoinUsage: monthlyCoinUsage + sendingCoin,
         sumCoinUsage: sumCoinUsage + sendingCoin,
+        time: new Date().toLocaleString(),
+      });
+      await updateDoc(getParamsData, {
+        time: new Date().toLocaleString(),
       });
     } else if (coinOwnership - sendingCoin < 0) {
       alert("コインが足りません");
