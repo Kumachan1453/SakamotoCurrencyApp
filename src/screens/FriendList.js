@@ -2,18 +2,23 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, View, FlatList, TextInput } from "react-native";
 import { FriendButton } from "../components/FriendButton";
 import { db } from "../components/Firebase";
-import { collection, getDocs, query, addDoc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  query,
+  addDoc,
+  connectFirestoreEmulator,
+} from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { useIsFocused } from "@react-navigation/native";
 import TrueOrFalseButton from "../components/TrueOrFalseButton";
-import { async } from "@firebase/util";
 
 export const FriendList = ({ navigation }) => {
   const isFocused = useIsFocused();
   const [listData, setListData] = useState([]);
   const [friendName, setFriendName] = useState("");
   const [historyListData, setHistoryListData] = useState([]);
-  const [recentListData, setRecentListData] = useState([]);
+  // const [recentListData, setRecentListData] = useState([]);
   const [buttonTrueOrFalse, setButtonTrueOrFalse] = useState(false);
 
   const getUserProfile = getAuth();
@@ -38,7 +43,6 @@ export const FriendList = ({ navigation }) => {
   //       subTest: docs.data(),
   //     });
   //   });
-  //   console.log("subTestArray", subTestArray);
 
   //   const testData = collection(db, "test");
   //   const getTestData = await getDocs(testData);
@@ -48,27 +52,25 @@ export const FriendList = ({ navigation }) => {
   //       con: docs.data(),
   //     });
   //   });
-  //   console.log("testArray", testArray);
   // };
   // testFunction();
 
   useEffect(async () => {
     const sendHistory = collection(db, "usersHistory");
     const querySnapshotHistory = await getDocs(sendHistory);
-    const arrayhistory = [];
+    const arrayHistory = [];
     querySnapshotHistory.forEach((docs) => {
-      arrayhistory.push({
+      arrayHistory.push({
         email: docs.data().email,
         recipientUserName: docs.data().recipientUserName,
+        recipientUserId: docs.data().recipientUserId,
         time: docs.data().time,
         id: docs.id,
       });
     });
-    const historyLoginFilter = arrayhistory.filter((login) => {
+    const historyLoginFilter = arrayHistory.filter((login) => {
       return email === login.email;
     });
-
-    // console.log("historyLoginFilter", historyLoginFilter);
 
     const historyLoginFilterTime = (historyLoginFilter.time =
       historyLoginFilter.sort((a, b) => {
@@ -85,21 +87,59 @@ export const FriendList = ({ navigation }) => {
 
     console.log("historyLoginFilterTime", historyLoginFilterTime);
 
-    const historyLoginFilterTimeFindIndex = historyLoginFilterTime.filter(
-      (element, index) => {
-        console.log("element", element);
-        console.log("index", index);
-        const findIndex = historyLoginFilterTime.findIndex((e) => {
-          // console.log("e", e);
-          console.log("e.email === element.email", e.email === element.email);
-          e.email === element.email;
-        });
-        console.log("findIndex", findIndex);
+    const getDatas = query(collection(db, "users"));
+    const querySnapshot = await getDocs(getDatas);
+    const array = [];
+    querySnapshot.forEach((docs) => {
+      array.push({
+        name: docs.data().name,
+        email: docs.data().email,
+        time: docs.data().time,
+        id: docs.id,
+      });
+    });
+    const loginFilter = array.filter((login) => {
+      return email !== login.email;
+    });
+    const loginFilterTime = (loginFilter.time = loginFilter.sort((a, b) => {
+      const x = a["time"];
+      const y = b["time"];
+      if (x > y) {
+        return -1;
       }
+      if (x < y) {
+        return 1;
+      }
+      return 0;
+    }));
+    console.log("loginFilterTime", loginFilterTime);
+
+    const historyRecipientUserId = [];
+    historyLoginFilterTime.forEach((docs) => {
+      historyRecipientUserId.push(docs.recipientUserId);
+    });
+    const setHistoryRecipientUserId = Array.from(
+      new Set(historyRecipientUserId)
     );
-    // console.log(
-    //   "historyLoginFilterTimeFindIndex",
-    //   historyLoginFilterTimeFindIndex
+    console.log("setHistoryRecipientUserId", setHistoryRecipientUserId);
+    const recentRecipientUserId = loginFilterTime.filter((docs) => {
+      console.log("docs.id", docs.id);
+      for (let i = 0; i <= loginFilterTime.length; i++) {
+        console.log(
+          "setHistoryRecipientUserId[i]",
+          setHistoryRecipientUserId[i]
+        );
+        return docs.id === setHistoryRecipientUserId[i];
+      }
+    });
+    console.log("recentRecipientUserId", recentRecipientUserId);
+
+    // const historyLoginFilterTimeFindIndex = historyLoginFilterTime.filter(
+    //   (element, index) => {
+    //     const findIndex = historyLoginFilterTime.findIndex((e) => {
+    //       e.email === element.email;
+    //     });
+    //   }
     // );
 
     // const newMap = new Map();
@@ -107,16 +147,11 @@ export const FriendList = ({ navigation }) => {
 
     // const historyFilterNewMap = newMap;
 
-    // console.log("historyFilter", historyFilter);
     // const historyFilterObject = Object.fromEntries(historyFilter);
-    // console.log("historyFilterObject:", historyFilterObject);
     // const historyFilterArray = Object.entries(historyFilterObject);
     // const historyFilterArray = [historyFilterObject];
-    setHistoryListData(historyLoginFilterTime);
+    setHistoryListData(recentRecipientUserId);
   }, [buttonTrueOrFalse]);
-
-  // console.log("historyListData", historyListData);
-  // console.log("listData", listData);
 
   // const array = [];
   // useEffect(async () => {
@@ -135,32 +170,19 @@ export const FriendList = ({ navigation }) => {
   //     return email !== login.email;
   //   });
 
-  //   console.log("recentLoginFilter", recentLoginFilter);
-
   // const recentFriendFilter = recentLoginFilter.filter((element, index) => {
-  //   console.log("element", element);
-  //   console.log("index", index);
   //   recentLoginFilter.findIndex(
   //     ((e) => e.email === element.email && e.name === element.name) === index
   //   );
   // });
 
-  // console.log(
-  //   "JSON.stringify(recentFriendFilter, null, 2);",
-  //   JSON.stringify(recentFriendFilter, null, 2)
-  // );
   // const result = JSON.stringify(recentFriendFilter, null, 2);
-  // console.log("recentFriendFilter", recentFriendFilter);
   // const mapFilter = new Map(
   //   recentLoginFilter.map((value) => [value.name, value])
   // );
   // const resultarray = Array.from(mapFilter);
-  // console.log("mapfilter", mapFilter);
-  // console.log("resultarray", resultarray);
   // const mapFilterObject = Object.fromEntries(mapFilter);
-  // console.log("mapFilterObject", mapFilterObject);
   // const mapFilterArray = Object.entries(mapFilterObject);
-  // console.log("mapFilterArray", mapFilterArray);
   // const mapFilterArray2 = [historyFilterObject];
   // const mapFilterArrayTime = (mapFilter.time = mapFilter.sort((a, b) => {
   //   const x = a["time"];
@@ -174,7 +196,6 @@ export const FriendList = ({ navigation }) => {
   //   return 0;
   // }));
   // setRecentListData(result);
-  // console.log("recentListData", recentListData);
   // }, [buttonTrueOrFalse]);
 
   useEffect(async () => {
@@ -272,7 +293,7 @@ export const FriendList = ({ navigation }) => {
       />
 
       <FlatList
-        data={buttonTrueOrFalse === true ? listData : recentListData}
+        data={buttonTrueOrFalse === true ? listData : historyListData}
         renderItem={({ item }) => {
           return (
             <FriendButton
