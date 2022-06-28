@@ -6,6 +6,7 @@ import { collection, getDocs, query } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { useIsFocused } from "@react-navigation/native";
 import TrueOrFalseButton from "../components/TrueOrFalseButton";
+import { async } from "@firebase/util";
 
 export const FriendList = ({ navigation }) => {
   const isFocused = useIsFocused();
@@ -91,8 +92,7 @@ export const FriendList = ({ navigation }) => {
       new Set(historyRecipientUserId)
     );
     console.log("setHistoryRecipientUserId", setHistoryRecipientUserId);
-
-    const recentRecipientUserId = loginFilterTime.filter((docs) => {
+    const recentRecipientUser = loginFilterTime.filter((docs) => {
       console.log("docs.id", docs.id);
       for (let i = 0; i <= loginFilterTime.length; i++) {
         console.log(
@@ -102,8 +102,8 @@ export const FriendList = ({ navigation }) => {
         return docs.id === setHistoryRecipientUserId[i];
       }
     });
-    console.log("recentRecipientUserId", recentRecipientUserId);
-    setHistoryListData(recentRecipientUserId);
+    console.log("recentRecipientUserId", recentRecipientUser);
+    setHistoryListData(recentRecipientUser);
   }, [buttonTrueOrFalse]);
 
   useEffect(async () => {
@@ -135,18 +135,35 @@ export const FriendList = ({ navigation }) => {
     setListData(loginFilter);
   }, []);
 
-  const friendNameList = [];
-  listData.forEach((docs) => {
-    friendNameList.push(docs.name);
-  });
+  // const friendNameList = [];
+  // listData.forEach((docs) => {
+  //   friendNameList.push(docs.name);
+  // });
+  // console.log("friendNameList", friendNameList);
 
   useEffect(() => {
     const timerId = setTimeout(() => {
       if (friendName !== "") {
-        const filterListData = listData.filter((item) => {
-          return item.name === friendName;
-        });
-        setListData(filterListData);
+        const filterFriendList = async () => {
+          const getDatas = query(collection(db, "users"));
+          const querySnapshot = await getDocs(getDatas);
+          const array = [];
+          querySnapshot.forEach((docs) => {
+            array.push({
+              name: docs.data().name,
+              email: docs.data().email,
+              time: docs.data().time,
+              id: docs.id,
+            });
+          });
+          console.log("array", array);
+          const filterListData = array.filter((item) => {
+            console.log("item.name", item.name);
+            return item.name === friendName;
+          });
+          setListData(filterListData);
+        };
+        filterFriendList();
       } else {
         const friendList = async () => {
           const getDatas = query(collection(db, "users"));
