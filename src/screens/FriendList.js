@@ -156,8 +156,11 @@ export const FriendList = ({ navigation }) => {
               id: docs.id,
             });
           });
-          console.log("array", array);
-          const filterListData = array.filter((item) => {
+          const loginFilter = array.filter((login) => {
+            return email !== login.email;
+          });
+          console.log("loginFilter", loginFilter);
+          const filterListData = loginFilter.filter((item) => {
             console.log("item.name", item.name);
             return item.name === friendName;
           });
