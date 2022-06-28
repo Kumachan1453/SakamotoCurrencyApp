@@ -91,6 +91,7 @@ export const FriendList = ({ navigation }) => {
       new Set(historyRecipientUserId)
     );
     console.log("setHistoryRecipientUserId", setHistoryRecipientUserId);
+
     const recentRecipientUserId = loginFilterTime.filter((docs) => {
       console.log("docs.id", docs.id);
       for (let i = 0; i <= loginFilterTime.length; i++) {
