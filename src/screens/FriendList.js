@@ -6,7 +6,6 @@ import { collection, getDocs, query } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { useIsFocused } from "@react-navigation/native";
 import TrueOrFalseButton from "../components/TrueOrFalseButton";
-import { async } from "@firebase/util";
 
 export const FriendList = ({ navigation }) => {
   const isFocused = useIsFocused();
@@ -159,10 +158,22 @@ export const FriendList = ({ navigation }) => {
           const loginFilter = array.filter((login) => {
             return email !== login.email;
           });
-          console.log("loginFilter", loginFilter);
-          const filterListData = loginFilter.filter((item) => {
-            console.log("item.name", item.name);
-            return item.name === friendName;
+          const loginFilterTime = (loginFilter.time = loginFilter.sort(
+            (a, b) => {
+              const x = a["time"];
+              const y = b["time"];
+              if (x > y) {
+                return -1;
+              }
+              if (x < y) {
+                return 1;
+              }
+              return 0;
+            }
+          ));
+          console.log("loginFilterTime", loginFilterTime);
+          const filterListData = loginFilterTime.filter((value) => {
+            return value.name.match(friendName);
           });
           setListData(filterListData);
         };
