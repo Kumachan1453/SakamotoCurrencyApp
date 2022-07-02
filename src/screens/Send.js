@@ -160,6 +160,7 @@ export const Send = ({ navigation }) => {
         email: snapData.data().email,
         sendingCoin: sendingCoin,
         recipientUserName: route.params.name,
+        recipientUserEmail: route.params.email,
         recipientUserId: route.params.id,
         time: new Date().toLocaleString(),
         sendOrGift: "-",
