@@ -134,12 +134,6 @@ export const FriendList = ({ navigation }) => {
     setListData(loginFilter);
   }, []);
 
-  // const friendNameList = [];
-  // listData.forEach((docs) => {
-  //   friendNameList.push(docs.name);
-  // });
-  // console.log("friendNameList", friendNameList);
-
   useEffect(() => {
     const timerId = setTimeout(() => {
       if (friendName !== "") {
