@@ -87,26 +87,16 @@ export const FriendList = ({ navigation }) => {
     historyLoginFilterTime.forEach((docs) => {
       historyRecipientUserEmail.push(docs.recipientUserEmail);
     });
-    // 重複を無くす動作
+
     const setHistoryRecipientUserEmail = Array.from(
       new Set(historyRecipientUserEmail)
     );
-    // console.log("setHistoryRecipientUserEmail", setHistoryRecipientUserEmail);
 
     const recentRecipientUser = loginFilterTime.filter(
-      (docs) => setHistoryRecipientUserEmail.indexOf("demo4@sample.com") === -1
+      (docs) => setHistoryRecipientUserEmail.indexOf(docs.email) !== -1
     );
-    console.log("recentRecipientUser", recentRecipientUser);
     setHistoryListData(recentRecipientUser);
-  }, [buttonTrueOrFalse]);
-
-  // 参考のコード
-  const array1 = ["1", "2", "3", "4", "5", "6"];
-  const array2 = ["3", "2", "4", "4", "4", "1", "3"];
-
-  const array3 = array1.filter((i) => array2.indexOf(i) !== -1);
-  console.log("array3", array3); // [5, 6]
-  // ここまで
+  }, [buttonTrueOrFalse, isFocused]);
 
   useEffect(async () => {
     const getDatas = query(collection(db, "users"));
@@ -136,12 +126,6 @@ export const FriendList = ({ navigation }) => {
     });
     setListData(loginFilter);
   }, []);
-
-  // const friendNameList = [];
-  // listData.forEach((docs) => {
-  //   friendNameList.push(docs.name);
-  // });
-  // console.log("friendNameList", friendNameList);
 
   useEffect(() => {
     const timerId = setTimeout(() => {
@@ -174,7 +158,6 @@ export const FriendList = ({ navigation }) => {
               return 0;
             }
           ));
-          console.log("loginFilterTime", loginFilterTime);
           const filterListData = loginFilterTime.filter((value) => {
             return value.name.match(friendName);
           });
