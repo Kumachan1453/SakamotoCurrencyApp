@@ -7,6 +7,7 @@ import { getAuth } from "firebase/auth";
 import { useIsFocused } from "@react-navigation/native";
 import TrueOrFalseButton from "../components/TrueOrFalseButton";
 
+//コードが複雑すぎるため、修正予定
 export const FriendList = ({ navigation }) => {
   const isFocused = useIsFocused();
   const [listData, setListData] = useState([]);
