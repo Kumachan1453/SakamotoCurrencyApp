@@ -34,6 +34,7 @@ export const FriendList = ({ navigation }) => {
       arrayHistory.push({
         email: docs.data().email,
         recipientUserName: docs.data().recipientUserName,
+        recipientUserEmail: docs.data().recipientUserEmail,
         recipientUserId: docs.data().recipientUserId,
         time: docs.data().time,
         id: docs.id,
@@ -81,29 +82,31 @@ export const FriendList = ({ navigation }) => {
       }
       return 0;
     }));
-    console.log("loginFilterTime", loginFilterTime);
 
-    const historyRecipientUserId = [];
+    const historyRecipientUserEmail = [];
     historyLoginFilterTime.forEach((docs) => {
-      historyRecipientUserId.push(docs.recipientUserId);
+      historyRecipientUserEmail.push(docs.recipientUserEmail);
     });
-    const setHistoryRecipientUserId = Array.from(
-      new Set(historyRecipientUserId)
+    // 重複を無くす動作
+    const setHistoryRecipientUserEmail = Array.from(
+      new Set(historyRecipientUserEmail)
     );
-    console.log("setHistoryRecipientUserId", setHistoryRecipientUserId);
-    const recentRecipientUser = loginFilterTime.filter((docs) => {
-      console.log("docs.id", docs.id);
-      for (let i = 0; i <= loginFilterTime.length; i++) {
-        console.log(
-          "setHistoryRecipientUserId[i]",
-          setHistoryRecipientUserId[i]
-        );
-        return docs.id === setHistoryRecipientUserId[i];
-      }
-    });
-    console.log("recentRecipientUserId", recentRecipientUser);
+    // console.log("setHistoryRecipientUserEmail", setHistoryRecipientUserEmail);
+
+    const recentRecipientUser = loginFilterTime.filter(
+      (docs) => setHistoryRecipientUserEmail.indexOf("demo4@sample.com") === -1
+    );
+    console.log("recentRecipientUser", recentRecipientUser);
     setHistoryListData(recentRecipientUser);
   }, [buttonTrueOrFalse]);
+
+  // 参考のコード
+  const array1 = ["1", "2", "3", "4", "5", "6"];
+  const array2 = ["3", "2", "4", "4", "4", "1", "3"];
+
+  const array3 = array1.filter((i) => array2.indexOf(i) !== -1);
+  console.log("array3", array3); // [5, 6]
+  // ここまで
 
   useEffect(async () => {
     const getDatas = query(collection(db, "users"));
