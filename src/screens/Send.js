@@ -8,44 +8,32 @@ import {
   ScrollView,
 } from "react-native";
 import { Button } from "../components/Button";
-import TextInputTemplate from "../components/TextInputTemplate";
 import TextTemplateYourCoinRerated from "../components/TextTemplateYourCoinRerated";
-import { initializeApp } from "firebase/app";
 import {
-  getFirestore,
   getDoc,
+  getDocs,
   doc,
   updateDoc,
   collection,
   addDoc,
 } from "firebase/firestore";
 import { useIsFocused, useRoute } from "@react-navigation/native";
-import FriendList from "../screens/FriendList";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ModalTemplete from "../components/ModalTemplete";
+import { db } from "../components/Firebase";
+import { getAuth } from "firebase/auth";
+import { howMuchDouYouUseYourCoinThisMonth } from "../components/PatternText";
+import { Warning } from "../components/Warning";
+import { useStateIfMounted } from "use-state-if-mounted";
 
 const Stack = createNativeStackNavigator();
 
-const firebaseConfig = {
-  apiKey: "AIzaSyB6srd7jvN3hCW5gFLc9yniGimACFTeni4",
-  authDomain: "sakamotocurrencyapp.firebaseapp.com",
-  projectId: "sakamotocurrencyapp",
-  storageBucket: "sakamotocurrencyapp.appspot.com",
-  messagingSenderId: "367955895931",
-  appId: "1:367955895931:web:7041aac36e6138ddf764de",
-  measurementId: "${config.measurementId}",
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-export const Send = ({ navigation: { navigate } }) => {
-  const FirstDay = "11/1";
-  const LastDay = "11/30";
+export const Send = ({ navigation }) => {
+  const getUserProfile = getAuth();
+  const user = getUserProfile.currentUser;
+  const email = user.email;
   const [sendingCoin, setSendingCoin] = useState(0);
-
   const [modalVisible, setModalVisible] = useState(false);
-
   const [coinOwnership, setCoinOwnership] = useState(0);
   const [monthlyCoinUsage, setMonthlyCoinUsage] = useState(0);
   const [balance, setBalance] = useState(
@@ -55,16 +43,54 @@ export const Send = ({ navigation: { navigate } }) => {
     Math.round(monthlyCoinUsage + sendingCoin)
   );
   const [sumCoinUsage, setSumCoinUsage] = useState(0);
-
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-
   const [subId, setSubId] = useState(0);
 
   const route = useRoute();
   const isFocused = useIsFocused();
 
+  // const [recentlyExchangedFriendsId, setRecentlyExchangedFriendsId] =
+  //   useState("");
+  // setRecentlyExchangedFriendsId(route.params.id);
+
+  // const [friendIdList, setFriendIdList] = useStateIfMounted([]);
+
+  // const RecentlyExchangedFriendsDataRecipientUserId = [];
+
+  // useEffect(() => {
+  //   (async () => {
+  //     const getCollection = await getDocs(
+  //       collection(db, "recentlyExchangedFriends")
+  //     );
+  //     getCollection.forEach((docs) => {
+  //       RecentlyExchangedFriendsDataRecipientUserId.push({
+  //         recipientUserId: docs.data().recipientUserId,
+  //       });
+  //       setFriendIdList(RecentlyExchangedFriendsDataRecipientUserId);
+  //     });
+  //   })();
+  // }, [isFocused]);
+
+  // const checkFriendsDataIdConflict = () => {
+  //   const regexIdConflict = friendIdList.some(
+  //     (element) => element === recentlyExchangedFriendsId
+  //   );
+  //   return regexIdConflict;
+  // };
+  // const isCheckFriendsDataIdConflict = checkFriendsDataIdConflict(
+  //   recentlyExchangedFriendsId
+  // );
+
   useEffect(async () => {
-    const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
+    const getCollection = await getDocs(collection(db, "users"));
+    const array = [];
+    getCollection.forEach((docs) => {
+      array.push({ email: docs.data().email, id: docs.id });
+    });
+    const loginFilter = array.filter((login) => {
+      return email === login.email;
+    });
+    const getData = doc(db, "users", loginFilter[0].id);
     const snapData = await getDoc(getData);
     setCoinOwnership(Math.round(snapData.data().coinOwnership));
     setMonthlyCoinUsage(Math.round(snapData.data().monthlyCoinUsage));
@@ -72,16 +98,28 @@ export const Send = ({ navigation: { navigate } }) => {
   }, [isFocused]);
 
   const updateData = async () => {
-    const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
+    const getCollection = await getDocs(collection(db, "users"));
+    const array = [];
+    getCollection.forEach((docs) => {
+      array.push({ email: docs.data().email, id: docs.id });
+    });
+    const loginFilter = array.filter((login) => {
+      return email === login.email;
+    });
+    const getData = doc(db, "users", loginFilter[0].id);
+    const getParamsData = doc(db, "users", route.params.id);
     if (sendingCoin < 0) {
       alert("数字が0以下です");
     } else if (coinOwnership - sendingCoin >= 0) {
       setSendingCoin(sendingCoin);
       await updateDoc(getData, {
-        // sendingCoin: sendingCoin,
         coinOwnership: coinOwnership - sendingCoin,
         monthlyCoinUsage: monthlyCoinUsage + sendingCoin,
         sumCoinUsage: sumCoinUsage + sendingCoin,
+        time: new Date().toLocaleString(),
+      });
+      await updateDoc(getParamsData, {
+        time: new Date().toLocaleString(),
       });
     } else if (coinOwnership - sendingCoin < 0) {
       alert("コインが足りません");
@@ -92,35 +130,57 @@ export const Send = ({ navigation: { navigate } }) => {
 
   const pressOkButton = () => {
     setSubId(subId + 1);
-    // console.log("subId", subId);
   };
 
   useEffect(async () => {
-    const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
+    const getCollection = await getDocs(collection(db, "users"));
+    const array = [];
+    getCollection.forEach((docs) => {
+      array.push({ email: docs.data().email, id: docs.id });
+    });
+    const loginFilter = array.filter((login) => {
+      return email === login.email;
+    });
+    const getData = doc(db, "users", loginFilter[0].id);
     const snapData = await getDoc(getData);
     if (sendingCoin === 0 || isNaN(sendingCoin)) {
-      // console.log("処理を阻止");
     } else {
       const sendGift = await addDoc(collection(db, "coins"), {
         name: snapData.data().name,
+        email: snapData.data().email,
         sendingCoin: sendingCoin,
-        // id: sendGift.id,
         subId: subId,
         recipientUserId: route.params.id,
+        recipientUserEmail: route.params.email,
+        time: new Date().toLocaleString(),
       });
-      // collection.doc(id).set({
-      //   ...sendGift,
-      // });
-      // console.log("Document written with ID: ", sendGift.id);
+
+      const sendHistory = await addDoc(collection(db, "usersHistory"), {
+        name: snapData.data().name,
+        email: snapData.data().email,
+        sendingCoin: sendingCoin,
+        recipientUserName: route.params.name,
+        recipientUserEmail: route.params.email,
+        recipientUserId: route.params.id,
+        time: new Date().toLocaleString(),
+        sendOrGift: "-",
+      });
+
+      const addRecentlyExchangedFriends = await addDoc(
+        collection(db, "recentlyExchangedFriends"),
+        {
+          name: route.params.name,
+          email: route.params.email,
+          id: route.params.id,
+          recipientUserName: snapData.data().name,
+          recipientUserEmail: snapData.data().email,
+          time: new Date().toLocaleString(),
+        }
+      );
+
+      navigation.goBack();
     }
   }, [subId]);
-
-  useEffect(async () => {
-    const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
-    const snapData = await getDoc(getData);
-    setCoinOwnership(Math.round(snapData.data().coinOwnership));
-    setMonthlyCoinUsage(Math.round(snapData.data().monthlyCoinUsage));
-  }, [updateData]);
 
   useEffect(() => {
     const timerId = setTimeout(() => {
@@ -152,56 +212,67 @@ export const Send = ({ navigation: { navigate } }) => {
 
   return (
     <ScrollView>
-      <View style={styles.content}>
-        <View style={styles.flexDirectionRowAndCenter}>
+      <View>
+        <View>
           <TextTemplateYourCoinRerated
-            letter="所持コイン数"
-            numberOfCoin={coinOwnership}
-            unit="C"
-          />
-          <TextTemplateYourCoinRerated
-            letter="残額"
-            numberOfCoin={balance}
-            unit="C"
+            letter="送る相手："
+            numberOfCoin={route.params.name}
           />
         </View>
         <View style={styles.line} />
-        <View style={styles.flexDirectionRowAndCenter}>
-          <TextTemplateYourCoinRerated
-            letter="コイン使用量"
-            subText1="集計期間"
-            date1={FirstDay}
-            subText2="〜"
-            date2={LastDay}
-            numberOfCoin={monthlyCoinUsage}
-            unit="C"
-          />
-          <TextTemplateYourCoinRerated
-            letter="使用後の使用量"
-            numberOfCoin={futureMonthlyCoinUsage}
-            unit="C"
-          />
+        <View>
+          {sendingCoin === 0 && (
+            <TextTemplateYourCoinRerated
+              letter="所持「Kon」数："
+              numberOfCoin={coinOwnership}
+              unit="K"
+            />
+          )}
+          {sendingCoin > 0 && sendingCoin <= coinOwnership && (
+            <TextTemplateYourCoinRerated
+              letter="残額："
+              numberOfCoin={balance}
+              unit="K"
+            />
+          )}
         </View>
         <View style={styles.line} />
-        <Text style={styles.bigText}>あなたが送るコインの額</Text>
-        <View style={styles.flexDirectionRow}>
-          <TextInput
-            style={isButtonDisabled ? styles.errorInput : styles.input}
-            onChangeText={
-              (text) =>
-                setSendingCoin(parseInt(isNaN(text) ? sendingCoin : text)) //要確認
-            }
-            type="number"
-            placeholder="数字を入力"
-            keyboardType="numeric"
-          />
-          <Text style={styles.bigCoinText}>C</Text>
+        <View>
+          {sendingCoin === 0 && (
+            <TextTemplateYourCoinRerated
+              letter={howMuchDouYouUseYourCoinThisMonth}
+              numberOfCoin={monthlyCoinUsage}
+              unit="K"
+            />
+          )}
+          {sendingCoin > 0 && sendingCoin <= coinOwnership && (
+            <TextTemplateYourCoinRerated
+              letter="使用後の使用量："
+              numberOfCoin={futureMonthlyCoinUsage}
+              unit="K"
+            />
+          )}
+        </View>
+        <View style={styles.line} />
+        <View style={styles.alignItemsCenter}>
+          <Text style={styles.bigText}>あなたが送るコインの額</Text>
+          <View style={styles.flexDirectionRow}>
+            <TextInput
+              style={isButtonDisabled ? styles.errorInput : styles.input}
+              onChangeText={(text) =>
+                setSendingCoin(parseInt(text === "" ? 0 : text))
+              }
+              type="number"
+              placeholder="数字を入力"
+              keyboardType="number-pad"
+            />
+            <Text style={styles.bigCoinText}>K</Text>
+            {sendingCoin > coinOwnership && (
+              <Warning letter={"残額を上回ってます"} />
+            )}
+          </View>
         </View>
         <View style={styles.borderLine} />
-        <View style={styles.sendMessage}>
-          <Text>メッセージを送る</Text>
-          <TextInputTemplate placeholder={"文字を入力"} />
-        </View>
 
         <View style={styles.centeredView}>
           <ModalTemplete
@@ -222,14 +293,17 @@ export const Send = ({ navigation: { navigate } }) => {
               setModalVisible(!modalVisible);
               updateData();
               pressOkButton();
-              // navigate("FriendList");
             }}
           />
-          <Button
-            content="コインを送る"
-            onPress={() => setModalVisible(true)}
-            isButtonDisabled={isButtonDisabled}
-          />
+          <View style={styles.alignItemsCenter}>
+            <Button
+              content="コインを送る"
+              onPress={() => {
+                setModalVisible(true);
+              }}
+              isButtonDisabled={isButtonDisabled}
+            />
+          </View>
         </View>
         <View style={styles.space} />
       </View>
@@ -238,11 +312,7 @@ export const Send = ({ navigation: { navigate } }) => {
 };
 
 const styles = StyleSheet.create({
-  content: {
-    alignItems: "center",
-  },
-  flexDirectionRowAndCenter: {
-    flexDirection: "row",
+  alignItemsCenter: {
     alignItems: "center",
   },
   bigText: {

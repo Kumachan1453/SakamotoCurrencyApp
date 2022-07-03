@@ -1,176 +1,210 @@
 import React, { useState, useEffect } from "react";
-import {
-  StyleSheet,
-  View,
-  Text,
-  Alert,
-  Modal,
-  TouchableOpacity,
-  FlatList,
-} from "react-native";
+import { StyleSheet, View, FlatList, Text } from "react-native";
 import { FriendButton } from "../components/FriendButton";
 import TextTemplateYourCoinRerated from "../components/TextTemplateYourCoinRerated";
-import { initializeApp } from "firebase/app";
 import {
-  getFirestore,
   getDoc,
   doc,
   updateDoc,
   getDocs,
   collection,
   deleteDoc,
+  addDoc,
 } from "firebase/firestore";
-import { useIsFocused } from "@react-navigation/native";
-import ModalTemplete from "../components/ModalTemplete";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyB6srd7jvN3hCW5gFLc9yniGimACFTeni4",
-  authDomain: "sakamotocurrencyapp.firebaseapp.com",
-  projectId: "sakamotocurrencyapp",
-  storageBucket: "sakamotocurrencyapp.appspot.com",
-  messagingSenderId: "367955895931",
-  appId: "1:367955895931:web:7041aac36e6138ddf764de",
-  measurementId: "${config.measurementId}",
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+import { getAuth } from "firebase/auth";
+import { useIsFocused, useRoute } from "@react-navigation/native";
+import { db } from "../components/Firebase";
+import { howMuchDouYouUseYourCoinThisMonth } from "../components/PatternText";
 
 export const Gift = () => {
+  const route = useRoute();
+  const [coinOwnership, setCoinOwnership] = useState(0);
+  const [monthlyCoinUsage, setMonthlyCoinUsage] = useState(0);
+  const [userId, setUserId] = useState("");
   const [giftListData, setGiftListData] = useState([]);
+  const [updateId, setUpdateId] = useState(0);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
+  const getUserProfile = getAuth();
+  const user = getUserProfile.currentUser;
+  const email = user.email;
+  const unit = "K";
+
+  const isFocused = useIsFocused();
+
   useEffect(async () => {
     const sendGift = collection(db, "coins");
     const querySnapshot = await getDocs(sendGift);
-    const array = [];
+    const arrayCoins = [];
     querySnapshot.forEach((docs) => {
-      array.push({
+      arrayCoins.push({
         name: docs.data().name,
         sendingCoin: docs.data().sendingCoin,
         subId: docs.data().subId,
         recipientUserId: docs.data().recipientUserId,
         id: docs.id,
+        time: docs.data().time,
       });
     });
-    setGiftListData(array);
-  });
+    setGiftListData(arrayCoins);
 
-  const FirstDay = "11/1";
-  const LastDay = "11/30";
-  const friendName = "damy-friend";
-  const unit = "C";
-  const [coinOwnership, setCoinOwnership] = useState(0);
-  const [monthlyCoinUsage, setMonthlyCoinUsage] = useState(0);
-
-  const isFocused = useIsFocused();
-
-  useEffect(async () => {
-    const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
+    const getCollection = await getDocs(collection(db, "users"));
+    const arrayUsers = [];
+    getCollection.forEach((docs) => {
+      arrayUsers.push({ email: docs.data().email, id: docs.id });
+    });
+    const loginFilter = arrayUsers.filter((login) => {
+      return email === login.email;
+    });
+    const getData = doc(db, "users", loginFilter[0].id);
     const snapData = await getDoc(getData);
+    setUserId(loginFilter[0].id);
     setCoinOwnership(Math.round(snapData.data().coinOwnership));
     setMonthlyCoinUsage(Math.round(snapData.data().monthlyCoinUsage));
   }, [isFocused]);
 
-  useEffect(async () => {
-    const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
-    const snapData = await getDoc(getData);
-    setCoinOwnership(Math.round(snapData.data().coinOwnership));
-    setMonthlyCoinUsage(Math.round(snapData.data().monthlyCoinUsage));
-  }, [() => updateData()]);
-
   const updateData = async (item) => {
-    const getData = doc(db, "users", "LGXdrQNczf95rT90Tp2R");
-    console.log("updateData-A");
-    await updateDoc(getData, {
-      coinOwnership: coinOwnership + item.sendingCoin,
+    const getCollection = await getDocs(collection(db, "users"));
+    const arrayUsers = [];
+    getCollection.forEach((docs) => {
+      arrayUsers.push({ email: docs.data().email, id: docs.id });
     });
-    console.log("updateData-B");
+    const loginFilter = arrayUsers.filter((login) => {
+      return email === login.email;
+    });
+    const getData = doc(db, "users", loginFilter[0].id);
+    const getItemData = doc(db, "users", item.id);
+    console.log("getItemData", getItemData);
+    const snapData = await getDoc(getData);
+    updateDoc(getData, {
+      coinOwnership: coinOwnership + item.sendingCoin,
+      time: new Date().toLocaleString(),
+    });
+
+    const sendGift = collection(db, "coins");
+    const querySnapshot = await getDocs(sendGift);
+    const arrayCoins = [];
+    querySnapshot.forEach((docs) => {
+      arrayCoins.push({
+        name: docs.data().name,
+        sendingCoin: docs.data().sendingCoin,
+        subId: docs.data().subId,
+        recipientUserId: docs.data().recipientUserId,
+        id: docs.id,
+        time: docs.data().time,
+      });
+    });
+    const giftHistory = await addDoc(collection(db, "usersHistory"), {
+      name: snapData.data().name,
+      email: snapData.data().email,
+      sendingCoin: item.sendingCoin,
+      recipientUserName: item.name,
+      recipientUserEmail: item.email,
+      recipientUserId: item.id,
+      time: new Date().toLocaleString(),
+      sendOrGift: "+",
+    });
   };
+
   const deleteData = async (item) => {
-    console.log("item.id", item.id);
-    await deleteDoc(doc(db, "coins", item.id));
+    deleteDoc(doc(db, "coins", item.id));
   };
+
   const onPressAction = async (item) => {
-    // setModalVisible(true);
-    updateData(item);
-    deleteData(item);
+    if (isButtonDisabled === false) {
+      setIsButtonDisabled(true);
+    }
+    await deleteData(item);
+    await updateData(item);
+    setUpdateId(updateId + 1);
   };
+
+  useEffect(async () => {
+    const getCollection = await getDocs(collection(db, "users"));
+    const arrayUsers = [];
+    getCollection.forEach((docs) => {
+      arrayUsers.push({ email: docs.data().email, id: docs.id });
+    });
+    const loginFilter = arrayUsers.filter((login) => {
+      return email === login.email;
+    });
+    const getUserData = doc(db, "users", loginFilter[0].id);
+    // console.log("loginFilter[0].id", loginFilter[0].id);
+    const snapUsersData = await getDoc(getUserData);
+    setCoinOwnership(Math.round(snapUsersData.data().coinOwnership));
+    setMonthlyCoinUsage(Math.round(snapUsersData.data().monthlyCoinUsage));
+    const sendGift = collection(db, "coins");
+    const querySnapshot = await getDocs(sendGift);
+    const arrayCoins = [];
+    querySnapshot.forEach((docs) => {
+      arrayCoins.push({
+        name: docs.data().name,
+        email: docs.data().email,
+        sendingCoin: docs.data().sendingCoin,
+        subId: docs.data().subId,
+        recipientUserId: docs.data().recipientUserId,
+        id: docs.id,
+        time: docs.data().time,
+      });
+    });
+    arrayCoins.time = arrayCoins.sort((a, b) => {
+      const x = a["time"];
+      const y = b["time"];
+      if (x > y) {
+        return -1;
+      }
+      if (x < y) {
+        return 1;
+      }
+      return 0;
+    });
+    setGiftListData(arrayCoins);
+    setTimeout(() => {
+      setIsButtonDisabled(false);
+    }, 2000);
+  }, [updateId]);
 
   return (
     <>
       <View style={styles.content}>
         <TextTemplateYourCoinRerated
-          letter="あなたの所持コイン数"
+          letter="あなたの所持「Kon」数"
           numberOfCoin={coinOwnership}
-          unit="C"
+          unit="K"
         />
         <TextTemplateYourCoinRerated
-          letter="あなたのコイン使用量"
-          subText1="集計期間"
-          date1={FirstDay}
-          subText2="〜"
-          date2={LastDay}
+          letter={howMuchDouYouUseYourCoinThisMonth}
           numberOfCoin={monthlyCoinUsage}
-          unit="C"
+          unit="K"
         />
-        <View style={styles.line} />
-        <Text style={styles.bigText}>コインが届いています</Text>
-        <Text style={styles.subText}>
-          ※送られた日から一週間以内に受け取らなければ消滅します
+        <Text style={styles.allertText}>
+          下のバーをタッチして「Kon」を受け取ろう!
         </Text>
+        <View style={styles.line} />
       </View>
-
-      <View style={styles.centeredView}>
-        <FlatList
-          data={giftListData}
-          renderItem={({ item }) => {
-            if (item.recipientUserId === "LGXdrQNczf95rT90Tp2R") {
-              return (
-                <>
-                  {/* <ModalTemplete
-                    transparent={false}
-                    visible={modalVisible}
-                    onRequestClose={() => {
-                      Alert.alert("Modal has been closed.");
-                      setModalVisible(!modalVisible);
-                    }}
-                    centerText={{ item } + "Cを受け取りますか？"}
-                    // subCenterText={subCenterText}
-                    buttonPlacement={true}
-                    leftText={"受け取らない"}
-                    rightText={"受け取る"}
-                    leftOnPress={() => {
-                      setModalVisible(!modalVisible);
-                    }}
-                    rightOnPress={() => {
-                      setModalVisible(!modalVisible);
-                      // deleteTask(item);
-                      setItemId(item.id);
-                      updateData();
-                      console.log("item.id -inRightOnPress", item.id);
-                    }}
-                  /> */}
-                  <FriendButton
-                    onPress={() => onPressAction(item)}
-                    friendName={item.name}
-                    coin={item.sendingCoin}
-                    unit={unit}
-                  />
-                </>
-              );
-            }
-          }}
-          // keyExtractor={(item) => item.key}
-          keyExtractor={(item) => item.id}
-        />
-      </View>
+      <FlatList
+        data={giftListData}
+        renderItem={({ item }) => {
+          if (item.recipientUserId === userId) {
+            return (
+              <FriendButton
+                onPress={() => onPressAction(item)}
+                friendName={item.name}
+                coin={item.sendingCoin}
+                unit={unit}
+                time={item.time}
+                disabled={isButtonDisabled}
+              />
+            );
+          }
+        }}
+        keyExtractor={(item) => item.id}
+      />
     </>
   );
 };
 
 const styles = StyleSheet.create({
-  content: {
-    alignItems: "center",
-  },
   bigText: {
     fontWeight: "bold",
     fontSize: 20,
@@ -189,17 +223,16 @@ const styles = StyleSheet.create({
   flexDirectionRow: {
     flexDirection: "row",
   },
+  allertText: {
+    textAlign: "center",
+    fontSize: 15,
+    color: "gray",
+  },
   line: {
     width: "100%",
     borderBottomWidth: 1,
     borderColor: "gray",
-    margin: 20,
-  },
-
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    marginTop: 20,
   },
   modalView: {
     margin: 20,
