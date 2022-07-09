@@ -28,7 +28,6 @@ export const Gift = () => {
   const getUserProfile = getAuth();
   const user = getUserProfile.currentUser;
   const email = user.email;
-  const unit = "K";
 
   const isFocused = useIsFocused();
 
@@ -170,12 +169,12 @@ export const Gift = () => {
         <TextTemplateYourCoinRerated
           letter="あなたの所持「Kon」数"
           numberOfCoin={coinOwnership}
-          unit="K"
+          unit={true}
         />
         <TextTemplateYourCoinRerated
           letter={howMuchDouYouUseYourCoinThisMonth}
           numberOfCoin={monthlyCoinUsage}
-          unit="K"
+          unit={true}
         />
         <Text style={styles.allertText}>
           下のバーをタッチして「Kon」を受け取ろう!
@@ -191,7 +190,7 @@ export const Gift = () => {
                 onPress={() => onPressAction(item)}
                 friendName={item.name}
                 coin={item.sendingCoin}
-                unit={unit}
+                unit={true}
                 time={item.time}
                 disabled={isButtonDisabled}
               />

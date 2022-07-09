@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
+import LeafCoinMini from "./LeafCoinMini";
 
 export const TextTemplateYourCoinRerated = ({
   letter,
@@ -12,15 +13,13 @@ export const TextTemplateYourCoinRerated = ({
 }) => {
   return (
     <View style={styles.content}>
-      {/* <View style={styles.flexDirectionRow}> */}
       <Text style={styles.bigText}>{letter}</Text>
       <View style={styles.justifycontentFlexEnd}>
         <View style={styles.flexDirectionRow}>
           <Text style={styles.bigCoinText}>{numberOfCoin}</Text>
-          <Text style={styles.bigCoinText}>{unit}</Text>
+          {unit === true && <LeafCoinMini width={35} height={35} />}
         </View>
       </View>
-      {/* </View> */}
       <View style={styles.flexDirectionRow}>
         <Text style={styles.subText}>{subText1}</Text>
         <Text style={styles.subText}>{date1}</Text>
@@ -34,6 +33,7 @@ export const TextTemplateYourCoinRerated = ({
 const styles = StyleSheet.create({
   justifycontentFlexEnd: {
     justifyContent: "flex-end",
+    marginRight: 5,
   },
   bigText: {
     fontSize: 18,
@@ -41,9 +41,7 @@ const styles = StyleSheet.create({
   },
   bigCoinText: {
     fontSize: 18,
-    // marginBottom: 10,
-    marginLeft: 4,
-    marginRight: 3,
+    top: 7,
   },
   subText: {
     color: "#808080",

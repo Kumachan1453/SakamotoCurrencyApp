@@ -8,14 +8,13 @@ import { useIsFocused } from "@react-navigation/native";
 import { howMuchDouYouUseYourCoinThisMonth } from "../components/PatternText";
 import { LongButton } from "../components/LongButton";
 import ModalTemplete from "../components/ModalTemplete";
+import MoneyText from "../components/MoneyText";
 
 import * as Localization from "expo-localization";
 import i18n from "i18n-js";
 import en from "../components/SupportedLanguages";
 i18n.fallbacks = true;
 i18n.translations = { en };
-// import { UserDataIdAndEmail } from "../components/UserData";
-// import LeafCoin from "../components/LeafCoin";
 
 export const Home = () => {
   i18n.translations = {
@@ -86,20 +85,13 @@ export const Home = () => {
               <Text style={styles.headingText}>
                 あなたが所持している「Kon」の数
               </Text>
-              <View style={styles.unitFlexDirectionRow}>
-                <Text style={styles.profileText}>{coinOwnership}</Text>
-                <Text style={styles.unit}>K</Text>
-              </View>
+              <MoneyText numberOfCoin={coinOwnership} />
             </View>
             <View style={styles.profileCategory}>
               <Text style={styles.headingText}>
                 {howMuchDouYouUseYourCoinThisMonth}
               </Text>
-              <View style={styles.unitFlexDirectionRow}>
-                <Text style={styles.profileText}>{monthlyCoinUsage}</Text>
-                {/* <LeafCoin /> */}
-                <Text style={styles.unit}>K</Text>
-              </View>
+              <MoneyText numberOfCoin={monthlyCoinUsage} />
             </View>
           </View>
         </View>
@@ -146,7 +138,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   profileCategory: {
-    margin: 15,
+    margin: 5,
+    marginTop: 10,
+    // backgroundColor: "red",
   },
   profileText: {
     fontSize: 28,

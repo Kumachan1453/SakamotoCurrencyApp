@@ -7,7 +7,11 @@ import { getAuth } from "firebase/auth";
 import { useIsFocused } from "@react-navigation/native";
 import TrueOrFalseButton from "../components/TrueOrFalseButton";
 
+<<<<<<< HEAD
 //コードが複雑すぎるため、修正予定
+=======
+//コードが複雑
+>>>>>>> feature/KonOfDesign
 export const FriendList = ({ navigation }) => {
   const isFocused = useIsFocused();
   const [listData, setListData] = useState([]);
@@ -35,6 +39,7 @@ export const FriendList = ({ navigation }) => {
       arrayHistory.push({
         email: docs.data().email,
         recipientUserName: docs.data().recipientUserName,
+        recipientUserEmail: docs.data().recipientUserEmail,
         recipientUserId: docs.data().recipientUserId,
         time: docs.data().time,
         id: docs.id,
@@ -82,29 +87,21 @@ export const FriendList = ({ navigation }) => {
       }
       return 0;
     }));
-    console.log("loginFilterTime", loginFilterTime);
 
-    const historyRecipientUserId = [];
+    const historyRecipientUserEmail = [];
     historyLoginFilterTime.forEach((docs) => {
-      historyRecipientUserId.push(docs.recipientUserId);
+      historyRecipientUserEmail.push(docs.recipientUserEmail);
     });
-    const setHistoryRecipientUserId = Array.from(
-      new Set(historyRecipientUserId)
+
+    const setHistoryRecipientUserEmail = Array.from(
+      new Set(historyRecipientUserEmail)
     );
-    console.log("setHistoryRecipientUserId", setHistoryRecipientUserId);
-    const recentRecipientUser = loginFilterTime.filter((docs) => {
-      console.log("docs.id", docs.id);
-      for (let i = 0; i <= loginFilterTime.length; i++) {
-        console.log(
-          "setHistoryRecipientUserId[i]",
-          setHistoryRecipientUserId[i]
-        );
-        return docs.id === setHistoryRecipientUserId[i];
-      }
-    });
-    console.log("recentRecipientUserId", recentRecipientUser);
+
+    const recentRecipientUser = loginFilterTime.filter(
+      (docs) => setHistoryRecipientUserEmail.indexOf(docs.email) !== -1
+    );
     setHistoryListData(recentRecipientUser);
-  }, [buttonTrueOrFalse]);
+  }, [buttonTrueOrFalse, isFocused]);
 
   useEffect(async () => {
     const getDatas = query(collection(db, "users"));
@@ -135,7 +132,41 @@ export const FriendList = ({ navigation }) => {
     setListData(loginFilter);
   }, []);
 
+<<<<<<< HEAD
   useEffect(() => {
+=======
+  useEffect(async () => {
+    const sendHistory = collection(db, "usersHistory");
+    const querySnapshotHistory = await getDocs(sendHistory);
+    const arrayHistory = [];
+    querySnapshotHistory.forEach((docs) => {
+      arrayHistory.push({
+        email: docs.data().email,
+        recipientUserName: docs.data().recipientUserName,
+        recipientUserEmail: docs.data().recipientUserEmail,
+        recipientUserId: docs.data().recipientUserId,
+        time: docs.data().time,
+        id: docs.id,
+      });
+    });
+    const historyLoginFilter = arrayHistory.filter((login) => {
+      return email === login.email;
+    });
+
+    const historyLoginFilterTime = (historyLoginFilter.time =
+      historyLoginFilter.sort((a, b) => {
+        const x = a["time"];
+        const y = b["time"];
+        if (x > y) {
+          return -1;
+        }
+        if (x < y) {
+          return 1;
+        }
+        return 0;
+      }));
+
+>>>>>>> feature/KonOfDesign
     const timerId = setTimeout(() => {
       if (friendName !== "") {
         const filterFriendList = async () => {
@@ -166,11 +197,31 @@ export const FriendList = ({ navigation }) => {
               return 0;
             }
           ));
-          console.log("loginFilterTime", loginFilterTime);
-          const filterListData = loginFilterTime.filter((value) => {
-            return value.name.match(friendName);
-          });
-          setListData(filterListData);
+          if (buttonTrueOrFalse === true) {
+            const filterListData = loginFilterTime.filter((value) => {
+              return value.name.match(friendName);
+            });
+            setListData(filterListData);
+          } else {
+            const historyRecipientUserEmail = [];
+            historyLoginFilterTime.forEach((docs) => {
+              historyRecipientUserEmail.push(docs.recipientUserEmail);
+            });
+
+            const setHistoryRecipientUserEmail = Array.from(
+              new Set(historyRecipientUserEmail)
+            );
+
+            const recentRecipientUser = loginFilterTime.filter(
+              (docs) => setHistoryRecipientUserEmail.indexOf(docs.email) !== -1
+            );
+            const historyFilterListData = recentRecipientUser.filter(
+              (value) => {
+                return value.name.match(friendName);
+              }
+            );
+            setHistoryListData(historyFilterListData);
+          }
         };
         filterFriendList();
       } else {
@@ -206,7 +257,7 @@ export const FriendList = ({ navigation }) => {
       }
     }, 0);
     return () => clearTimeout(timerId);
-  }, [friendName, isFocused]);
+  }, [friendName, isFocused, buttonTrueOrFalse]);
 
   return (
     <View style={styles.content}>
@@ -223,7 +274,7 @@ export const FriendList = ({ navigation }) => {
         onPress={getButtonTrueOrFalse}
         buttonTrueOrFalse={buttonTrueOrFalse}
         trueText={"すべてのフレンド"}
-        falseText={"最近のフレンド"}
+        falseText={"最近のフレンドのみ"}
       />
 
       <FlatList

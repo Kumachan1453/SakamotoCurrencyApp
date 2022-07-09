@@ -128,7 +128,7 @@ export const History = () => {
             <HistoryList
               friendName={item.recipientUserName}
               sontCoin={item.sendingCoin}
-              unit={"K"}
+              unit={true}
               time={item.time}
               sendOrGift={item.sendOrGift}
             />

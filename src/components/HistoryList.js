@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
+import LeafCoinMini from "./LeafCoinMini";
 
 export const HistoryList = ({
   friendName,
@@ -30,11 +31,7 @@ export const HistoryList = ({
             >
               {sontCoin}
             </Text>
-            <Text
-              style={sendOrGift === "+" ? styles.coinText : styles.redCointext}
-            >
-              {unit}
-            </Text>
+            {unit === true && <LeafCoinMini width={35} height={35} />}
           </View>
           <View>
             <Text style={styles.timeText}>{time}</Text>
@@ -84,6 +81,7 @@ const styles = StyleSheet.create({
     color: "green",
     fontSize: 25,
     marginRight: 3,
+    top: 3,
   },
   redCointext: {
     justifyContent: "center",
@@ -91,6 +89,7 @@ const styles = StyleSheet.create({
     color: "red",
     fontSize: 25,
     marginRight: 3,
+    top: 3,
   },
   timeText: {
     justifyContent: "center",
