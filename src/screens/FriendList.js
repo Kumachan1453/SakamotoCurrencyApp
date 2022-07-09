@@ -7,11 +7,6 @@ import { getAuth } from "firebase/auth";
 import { useIsFocused } from "@react-navigation/native";
 import TrueOrFalseButton from "../components/TrueOrFalseButton";
 
-<<<<<<< HEAD
-//コードが複雑すぎるため、修正予定
-=======
-//コードが複雑
->>>>>>> feature/KonOfDesign
 export const FriendList = ({ navigation }) => {
   const isFocused = useIsFocused();
   const [listData, setListData] = useState([]);
@@ -132,9 +127,6 @@ export const FriendList = ({ navigation }) => {
     setListData(loginFilter);
   }, []);
 
-<<<<<<< HEAD
-  useEffect(() => {
-=======
   useEffect(async () => {
     const sendHistory = collection(db, "usersHistory");
     const querySnapshotHistory = await getDocs(sendHistory);
@@ -165,8 +157,6 @@ export const FriendList = ({ navigation }) => {
         }
         return 0;
       }));
-
->>>>>>> feature/KonOfDesign
     const timerId = setTimeout(() => {
       if (friendName !== "") {
         const filterFriendList = async () => {
