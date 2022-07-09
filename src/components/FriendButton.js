@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import LeafCoinMini from "./LeafCoinMini";
 
 export const FriendButton = ({
   disabled,
@@ -49,7 +50,7 @@ export const FriendButton = ({
         <View style={styles.rightPlacement}>
           <View style={styles.coinTextPlacement}>
             <Text style={styles.coinText}>{coin}</Text>
-            <Text style={styles.coinText}>{unit}</Text>
+            {unit === true && <LeafCoinMini width={35} height={35} />}
           </View>
           {time !== "" && (
             <View style={styles.justifyContentFlexEnd}>
@@ -126,6 +127,7 @@ const styles = StyleSheet.create({
     color: "gray",
     fontSize: 25,
     marginRight: 3,
+    top: 3,
   },
   medalIcon: {
     textAlign: "right",

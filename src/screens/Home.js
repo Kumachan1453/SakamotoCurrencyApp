@@ -85,20 +85,13 @@ export const Home = () => {
               <Text style={styles.headingText}>
                 あなたが所持している「Kon」の数
               </Text>
-              <MoneyText money={coinOwnership} />
-              {/* <View style={styles.unitFlexDirectionRow}>
-                <Text style={styles.profileText}>{coinOwnership}</Text>
-                <LeafCoin />
-              </View> */}
+              <MoneyText numberOfCoin={coinOwnership} />
             </View>
             <View style={styles.profileCategory}>
               <Text style={styles.headingText}>
                 {howMuchDouYouUseYourCoinThisMonth}
               </Text>
-              <View style={styles.unitFlexDirectionRow}>
-                <Text style={styles.profileText}>{monthlyCoinUsage}</Text>
-                <Text style={styles.unit}>K</Text>
-              </View>
+              <MoneyText numberOfCoin={monthlyCoinUsage} />
             </View>
           </View>
         </View>

@@ -225,14 +225,16 @@ export const Send = ({ navigation }) => {
             <TextTemplateYourCoinRerated
               letter="所持「Kon」数："
               numberOfCoin={coinOwnership}
-              unit="K"
+              unit={true}
+              // unit="K"
             />
           )}
           {sendingCoin > 0 && sendingCoin <= coinOwnership && (
             <TextTemplateYourCoinRerated
               letter="残額："
               numberOfCoin={balance}
-              unit="K"
+              unit={true}
+              // unit="K"
             />
           )}
         </View>
@@ -242,14 +244,14 @@ export const Send = ({ navigation }) => {
             <TextTemplateYourCoinRerated
               letter={howMuchDouYouUseYourCoinThisMonth}
               numberOfCoin={monthlyCoinUsage}
-              unit="K"
+              unit={true}
             />
           )}
           {sendingCoin > 0 && sendingCoin <= coinOwnership && (
             <TextTemplateYourCoinRerated
               letter="使用後の使用量："
               numberOfCoin={futureMonthlyCoinUsage}
-              unit="K"
+              unit={true}
             />
           )}
         </View>

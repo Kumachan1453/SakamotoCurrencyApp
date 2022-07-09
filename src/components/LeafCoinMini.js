@@ -2,7 +2,7 @@ import React from "react";
 import { View, Image, StyleSheet, Text } from "react-native";
 import LeafImage from "../components/Image/iconleaf.png";
 
-export const LeafCoin = ({ width, height }) => {
+export const LeafCoinMini = ({ width, height }) => {
   const leaf = Image.resolveAssetSource(LeafImage).uri;
   return (
     <View style={styles.leaf}>
@@ -27,9 +27,9 @@ const styles = StyleSheet.create({
     top: "27%",
     left: "24%",
     fontWeight: "800",
-    fontSize: 17,
+    fontSize: 10,
     color: "white",
   },
 });
 
-export default LeafCoin;
+export default LeafCoinMini;
