@@ -8,7 +8,7 @@ import { useIsFocused } from "@react-navigation/native";
 import { howMuchDouYouUseYourCoinThisMonth } from "../components/PatternText";
 import { LongButton } from "../components/LongButton";
 import ModalTemplete from "../components/ModalTemplete";
-import LeafCoin from "../components/LeafCoin";
+import MoneyText from "../components/MoneyText";
 
 import * as Localization from "expo-localization";
 import i18n from "i18n-js";
@@ -85,10 +85,11 @@ export const Home = () => {
               <Text style={styles.headingText}>
                 あなたが所持している「Kon」の数
               </Text>
-              <View style={styles.unitFlexDirectionRow}>
+              <MoneyText money={coinOwnership} />
+              {/* <View style={styles.unitFlexDirectionRow}>
                 <Text style={styles.profileText}>{coinOwnership}</Text>
-                <Text style={styles.unit}>K</Text>
-              </View>
+                <LeafCoin />
+              </View> */}
             </View>
             <View style={styles.profileCategory}>
               <Text style={styles.headingText}>
@@ -98,7 +99,6 @@ export const Home = () => {
                 <Text style={styles.profileText}>{monthlyCoinUsage}</Text>
                 <Text style={styles.unit}>K</Text>
               </View>
-              <LeafCoin />
             </View>
           </View>
         </View>
@@ -145,7 +145,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   profileCategory: {
-    margin: 15,
+    margin: 5,
+    marginTop: 10,
+    // backgroundColor: "red",
   },
   profileText: {
     fontSize: 28,
