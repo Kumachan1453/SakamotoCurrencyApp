@@ -8,14 +8,13 @@ import { useIsFocused } from "@react-navigation/native";
 import { howMuchDouYouUseYourCoinThisMonth } from "../components/PatternText";
 import { LongButton } from "../components/LongButton";
 import ModalTemplete from "../components/ModalTemplete";
+import LeafCoin from "../components/LeafCoin";
 
 import * as Localization from "expo-localization";
 import i18n from "i18n-js";
 import en from "../components/SupportedLanguages";
 i18n.fallbacks = true;
 i18n.translations = { en };
-// import { UserDataIdAndEmail } from "../components/UserData";
-// import LeafCoin from "../components/LeafCoin";
 
 export const Home = () => {
   i18n.translations = {
@@ -97,9 +96,9 @@ export const Home = () => {
               </Text>
               <View style={styles.unitFlexDirectionRow}>
                 <Text style={styles.profileText}>{monthlyCoinUsage}</Text>
-                {/* <LeafCoin /> */}
                 <Text style={styles.unit}>K</Text>
               </View>
+              <LeafCoin />
             </View>
           </View>
         </View>
