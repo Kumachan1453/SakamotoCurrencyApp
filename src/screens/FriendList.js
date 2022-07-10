@@ -264,7 +264,7 @@ export const FriendList = ({ navigation }) => {
         onPress={getButtonTrueOrFalse}
         buttonTrueOrFalse={buttonTrueOrFalse}
         trueText={"すべてのフレンド"}
-        falseText={"最近のフレンドのみ"}
+        falseText={"関連したフレンドのみ"}
       />
 
       <FlatList
