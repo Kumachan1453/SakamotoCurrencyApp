@@ -25,6 +25,7 @@ import { getAuth } from "firebase/auth";
 import { howMuchDouYouUseYourCoinThisMonth } from "../components/PatternText";
 import { Warning } from "../components/Warning";
 import { useStateIfMounted } from "use-state-if-mounted";
+import LeafCoinMini from "../components/LeafCoinMini";
 
 const Stack = createNativeStackNavigator();
 
@@ -268,7 +269,7 @@ export const Send = ({ navigation }) => {
               placeholder="数字を入力"
               keyboardType="number-pad"
             />
-            <Text style={styles.bigCoinText}>K</Text>
+            <LeafCoinMini width={35} height={35} />
             {sendingCoin > coinOwnership && (
               <Warning letter={"残額を上回ってます"} />
             )}
@@ -324,12 +325,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
     alignItems: "center",
   },
-  bigCoinText: {
-    fontWeight: "bold",
-    fontSize: 18,
-    marginTop: 17,
-    marginBottom: 30,
-  },
   input: {
     width: 230,
     height: 40,
@@ -360,6 +355,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: "gray",
     marginBottom: 20,
+    marginTop: 30,
   },
   sendMessage: {
     marginBottom: 60,
