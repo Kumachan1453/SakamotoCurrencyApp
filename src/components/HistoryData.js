@@ -3,7 +3,7 @@ import { db } from "./Firebase";
 
 const HistoryData = [];
 
-const getUserData = async () => {
+const getHistoryData = async () => {
   const getCollection = await getDocs(collection(db, "usersHistory"));
   getCollection.forEach((docs) => {
     HistoryData.push({
@@ -18,4 +18,4 @@ const getUserData = async () => {
     });
   });
 };
-getUserData();
+getHistoryData();
