@@ -14,6 +14,7 @@ const getUserData = async () => {
       coinOwnership: docs.data().coinOwnership,
       monthlyCoinUsage: docs.data().monthlyCoinUsage,
       sumCoinUsage: docs.data().sumCoinUsage,
+      time: docs.data().time,
     });
   });
 };
