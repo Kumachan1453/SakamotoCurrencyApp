@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, FlatList, TextInput } from "react-native";
 import { FriendButton } from "../components/FriendButton";
-import { db } from "../components/Firebase";
-import { collection, getDocs, query } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { useIsFocused } from "@react-navigation/native";
 import TrueOrFalseButton from "../components/TrueOrFalseButton";
