@@ -19,3 +19,5 @@ const getHistoryData = async () => {
   });
 };
 getHistoryData();
+
+export { HistoryData };
