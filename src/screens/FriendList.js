@@ -63,16 +63,16 @@ export const FriendList = ({ navigation }) => {
       historyRecipientUserEmail.push(docs.recipientUserEmail);
     });
 
-    const setHistoryRecipientUserEmail = Array.from(
+    const onlyHistoryRecipientUserEmail = Array.from(
       new Set(historyRecipientUserEmail)
     );
 
     const recentRecipientUser = loginFilterTime.filter(
-      (docs) => setHistoryRecipientUserEmail.indexOf(docs.email) !== -1
+      (docs) => onlyHistoryRecipientUserEmail.indexOf(docs.email) !== -1
     );
     setHistoryListData(recentRecipientUser);
 
-    const timerId = setTimeout(() => {
+    const searchWord = setTimeout(() => {
       if (friendName !== "") {
         const filterFriendList = () => {
           setListData(loginFilterTime);
@@ -95,7 +95,7 @@ export const FriendList = ({ navigation }) => {
         setListData(loginFilterTime);
       }
     }, 0);
-    return () => clearTimeout(timerId);
+    return () => clearTimeout(searchWord);
   }, [friendName, isFocused, buttonTrueOrFalse]);
 
   return (
