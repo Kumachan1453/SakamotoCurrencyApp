@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, FlatList, TextInput } from "react-native";
 import { FriendButton } from "../components/FriendButton";
-import { db } from "../components/Firebase";
-import { collection, getDocs, query } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { useIsFocused } from "@react-navigation/native";
 import TrueOrFalseButton from "../components/TrueOrFalseButton";
+import { HistoryData } from "../components/HistoryData";
+import { UserData } from "../components/UserData";
 
 export const FriendList = ({ navigation }) => {
   const isFocused = useIsFocused();
@@ -26,24 +26,10 @@ export const FriendList = ({ navigation }) => {
     }
   };
 
-  useEffect(async () => {
-    const sendHistory = collection(db, "usersHistory");
-    const querySnapshotHistory = await getDocs(sendHistory);
-    const arrayHistory = [];
-    querySnapshotHistory.forEach((docs) => {
-      arrayHistory.push({
-        email: docs.data().email,
-        recipientUserName: docs.data().recipientUserName,
-        recipientUserEmail: docs.data().recipientUserEmail,
-        recipientUserId: docs.data().recipientUserId,
-        time: docs.data().time,
-        id: docs.id,
-      });
-    });
-    const historyLoginFilter = arrayHistory.filter((login) => {
+  useEffect(() => {
+    const historyLoginFilter = HistoryData.filter((login) => {
       return email === login.email;
     });
-
     const historyLoginFilterTime = (historyLoginFilter.time =
       historyLoginFilter.sort((a, b) => {
         const x = a["time"];
@@ -57,18 +43,7 @@ export const FriendList = ({ navigation }) => {
         return 0;
       }));
 
-    const getDatas = query(collection(db, "users"));
-    const querySnapshot = await getDocs(getDatas);
-    const array = [];
-    querySnapshot.forEach((docs) => {
-      array.push({
-        name: docs.data().name,
-        email: docs.data().email,
-        time: docs.data().time,
-        id: docs.id,
-      });
-    });
-    const loginFilter = array.filter((login) => {
+    const loginFilter = UserData.filter((login) => {
       return email !== login.email;
     });
     const loginFilterTime = (loginFilter.time = loginFilter.sort((a, b) => {
@@ -88,123 +63,25 @@ export const FriendList = ({ navigation }) => {
       historyRecipientUserEmail.push(docs.recipientUserEmail);
     });
 
-    const setHistoryRecipientUserEmail = Array.from(
+    const onlyHistoryRecipientUserEmail = Array.from(
       new Set(historyRecipientUserEmail)
     );
 
     const recentRecipientUser = loginFilterTime.filter(
-      (docs) => setHistoryRecipientUserEmail.indexOf(docs.email) !== -1
+      (docs) => onlyHistoryRecipientUserEmail.indexOf(docs.email) !== -1
     );
     setHistoryListData(recentRecipientUser);
-  }, [buttonTrueOrFalse, isFocused]);
 
-  useEffect(async () => {
-    const getDatas = query(collection(db, "users"));
-    const querySnapshot = await getDocs(getDatas);
-    const array = [];
-    querySnapshot.forEach((docs) => {
-      array.push({
-        name: docs.data().name,
-        email: docs.data().email,
-        time: docs.data().time,
-        id: docs.id,
-      });
-    });
-    const loginFilter = array.filter((login) => {
-      return email !== login.email;
-    });
-    loginFilter.time = loginFilter.sort((a, b) => {
-      const x = a["time"];
-      const y = b["time"];
-      if (x > y) {
-        return -1;
-      }
-      if (x < y) {
-        return 1;
-      }
-      return 0;
-    });
-    setListData(loginFilter);
-  }, []);
-
-  useEffect(async () => {
-    const sendHistory = collection(db, "usersHistory");
-    const querySnapshotHistory = await getDocs(sendHistory);
-    const arrayHistory = [];
-    querySnapshotHistory.forEach((docs) => {
-      arrayHistory.push({
-        email: docs.data().email,
-        recipientUserName: docs.data().recipientUserName,
-        recipientUserEmail: docs.data().recipientUserEmail,
-        recipientUserId: docs.data().recipientUserId,
-        time: docs.data().time,
-        id: docs.id,
-      });
-    });
-    const historyLoginFilter = arrayHistory.filter((login) => {
-      return email === login.email;
-    });
-
-    const historyLoginFilterTime = (historyLoginFilter.time =
-      historyLoginFilter.sort((a, b) => {
-        const x = a["time"];
-        const y = b["time"];
-        if (x > y) {
-          return -1;
-        }
-        if (x < y) {
-          return 1;
-        }
-        return 0;
-      }));
-    const timerId = setTimeout(() => {
+    const searchWord = setTimeout(() => {
       if (friendName !== "") {
-        const filterFriendList = async () => {
-          const getDatas = query(collection(db, "users"));
-          const querySnapshot = await getDocs(getDatas);
-          const array = [];
-          querySnapshot.forEach((docs) => {
-            array.push({
-              name: docs.data().name,
-              email: docs.data().email,
-              time: docs.data().time,
-              id: docs.id,
-            });
-          });
-          const loginFilter = array.filter((login) => {
-            return email !== login.email;
-          });
-          const loginFilterTime = (loginFilter.time = loginFilter.sort(
-            (a, b) => {
-              const x = a["time"];
-              const y = b["time"];
-              if (x > y) {
-                return -1;
-              }
-              if (x < y) {
-                return 1;
-              }
-              return 0;
-            }
-          ));
+        const filterFriendList = () => {
+          setListData(loginFilterTime);
           if (buttonTrueOrFalse === true) {
             const filterListData = loginFilterTime.filter((value) => {
               return value.name.match(friendName);
             });
             setListData(filterListData);
           } else {
-            const historyRecipientUserEmail = [];
-            historyLoginFilterTime.forEach((docs) => {
-              historyRecipientUserEmail.push(docs.recipientUserEmail);
-            });
-
-            const setHistoryRecipientUserEmail = Array.from(
-              new Set(historyRecipientUserEmail)
-            );
-
-            const recentRecipientUser = loginFilterTime.filter(
-              (docs) => setHistoryRecipientUserEmail.indexOf(docs.email) !== -1
-            );
             const historyFilterListData = recentRecipientUser.filter(
               (value) => {
                 return value.name.match(friendName);
@@ -215,38 +92,10 @@ export const FriendList = ({ navigation }) => {
         };
         filterFriendList();
       } else {
-        const friendList = async () => {
-          const getDatas = query(collection(db, "users"));
-          const querySnapshot = await getDocs(getDatas);
-          const array = [];
-          querySnapshot.forEach((docs) => {
-            array.push({
-              name: docs.data().name,
-              email: docs.data().email,
-              time: docs.data().time,
-              id: docs.id,
-            });
-          });
-          const loginFilter = array.filter((login) => {
-            return email !== login.email;
-          });
-          loginFilter.time = loginFilter.sort((a, b) => {
-            const x = a["time"];
-            const y = b["time"];
-            if (x > y) {
-              return -1;
-            }
-            if (x < y) {
-              return 1;
-            }
-            return 0;
-          });
-          setListData(loginFilter);
-        };
-        friendList();
+        setListData(loginFilterTime);
       }
     }, 0);
-    return () => clearTimeout(timerId);
+    return () => clearTimeout(searchWord);
   }, [friendName, isFocused, buttonTrueOrFalse]);
 
   return (
