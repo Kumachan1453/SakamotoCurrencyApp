@@ -15,6 +15,7 @@ import { getAuth } from "firebase/auth";
 import { useIsFocused, useRoute } from "@react-navigation/native";
 import { db } from "../components/Firebase";
 import { howMuchDouYouUseYourCoinThisMonth } from "../components/PatternText";
+import { async } from "@firebase/util";
 
 export const Gift = () => {
   const route = useRoute();
@@ -48,15 +49,45 @@ export const Gift = () => {
     });
   };
 
-  useEffect(async () => {
-    await getCoinsData();
-    setGiftListData(coinsData);
+  const userData = [];
+  const getUserData = async () => {
     const getCollection = await getDocs(collection(db, "users"));
-    const arrayUsers = [];
     getCollection.forEach((docs) => {
-      arrayUsers.push({ email: docs.data().email, id: docs.id });
+      userData.push({
+        id: docs.id,
+        name: docs.data().name,
+        email: docs.data().email,
+        password: docs.data().password,
+        coinOwnership: docs.data().coinOwnership,
+        monthlyCoinUsage: docs.data().monthlyCoinUsage,
+        sumCoinUsage: docs.data().sumCoinUsage,
+        time: docs.data().time,
+      });
     });
-    const loginFilter = arrayUsers.filter((login) => {
+  };
+
+  const ascendingOrder = (array) => {
+    array.time = array.sort((a, b) => {
+      const x = a["time"];
+      const y = b["time"];
+      if (x > y) {
+        return -1;
+      }
+      if (x < y) {
+        return 1;
+      }
+      return 0;
+    });
+    return array;
+  };
+
+  const getLoginUserData = async () => {
+    await getCoinsData();
+    const coinsDataTime = ascendingOrder(coinsData);
+    setGiftListData(coinsDataTime);
+
+    await getUserData();
+    const loginFilter = userData.filter((login) => {
       return email === login.email;
     });
     const getData = doc(db, "users", loginFilter[0].id);
@@ -64,39 +95,21 @@ export const Gift = () => {
     setUserId(loginFilter[0].id);
     setCoinOwnership(Math.round(snapData.data().coinOwnership));
     setMonthlyCoinUsage(Math.round(snapData.data().monthlyCoinUsage));
-  }, [isFocused]);
+  };
 
   const updateData = async (item) => {
-    const getCollection = await getDocs(collection(db, "users"));
-    const arrayUsers = [];
-    getCollection.forEach((docs) => {
-      arrayUsers.push({ email: docs.data().email, id: docs.id });
-    });
-    const loginFilter = arrayUsers.filter((login) => {
+    await getUserData();
+    const loginFilter = userData.filter((login) => {
       return email === login.email;
     });
     const getData = doc(db, "users", loginFilter[0].id);
-    const getItemData = doc(db, "users", item.id);
-    console.log("getItemData", getItemData);
     const snapData = await getDoc(getData);
     updateDoc(getData, {
       coinOwnership: coinOwnership + item.sendingCoin,
       time: new Date().toLocaleString(),
     });
 
-    const sendGift = collection(db, "coins");
-    const querySnapshot = await getDocs(sendGift);
-    const arrayCoins = [];
-    querySnapshot.forEach((docs) => {
-      arrayCoins.push({
-        name: docs.data().name,
-        sendingCoin: docs.data().sendingCoin,
-        subId: docs.data().subId,
-        recipientUserId: docs.data().recipientUserId,
-        id: docs.id,
-        time: docs.data().time,
-      });
-    });
+    await getCoinsData();
     const giftHistory = await addDoc(collection(db, "usersHistory"), {
       name: snapData.data().name,
       email: snapData.data().email,
@@ -123,19 +136,11 @@ export const Gift = () => {
   };
 
   useEffect(async () => {
-    const getCollection = await getDocs(collection(db, "users"));
-    const arrayUsers = [];
-    getCollection.forEach((docs) => {
-      arrayUsers.push({ email: docs.data().email, id: docs.id });
-    });
-    const loginFilter = arrayUsers.filter((login) => {
-      return email === login.email;
-    });
-    const getUserData = doc(db, "users", loginFilter[0].id);
-    // console.log("loginFilter[0].id", loginFilter[0].id);
-    const snapUsersData = await getDoc(getUserData);
-    setCoinOwnership(Math.round(snapUsersData.data().coinOwnership));
-    setMonthlyCoinUsage(Math.round(snapUsersData.data().monthlyCoinUsage));
+    await getLoginUserData();
+  }, [isFocused]);
+
+  const update = async () => {
+    await getUserData();
     const sendGift = collection(db, "coins");
     const querySnapshot = await getDocs(sendGift);
     const arrayCoins = [];
@@ -165,6 +170,53 @@ export const Gift = () => {
     setTimeout(() => {
       setIsButtonDisabled(false);
     }, 2000);
+  };
+
+  useEffect(async () => {
+    await update();
+    // // const getCollection = await getDocs(collection(db, "users"));
+    // // const arrayUsers = [];
+    // // getCollection.forEach((docs) => {
+    // //   arrayUsers.push({ email: docs.data().email, id: docs.id });
+    // // });
+    // await getUserData();
+    // const loginFilter = userData.filter((login) => {
+    //   return email === login.email;
+    // });
+    // const getUserData = doc(db, "users", loginFilter[0].id);
+    // // console.log("loginFilter[0].id", loginFilter[0].id);
+    // const snapUsersData = await getDoc(getUserData);
+    // setCoinOwnership(Math.round(snapUsersData.data().coinOwnership));
+    // setMonthlyCoinUsage(Math.round(snapUsersData.data().monthlyCoinUsage));
+    // const sendGift = collection(db, "coins");
+    // const querySnapshot = await getDocs(sendGift);
+    // const arrayCoins = [];
+    // querySnapshot.forEach((docs) => {
+    //   arrayCoins.push({
+    //     name: docs.data().name,
+    //     email: docs.data().email,
+    //     sendingCoin: docs.data().sendingCoin,
+    //     subId: docs.data().subId,
+    //     recipientUserId: docs.data().recipientUserId,
+    //     id: docs.id,
+    //     time: docs.data().time,
+    //   });
+    // });
+    // arrayCoins.time = arrayCoins.sort((a, b) => {
+    //   const x = a["time"];
+    //   const y = b["time"];
+    //   if (x > y) {
+    //     return -1;
+    //   }
+    //   if (x < y) {
+    //     return 1;
+    //   }
+    //   return 0;
+    // });
+    // setGiftListData(arrayCoins);
+    // setTimeout(() => {
+    //   setIsButtonDisabled(false);
+    // }, 2000);
   }, [updateId]);
 
   return (
