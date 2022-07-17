@@ -6,6 +6,8 @@ import { useIsFocused } from "@react-navigation/native";
 import TrueOrFalseButton from "../components/TrueOrFalseButton";
 import { HistoryData } from "../components/HistoryData";
 import { UserData } from "../components/UserData";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../components/Firebase";
 
 export const FriendList = ({ navigation }) => {
   const isFocused = useIsFocused();
@@ -25,8 +27,26 @@ export const FriendList = ({ navigation }) => {
       setButtonTrueOrFalse(false);
     }
   };
+  const userData = [];
+  const getUserData = async () => {
+    const getCollection = await getDocs(collection(db, "users"));
+    getCollection.forEach((docs) => {
+      userData.push({
+        id: docs.id,
+        name: docs.data().name,
+        email: docs.data().email,
+        password: docs.data().password,
+        coinOwnership: docs.data().coinOwnership,
+        monthlyCoinUsage: docs.data().monthlyCoinUsage,
+        sumCoinUsage: docs.data().sumCoinUsage,
+        time: docs.data().time,
+      });
+    });
+  };
 
-  useEffect(() => {
+  useEffect(async () => {
+    await getUserData();
+
     const historyLoginFilter = HistoryData.filter((login) => {
       return email === login.email;
     });
@@ -43,7 +63,7 @@ export const FriendList = ({ navigation }) => {
         return 0;
       }));
 
-    const loginFilter = UserData.filter((login) => {
+    const loginFilter = userData.filter((login) => {
       return email !== login.email;
     });
     const loginFilterTime = (loginFilter.time = loginFilter.sort((a, b) => {

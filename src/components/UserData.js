@@ -23,6 +23,7 @@ const UserData = [];
 // }, []);
 const getUserData = async () => {
   const getCollection = await getDocs(collection(db, "users"));
+  console.log("UserData", UserData);
   getCollection.forEach((docs) => {
     UserData.push({
       id: docs.id,
@@ -37,95 +38,96 @@ const getUserData = async () => {
   });
 };
 getUserData();
+// console.log("UserData", UserData);
 
-const UserDataId = [];
-const getUserDataId = async () => {
-  const getCollection = await getDocs(collection(db, "users"));
-  getCollection.forEach((docs) => {
-    UserDataId.push({
-      id: docs.id,
-    });
-  });
-};
-getUserDataId();
+// const UserDataId = [];
+// const getUserDataId = async () => {
+//   const getCollection = await getDocs(collection(db, "users"));
+//   getCollection.forEach((docs) => {
+//     UserDataId.push({
+//       id: docs.id,
+//     });
+//   });
+// };
+// getUserDataId();
 
-const UserDataName = [];
-const getUserDataName = async () => {
-  const getCollection = await getDocs(collection(db, "users"));
-  getCollection.forEach((docs) => {
-    UserDataName.push({
-      name: docs.data().name,
-    });
-  });
-};
-getUserDataName();
+// const UserDataName = [];
+// const getUserDataName = async () => {
+//   const getCollection = await getDocs(collection(db, "users"));
+//   getCollection.forEach((docs) => {
+//     UserDataName.push({
+//       name: docs.data().name,
+//     });
+//   });
+// };
+// getUserDataName();
 
-const UserDataEmail = [];
-const getUserDataEmail = async () => {
-  const getCollection = await getDocs(collection(db, "users"));
-  getCollection.forEach((docs) => {
-    UserDataEmail.push({
-      email: docs.data().email,
-    });
-  });
-};
-getUserDataEmail();
+// const UserDataEmail = [];
+// const getUserDataEmail = async () => {
+//   const getCollection = await getDocs(collection(db, "users"));
+//   getCollection.forEach((docs) => {
+//     UserDataEmail.push({
+//       email: docs.data().email,
+//     });
+//   });
+// };
+// getUserDataEmail();
 
-const UserDataPassword = [];
-const getUserDataPassword = async () => {
-  const getCollection = await getDocs(collection(db, "users"));
-  getCollection.forEach((docs) => {
-    UserDataPassword.push({
-      password: docs.data().password,
-    });
-  });
-};
-getUserDataPassword();
+// const UserDataPassword = [];
+// const getUserDataPassword = async () => {
+//   const getCollection = await getDocs(collection(db, "users"));
+//   getCollection.forEach((docs) => {
+//     UserDataPassword.push({
+//       password: docs.data().password,
+//     });
+//   });
+// };
+// getUserDataPassword();
 
-const UserDataCoinOwnership = [];
-const getUserDataCoinOwnership = async () => {
-  const getCollection = await getDocs(collection(db, "users"));
-  getCollection.forEach((docs) => {
-    UserDataCoinOwnership.push({
-      coinOwnership: docs.data().coinOwnership,
-    });
-  });
-};
-getUserDataCoinOwnership();
+// const UserDataCoinOwnership = [];
+// const getUserDataCoinOwnership = async () => {
+//   const getCollection = await getDocs(collection(db, "users"));
+//   getCollection.forEach((docs) => {
+//     UserDataCoinOwnership.push({
+//       coinOwnership: docs.data().coinOwnership,
+//     });
+//   });
+// };
+// getUserDataCoinOwnership();
 
-const UserDataMonthlyCoinUsage = [];
-const getUserDataMonthlyCoinUsage = async () => {
-  const getCollection = await getDocs(collection(db, "users"));
-  getCollection.forEach((docs) => {
-    UserDataMonthlyCoinUsage.push({
-      monthlyCoinUsage: docs.data().monthlyCoinUsage,
-    });
-  });
-};
-getUserDataMonthlyCoinUsage();
+// const UserDataMonthlyCoinUsage = [];
+// const getUserDataMonthlyCoinUsage = async () => {
+//   const getCollection = await getDocs(collection(db, "users"));
+//   getCollection.forEach((docs) => {
+//     UserDataMonthlyCoinUsage.push({
+//       monthlyCoinUsage: docs.data().monthlyCoinUsage,
+//     });
+//   });
+// };
+// getUserDataMonthlyCoinUsage();
 
-const UserDataSumCoinUsage = [];
-const getUserDataSumCoinUsage = async () => {
-  const getCollection = await getDocs(collection(db, "users"));
-  getCollection.forEach((docs) => {
-    UserDataSumCoinUsage.push({
-      sumCoinUsage: docs.data().sumCoinUsage,
-    });
-  });
-};
-getUserDataSumCoinUsage();
+// const UserDataSumCoinUsage = [];
+// const getUserDataSumCoinUsage = async () => {
+//   const getCollection = await getDocs(collection(db, "users"));
+//   getCollection.forEach((docs) => {
+//     UserDataSumCoinUsage.push({
+//       sumCoinUsage: docs.data().sumCoinUsage,
+//     });
+//   });
+// };
+// getUserDataSumCoinUsage();
 
-const UserDataIdAndEmail = [];
-const getUserDataIdAndEmail = async () => {
-  const getCollection = await getDocs(collection(db, "users"));
-  getCollection.forEach((docs) => {
-    UserDataIdAndEmail.push({
-      id: docs.id,
-      email: docs.data().email,
-    });
-  });
-};
-getUserDataIdAndEmail();
+// const UserDataIdAndEmail = [];
+// const getUserDataIdAndEmail = async () => {
+//   const getCollection = await getDocs(collection(db, "users"));
+//   getCollection.forEach((docs) => {
+//     UserDataIdAndEmail.push({
+//       id: docs.id,
+//       email: docs.data().email,
+//     });
+//   });
+// };
+// getUserDataIdAndEmail();
 // console.log("UserDataIdAndEmail", UserDataIdAndEmail);
 
 // const LoginUserData = [];
@@ -157,12 +159,12 @@ getUserDataIdAndEmail();
 
 export {
   UserData,
-  UserDataCoinOwnership,
-  UserDataEmail,
-  UserDataId,
-  UserDataMonthlyCoinUsage,
-  UserDataName,
-  UserDataPassword,
-  UserDataSumCoinUsage,
-  UserDataIdAndEmail,
+  // UserDataCoinOwnership,
+  // UserDataEmail,
+  // UserDataId,
+  // UserDataMonthlyCoinUsage,
+  // UserDataName,
+  // UserDataPassword,
+  // UserDataSumCoinUsage,
+  // UserDataIdAndEmail,
 };
