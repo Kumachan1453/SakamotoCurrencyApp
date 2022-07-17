@@ -15,7 +15,6 @@ import { getAuth } from "firebase/auth";
 import { useIsFocused, useRoute } from "@react-navigation/native";
 import { db } from "../components/Firebase";
 import { howMuchDouYouUseYourCoinThisMonth } from "../components/PatternText";
-import { async } from "@firebase/util";
 
 export const Gift = () => {
   const route = useRoute();
@@ -137,87 +136,10 @@ export const Gift = () => {
 
   useEffect(async () => {
     await getLoginUserData();
-  }, [isFocused]);
-
-  const update = async () => {
-    await getUserData();
-    const sendGift = collection(db, "coins");
-    const querySnapshot = await getDocs(sendGift);
-    const arrayCoins = [];
-    querySnapshot.forEach((docs) => {
-      arrayCoins.push({
-        name: docs.data().name,
-        email: docs.data().email,
-        sendingCoin: docs.data().sendingCoin,
-        subId: docs.data().subId,
-        recipientUserId: docs.data().recipientUserId,
-        id: docs.id,
-        time: docs.data().time,
-      });
-    });
-    arrayCoins.time = arrayCoins.sort((a, b) => {
-      const x = a["time"];
-      const y = b["time"];
-      if (x > y) {
-        return -1;
-      }
-      if (x < y) {
-        return 1;
-      }
-      return 0;
-    });
-    setGiftListData(arrayCoins);
     setTimeout(() => {
       setIsButtonDisabled(false);
     }, 2000);
-  };
-
-  useEffect(async () => {
-    await update();
-    // // const getCollection = await getDocs(collection(db, "users"));
-    // // const arrayUsers = [];
-    // // getCollection.forEach((docs) => {
-    // //   arrayUsers.push({ email: docs.data().email, id: docs.id });
-    // // });
-    // await getUserData();
-    // const loginFilter = userData.filter((login) => {
-    //   return email === login.email;
-    // });
-    // const getUserData = doc(db, "users", loginFilter[0].id);
-    // // console.log("loginFilter[0].id", loginFilter[0].id);
-    // const snapUsersData = await getDoc(getUserData);
-    // setCoinOwnership(Math.round(snapUsersData.data().coinOwnership));
-    // setMonthlyCoinUsage(Math.round(snapUsersData.data().monthlyCoinUsage));
-    // const sendGift = collection(db, "coins");
-    // const querySnapshot = await getDocs(sendGift);
-    // const arrayCoins = [];
-    // querySnapshot.forEach((docs) => {
-    //   arrayCoins.push({
-    //     name: docs.data().name,
-    //     email: docs.data().email,
-    //     sendingCoin: docs.data().sendingCoin,
-    //     subId: docs.data().subId,
-    //     recipientUserId: docs.data().recipientUserId,
-    //     id: docs.id,
-    //     time: docs.data().time,
-    //   });
-    // });
-    // arrayCoins.time = arrayCoins.sort((a, b) => {
-    //   const x = a["time"];
-    //   const y = b["time"];
-    //   if (x > y) {
-    //     return -1;
-    //   }
-    //   if (x < y) {
-    //     return 1;
-    //   }
-    //   return 0;
-    // });
-    // setGiftListData(arrayCoins);
-    // setTimeout(() => {
-    //   setIsButtonDisabled(false);
-    // }, 2000);
-  }, [updateId]);
+  }, [isFocused, updateId]);
 
   return (
     <>
