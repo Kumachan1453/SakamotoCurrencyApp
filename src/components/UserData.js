@@ -1,43 +1,23 @@
-import React, { useEffect } from "react";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "./Firebase";
+// import { collection, getDocs } from "firebase/firestore";
+// import { db } from "./Firebase";
 
-const UserData = [];
-
-// useEffect(() => {
-//   (async () => {
-//     const getCollection = await getDocs(collection(db, "users"));
-//     getCollection.forEach((docs) => {
-//       UserData.push({
-//         id: docs.id,
-//         name: docs.data().name,
-//         email: docs.data().email,
-//         password: docs.data().password,
-//         coinOwnership: docs.data().coinOwnership,
-//         monthlyCoinUsage: docs.data().monthlyCoinUsage,
-//         sumCoinUsage: docs.data().sumCoinUsage,
-//         time: docs.data().time,
-//       });
+// const userData = [];
+// const getUserData = async () => {
+//   const getCollection = await getDocs(collection(db, "users"));
+//   getCollection.forEach((docs) => {
+//     userData.push({
+//       id: docs.id,
+//       name: docs.data().name,
+//       email: docs.data().email,
+//       password: docs.data().password,
+//       coinOwnership: docs.data().coinOwnership,
+//       monthlyCoinUsage: docs.data().monthlyCoinUsage,
+//       sumCoinUsage: docs.data().sumCoinUsage,
+//       time: docs.data().time,
 //     });
-//   })();
-// }, []);
-const getUserData = async () => {
-  const getCollection = await getDocs(collection(db, "users"));
-  console.log("UserData", UserData);
-  getCollection.forEach((docs) => {
-    UserData.push({
-      id: docs.id,
-      name: docs.data().name,
-      email: docs.data().email,
-      password: docs.data().password,
-      coinOwnership: docs.data().coinOwnership,
-      monthlyCoinUsage: docs.data().monthlyCoinUsage,
-      sumCoinUsage: docs.data().sumCoinUsage,
-      time: docs.data().time,
-    });
-  });
-};
-getUserData();
+//   });
+// };
+// getUserData();
 // console.log("UserData", UserData);
 
 // const UserDataId = [];
@@ -157,14 +137,15 @@ getUserData();
 // };
 // loginUser();
 
-export {
-  UserData,
-  // UserDataCoinOwnership,
-  // UserDataEmail,
-  // UserDataId,
-  // UserDataMonthlyCoinUsage,
-  // UserDataName,
-  // UserDataPassword,
-  // UserDataSumCoinUsage,
-  // UserDataIdAndEmail,
-};
+// export {
+// userData,
+// getUserData,
+// UserDataCoinOwnership,
+// UserDataEmail,
+// UserDataId,
+// UserDataMonthlyCoinUsage,
+// UserDataName,
+// UserDataPassword,
+// UserDataSumCoinUsage,
+// UserDataIdAndEmail,
+// };

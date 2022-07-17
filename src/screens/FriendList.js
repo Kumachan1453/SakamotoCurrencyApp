@@ -4,8 +4,6 @@ import { FriendButton } from "../components/FriendButton";
 import { getAuth } from "firebase/auth";
 import { useIsFocused } from "@react-navigation/native";
 import TrueOrFalseButton from "../components/TrueOrFalseButton";
-import { HistoryData } from "../components/HistoryData";
-import { UserData } from "../components/UserData";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../components/Firebase";
 
@@ -44,29 +42,25 @@ export const FriendList = ({ navigation }) => {
     });
   };
 
-  useEffect(async () => {
-    await getUserData();
-
-    const historyLoginFilter = HistoryData.filter((login) => {
-      return email === login.email;
+  const historyData = [];
+  const getHistoryData = async () => {
+    const getCollection = await getDocs(collection(db, "usersHistory"));
+    getCollection.forEach((docs) => {
+      historyData.push({
+        name: docs.data().name,
+        email: docs.data().email,
+        recipientUserEmail: docs.data().recipientUserEmail,
+        recipientUserId: docs.data().recipientUserId,
+        recipientUserName: docs.data().recipientUserName,
+        sendOrGift: docs.data().sendOrGift,
+        sendingCoin: docs.data().sendingCoin,
+        time: docs.data().time,
+      });
     });
-    const historyLoginFilterTime = (historyLoginFilter.time =
-      historyLoginFilter.sort((a, b) => {
-        const x = a["time"];
-        const y = b["time"];
-        if (x > y) {
-          return -1;
-        }
-        if (x < y) {
-          return 1;
-        }
-        return 0;
-      }));
+  };
 
-    const loginFilter = userData.filter((login) => {
-      return email !== login.email;
-    });
-    const loginFilterTime = (loginFilter.time = loginFilter.sort((a, b) => {
+  const ascendingOrder = (array) => {
+    array.time = array.sort((a, b) => {
       const x = a["time"];
       const y = b["time"];
       if (x > y) {
@@ -76,7 +70,21 @@ export const FriendList = ({ navigation }) => {
         return 1;
       }
       return 0;
-    }));
+    });
+    return array;
+  };
+
+  const functionInUseEffect = async () => {
+    await getUserData();
+    await getHistoryData();
+    const historyLoginFilter = historyData.filter((login) => {
+      return email === login.email;
+    });
+    const loginFilter = userData.filter((login) => {
+      return email !== login.email;
+    });
+    const loginFilterTime = ascendingOrder(loginFilter);
+    const historyLoginFilterTime = ascendingOrder(historyLoginFilter);
 
     const historyRecipientUserEmail = [];
     historyLoginFilterTime.forEach((docs) => {
@@ -116,6 +124,10 @@ export const FriendList = ({ navigation }) => {
       }
     }, 0);
     return () => clearTimeout(searchWord);
+  };
+
+  useEffect(async () => {
+    await functionInUseEffect();
   }, [friendName, isFocused, buttonTrueOrFalse]);
 
   return (
