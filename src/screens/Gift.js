@@ -31,22 +31,26 @@ export const Gift = () => {
 
   const isFocused = useIsFocused();
 
-  useEffect(async () => {
-    const sendGift = collection(db, "coins");
-    const querySnapshot = await getDocs(sendGift);
-    const arrayCoins = [];
-    querySnapshot.forEach((docs) => {
-      arrayCoins.push({
+  const coinsData = [];
+  const getCoinsData = async () => {
+    const getCollection = await getDocs(collection(db, "coins"));
+    getCollection.forEach((docs) => {
+      coinsData.push({
         name: docs.data().name,
+        email: docs.data().email,
+        recipientUserEmail: docs.data().recipientUserEmail,
+        recipientUserId: docs.data().recipientUserId,
         sendingCoin: docs.data().sendingCoin,
         subId: docs.data().subId,
-        recipientUserId: docs.data().recipientUserId,
-        id: docs.id,
         time: docs.data().time,
+        id: docs.id,
       });
     });
-    setGiftListData(arrayCoins);
+  };
 
+  useEffect(async () => {
+    await getCoinsData();
+    setGiftListData(coinsData);
     const getCollection = await getDocs(collection(db, "users"));
     const arrayUsers = [];
     getCollection.forEach((docs) => {

@@ -1,12 +1,12 @@
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "./Firebase";
 
-const CoinsData = [];
+const coinsData = [];
 
 const getCoinsData = async () => {
   const getCollection = await getDocs(collection(db, "coins"));
   getCollection.forEach((docs) => {
-    CoinsData.push({
+    coinsData.push({
       name: docs.data().name,
       email: docs.data().email,
       recipientUserEmail: docs.data().recipientUserEmail,
@@ -14,9 +14,10 @@ const getCoinsData = async () => {
       sendingCoin: docs.data().sendingCoin,
       subId: docs.data().subId,
       time: docs.data().time,
+      id: docs.id,
     });
   });
 };
 getCoinsData();
 
-export { CoinsData };
+export { coinsData };
