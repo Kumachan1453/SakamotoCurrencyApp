@@ -53,22 +53,27 @@ export const History = () => {
     }
   };
 
-  useEffect(async () => {
-    const sendHistory = collection(db, "usersHistory");
-    const querySnapshotHistory = await getDocs(sendHistory);
-    const arrayhistory = [];
-    querySnapshotHistory.forEach((docs) => {
-      arrayhistory.push({
+  const HistoryData = [];
+  const getHistoryData = async () => {
+    const getCollection = await getDocs(collection(db, "usersHistory"));
+    getCollection.forEach((docs) => {
+      HistoryData.push({
         name: docs.data().name,
         email: docs.data().email,
-        sendingCoin: docs.data().sendingCoin,
+        recipientUserEmail: docs.data().recipientUserEmail,
+        recipientUserId: docs.data().recipientUserId,
         recipientUserName: docs.data().recipientUserName,
-        time: docs.data().time,
         sendOrGift: docs.data().sendOrGift,
+        sendingCoin: docs.data().sendingCoin,
+        time: docs.data().time,
         id: docs.id,
       });
     });
-    const historyFilter = arrayhistory.filter((login) => {
+  };
+
+  const update = async () => {
+    await getHistoryData();
+    const historyFilter = HistoryData.filter((login) => {
       return email === login.email;
     });
 
@@ -111,6 +116,10 @@ export const History = () => {
       });
       setHistoryListData(historyMinusFilter);
     }
+  };
+
+  useEffect(async () => {
+    await update();
   }, [isFocused, buttonUpOrDown, plusFilter, minusFilter]);
 
   return (
