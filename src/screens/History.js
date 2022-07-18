@@ -53,11 +53,11 @@ export const History = () => {
     }
   };
 
-  const HistoryData = [];
+  const historyData = [];
   const getHistoryData = async () => {
     const getCollection = await getDocs(collection(db, "usersHistory"));
     getCollection.forEach((docs) => {
-      HistoryData.push({
+      historyData.push({
         name: docs.data().name,
         email: docs.data().email,
         recipientUserEmail: docs.data().recipientUserEmail,
@@ -73,7 +73,7 @@ export const History = () => {
 
   const update = async () => {
     await getHistoryData();
-    const historyFilter = HistoryData.filter((login) => {
+    const historyFilter = historyData.filter((login) => {
       return email === login.email;
     });
 
