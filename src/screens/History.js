@@ -111,18 +111,8 @@ export const History = () => {
       const ascendingHistoryFilter = ascendingOrder(historyFilter);
       setHistoryListData(ascendingHistoryFilter);
     } else if (buttonUpOrDown === true) {
-      historyFilter.time = historyFilter.sort((a, b) => {
-        const x = a["time"];
-        const y = b["time"];
-        if (x > y) {
-          return 1;
-        }
-        if (x < y) {
-          return -1;
-        }
-        return 0;
-      });
-      setHistoryListData(historyFilter);
+      const descendingHistoryFilter = descendingOrder(historyFilter);
+      setHistoryListData(descendingHistoryFilter);
     }
 
     if (plusFilter === true) {
