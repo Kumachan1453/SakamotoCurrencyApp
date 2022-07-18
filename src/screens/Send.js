@@ -50,45 +50,26 @@ export const Send = ({ navigation }) => {
   const route = useRoute();
   const isFocused = useIsFocused();
 
-  // const [recentlyExchangedFriendsId, setRecentlyExchangedFriendsId] =
-  //   useState("");
-  // setRecentlyExchangedFriendsId(route.params.id);
-
-  // const [friendIdList, setFriendIdList] = useStateIfMounted([]);
-
-  // const RecentlyExchangedFriendsDataRecipientUserId = [];
-
-  // useEffect(() => {
-  //   (async () => {
-  //     const getCollection = await getDocs(
-  //       collection(db, "recentlyExchangedFriends")
-  //     );
-  //     getCollection.forEach((docs) => {
-  //       RecentlyExchangedFriendsDataRecipientUserId.push({
-  //         recipientUserId: docs.data().recipientUserId,
-  //       });
-  //       setFriendIdList(RecentlyExchangedFriendsDataRecipientUserId);
-  //     });
-  //   })();
-  // }, [isFocused]);
-
-  // const checkFriendsDataIdConflict = () => {
-  //   const regexIdConflict = friendIdList.some(
-  //     (element) => element === recentlyExchangedFriendsId
-  //   );
-  //   return regexIdConflict;
-  // };
-  // const isCheckFriendsDataIdConflict = checkFriendsDataIdConflict(
-  //   recentlyExchangedFriendsId
-  // );
-
-  useEffect(async () => {
+  const userData = [];
+  const getUserData = async () => {
     const getCollection = await getDocs(collection(db, "users"));
-    const array = [];
     getCollection.forEach((docs) => {
-      array.push({ email: docs.data().email, id: docs.id });
+      userData.push({
+        id: docs.id,
+        name: docs.data().name,
+        email: docs.data().email,
+        password: docs.data().password,
+        coinOwnership: docs.data().coinOwnership,
+        monthlyCoinUsage: docs.data().monthlyCoinUsage,
+        sumCoinUsage: docs.data().sumCoinUsage,
+        time: docs.data().time,
+      });
     });
-    const loginFilter = array.filter((login) => {
+  };
+
+  const getLoginUserData = async () => {
+    await getUserData();
+    const loginFilter = userData.filter((login) => {
       return email === login.email;
     });
     const getData = doc(db, "users", loginFilter[0].id);
@@ -96,7 +77,7 @@ export const Send = ({ navigation }) => {
     setCoinOwnership(Math.round(snapData.data().coinOwnership));
     setMonthlyCoinUsage(Math.round(snapData.data().monthlyCoinUsage));
     setSumCoinUsage(Math.round(snapData.data().sumCoinUsage));
-  }, [isFocused]);
+  };
 
   const updateData = async () => {
     const getCollection = await getDocs(collection(db, "users"));
@@ -132,6 +113,10 @@ export const Send = ({ navigation }) => {
   const pressOkButton = () => {
     setSubId(subId + 1);
   };
+
+  useEffect(async () => {
+    await getLoginUserData();
+  }, [isFocused]);
 
   useEffect(async () => {
     const getCollection = await getDocs(collection(db, "users"));
