@@ -6,7 +6,6 @@ import { db } from "../components/Firebase";
 import { getAuth } from "firebase/auth";
 import { useIsFocused } from "@react-navigation/native";
 import { HistoryList } from "../components/HistoryList";
-import { UserDataIdAndEmail } from "../components/UserData";
 import { TrueOrFalseButton } from "../components/TrueOrFalseButton";
 
 const Stack = createNativeStackNavigator();
