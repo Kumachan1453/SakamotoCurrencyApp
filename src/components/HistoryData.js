@@ -15,6 +15,7 @@ const getHistoryData = async () => {
       sendOrGift: docs.data().sendOrGift,
       sendingCoin: docs.data().sendingCoin,
       time: docs.data().time,
+      id: docs.id,
     });
   });
 };

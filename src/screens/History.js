@@ -6,7 +6,6 @@ import { db } from "../components/Firebase";
 import { getAuth } from "firebase/auth";
 import { useIsFocused } from "@react-navigation/native";
 import { HistoryList } from "../components/HistoryList";
-import { UserDataIdAndEmail } from "../components/UserData";
 import { TrueOrFalseButton } from "../components/TrueOrFalseButton";
 
 const Stack = createNativeStackNavigator();
@@ -53,51 +52,66 @@ export const History = () => {
     }
   };
 
-  useEffect(async () => {
-    const sendHistory = collection(db, "usersHistory");
-    const querySnapshotHistory = await getDocs(sendHistory);
-    const arrayhistory = [];
-    querySnapshotHistory.forEach((docs) => {
-      arrayhistory.push({
+  const historyData = [];
+  const getHistoryData = async () => {
+    const getCollection = await getDocs(collection(db, "usersHistory"));
+    getCollection.forEach((docs) => {
+      historyData.push({
         name: docs.data().name,
         email: docs.data().email,
-        sendingCoin: docs.data().sendingCoin,
+        recipientUserEmail: docs.data().recipientUserEmail,
+        recipientUserId: docs.data().recipientUserId,
         recipientUserName: docs.data().recipientUserName,
-        time: docs.data().time,
         sendOrGift: docs.data().sendOrGift,
+        sendingCoin: docs.data().sendingCoin,
+        time: docs.data().time,
         id: docs.id,
       });
     });
-    const historyFilter = arrayhistory.filter((login) => {
+  };
+
+  const ascendingOrder = (array) => {
+    array.time = array.sort((a, b) => {
+      const x = a["time"];
+      const y = b["time"];
+      if (x > y) {
+        return -1;
+      }
+      if (x < y) {
+        return 1;
+      }
+      return 0;
+    });
+    return array;
+  };
+
+  const descendingOrder = (array) => {
+    array.time = array.sort((a, b) => {
+      const x = a["time"];
+      const y = b["time"];
+      if (x > y) {
+        return 1;
+      }
+      if (x < y) {
+        return -1;
+      }
+      return 0;
+    });
+    return array;
+  };
+
+  const update = async () => {
+    await getHistoryData();
+    const historyFilter = historyData.filter((login) => {
       return email === login.email;
     });
 
     if (buttonUpOrDown === false) {
-      historyFilter.time = historyFilter.sort((a, b) => {
-        const x = a["time"];
-        const y = b["time"];
-        if (x > y) {
-          return -1;
-        }
-        if (x < y) {
-          return 1;
-        }
-        return 0;
-      });
-      setHistoryListData(historyFilter);
+      const ascendingHistoryFilter = ascendingOrder(historyFilter);
+      setHistoryListData(ascendingHistoryFilter);
     } else if (buttonUpOrDown === true) {
-      historyFilter.time = historyFilter.sort((a, b) => {
-        const x = a["time"];
-        const y = b["time"];
-        if (x > y) {
-          return 1;
-        }
-        if (x < y) {
-          return -1;
-        }
-        return 0;
-      });
-      setHistoryListData(historyFilter);
+      const descendingHistoryFilter = descendingOrder(historyFilter);
+      setHistoryListData(descendingHistoryFilter);
     }
 
     if (plusFilter === true) {
@@ -111,6 +125,10 @@ export const History = () => {
       });
       setHistoryListData(historyMinusFilter);
     }
+  };
+
+  useEffect(async () => {
+    await update();
   }, [isFocused, buttonUpOrDown, plusFilter, minusFilter]);
 
   return (
