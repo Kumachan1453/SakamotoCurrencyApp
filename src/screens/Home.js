@@ -29,7 +29,8 @@ export const Home = () => {
     } else {
     }
   });
-  useEffect(async () => {
+
+  const getLoginUserData = async () => {
     const getCollection = await getDocs(collection(db, "users"));
     const array = [];
     getCollection.forEach((docs) => {
@@ -44,6 +45,10 @@ export const Home = () => {
     setCoinOwnership(Math.round(snapData.data().coinOwnership));
     setMonthlyCoinUsage(Math.round(snapData.data().monthlyCoinUsage));
     setRanking(Math.round(snapData.data().ranking));
+  };
+
+  useEffect(async () => {
+    await getLoginUserData();
   }, [isFocused]);
 
   const handleLogout = () => {
