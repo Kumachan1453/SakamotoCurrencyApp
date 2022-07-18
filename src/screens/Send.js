@@ -24,7 +24,6 @@ import { db } from "../components/Firebase";
 import { getAuth } from "firebase/auth";
 import { howMuchDouYouUseYourCoinThisMonth } from "../components/PatternText";
 import { Warning } from "../components/Warning";
-import { useStateIfMounted } from "use-state-if-mounted";
 import LeafCoinMini from "../components/LeafCoinMini";
 
 const Stack = createNativeStackNavigator();
@@ -114,17 +113,9 @@ export const Send = ({ navigation }) => {
     setSubId(subId + 1);
   };
 
-  useEffect(async () => {
-    await getLoginUserData();
-  }, [isFocused]);
-
-  useEffect(async () => {
-    const getCollection = await getDocs(collection(db, "users"));
-    const array = [];
-    getCollection.forEach((docs) => {
-      array.push({ email: docs.data().email, id: docs.id });
-    });
-    const loginFilter = array.filter((login) => {
+  const update = async () => {
+    await getUserData();
+    const loginFilter = userData.filter((login) => {
       return email === login.email;
     });
     const getData = doc(db, "users", loginFilter[0].id);
@@ -152,29 +143,9 @@ export const Send = ({ navigation }) => {
         sendOrGift: "-",
       });
 
-      const addRecentlyExchangedFriends = await addDoc(
-        collection(db, "recentlyExchangedFriends"),
-        {
-          name: route.params.name,
-          email: route.params.email,
-          id: route.params.id,
-          recipientUserName: snapData.data().name,
-          recipientUserEmail: snapData.data().email,
-          time: new Date().toLocaleString(),
-        }
-      );
-
       navigation.goBack();
     }
-  }, [subId]);
-
-  useEffect(() => {
-    const timerId = setTimeout(() => {
-      setBalance(Math.round(coinOwnership - sendingCoin));
-      setFutureMonthlyCoinUsage(Math.round(monthlyCoinUsage + sendingCoin));
-    }, 0);
-    return () => clearTimeout(timerId);
-  }, [sendingCoin]);
+  };
 
   if (isNaN(balance) || !isFinite(balance)) {
     const afterBalance = () => setBalance(coinOwnership);
@@ -196,6 +167,22 @@ export const Send = ({ navigation }) => {
     }
   }
 
+  useEffect(async () => {
+    await getLoginUserData();
+  }, [isFocused]);
+
+  useEffect(async () => {
+    await update();
+  }, [subId]);
+
+  useEffect(() => {
+    const timerId = setTimeout(() => {
+      setBalance(Math.round(coinOwnership - sendingCoin));
+      setFutureMonthlyCoinUsage(Math.round(monthlyCoinUsage + sendingCoin));
+    }, 0);
+    return () => clearTimeout(timerId);
+  }, [sendingCoin]);
+
   return (
     <ScrollView>
       <View>
@@ -212,7 +199,6 @@ export const Send = ({ navigation }) => {
               letter="所持「Kon」数："
               numberOfCoin={coinOwnership}
               unit={true}
-              // unit="K"
             />
           )}
           {sendingCoin > 0 && sendingCoin <= coinOwnership && (
@@ -220,7 +206,6 @@ export const Send = ({ navigation }) => {
               letter="残額："
               numberOfCoin={balance}
               unit={true}
-              // unit="K"
             />
           )}
         </View>
