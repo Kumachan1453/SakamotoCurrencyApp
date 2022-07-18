@@ -10,20 +10,7 @@ import { LongButton } from "../components/LongButton";
 import ModalTemplete from "../components/ModalTemplete";
 import MoneyText from "../components/MoneyText";
 
-import * as Localization from "expo-localization";
-import i18n from "i18n-js";
-import en from "../components/SupportedLanguages";
-i18n.fallbacks = true;
-i18n.translations = { en };
-
 export const Home = () => {
-  i18n.translations = {
-    en: { myUserName: "User Name" },
-    ja: { myUserName: "ユーザー名" },
-    Portuguese: { myUserName: "Nome do Utilizador" },
-  };
-  i18n.locale = Localization.locale;
-
   const isFocused = useIsFocused();
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -71,7 +58,7 @@ export const Home = () => {
         <View style={styles.center}>
           <View style={styles.profile}>
             <View style={styles.profileCategory}>
-              <Text style={styles.headingText}>{i18n.t("myUserName")}</Text>
+              <Text style={styles.headingText}>ユーザー名</Text>
               <Text style={styles.profileText}>{name}</Text>
             </View>
             <View style={styles.profileCategory}>
