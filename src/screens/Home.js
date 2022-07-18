@@ -30,13 +30,32 @@ export const Home = () => {
     }
   });
 
-  const getLoginUserData = async () => {
+  const userData = [];
+  const getUserData = async () => {
     const getCollection = await getDocs(collection(db, "users"));
-    const array = [];
     getCollection.forEach((docs) => {
-      array.push({ email: docs.data().email, id: docs.id });
+      userData.push({
+        id: docs.id,
+        name: docs.data().name,
+        email: docs.data().email,
+        password: docs.data().password,
+        coinOwnership: docs.data().coinOwnership,
+        monthlyCoinUsage: docs.data().monthlyCoinUsage,
+        sumCoinUsage: docs.data().sumCoinUsage,
+        time: docs.data().time,
+      });
     });
-    const loginFilter = array.filter((login) => {
+  };
+
+  const handleLogout = () => {
+    signOut(auth).catch((error) => {
+      console.log("error.message", error.message);
+    });
+  };
+
+  const getLoginUserData = async () => {
+    await getUserData();
+    const loginFilter = userData.filter((login) => {
       return email === login.email;
     });
     const getData = doc(db, "users", loginFilter[0].id);
@@ -50,12 +69,6 @@ export const Home = () => {
   useEffect(async () => {
     await getLoginUserData();
   }, [isFocused]);
-
-  const handleLogout = () => {
-    signOut(auth).catch((error) => {
-      console.log("error.message", error.message);
-    });
-  };
 
   return (
     <ScrollView>
@@ -132,7 +145,6 @@ const styles = StyleSheet.create({
   profileCategory: {
     margin: 5,
     marginTop: 10,
-    // backgroundColor: "red",
   },
   profileText: {
     fontSize: 28,
