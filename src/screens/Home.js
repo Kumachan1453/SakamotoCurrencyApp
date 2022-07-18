@@ -10,20 +10,7 @@ import { LongButton } from "../components/LongButton";
 import ModalTemplete from "../components/ModalTemplete";
 import MoneyText from "../components/MoneyText";
 
-import * as Localization from "expo-localization";
-import i18n from "i18n-js";
-import en from "../components/SupportedLanguages";
-i18n.fallbacks = true;
-i18n.translations = { en };
-
 export const Home = () => {
-  i18n.translations = {
-    en: { myUserName: "User Name" },
-    ja: { myUserName: "ユーザー名" },
-    Portuguese: { myUserName: "Nome do Utilizador" },
-  };
-  i18n.locale = Localization.locale;
-
   const isFocused = useIsFocused();
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -42,13 +29,33 @@ export const Home = () => {
     } else {
     }
   });
-  useEffect(async () => {
+
+  const userData = [];
+  const getUserData = async () => {
     const getCollection = await getDocs(collection(db, "users"));
-    const array = [];
     getCollection.forEach((docs) => {
-      array.push({ email: docs.data().email, id: docs.id });
+      userData.push({
+        id: docs.id,
+        name: docs.data().name,
+        email: docs.data().email,
+        password: docs.data().password,
+        coinOwnership: docs.data().coinOwnership,
+        monthlyCoinUsage: docs.data().monthlyCoinUsage,
+        sumCoinUsage: docs.data().sumCoinUsage,
+        time: docs.data().time,
+      });
     });
-    const loginFilter = array.filter((login) => {
+  };
+
+  const handleLogout = () => {
+    signOut(auth).catch((error) => {
+      console.log("error.message", error.message);
+    });
+  };
+
+  const getLoginUserData = async () => {
+    await getUserData();
+    const loginFilter = userData.filter((login) => {
       return email === login.email;
     });
     const getData = doc(db, "users", loginFilter[0].id);
@@ -57,13 +64,11 @@ export const Home = () => {
     setCoinOwnership(Math.round(snapData.data().coinOwnership));
     setMonthlyCoinUsage(Math.round(snapData.data().monthlyCoinUsage));
     setRanking(Math.round(snapData.data().ranking));
-  }, [isFocused]);
-
-  const handleLogout = () => {
-    signOut(auth).catch((error) => {
-      console.log("error.message", error.message);
-    });
   };
+
+  useEffect(async () => {
+    await getLoginUserData();
+  }, [isFocused]);
 
   return (
     <ScrollView>
@@ -71,7 +76,7 @@ export const Home = () => {
         <View style={styles.center}>
           <View style={styles.profile}>
             <View style={styles.profileCategory}>
-              <Text style={styles.headingText}>{i18n.t("myUserName")}</Text>
+              <Text style={styles.headingText}>ユーザー名</Text>
               <Text style={styles.profileText}>{name}</Text>
             </View>
             <View style={styles.profileCategory}>
@@ -140,7 +145,6 @@ const styles = StyleSheet.create({
   profileCategory: {
     margin: 5,
     marginTop: 10,
-    // backgroundColor: "red",
   },
   profileText: {
     fontSize: 28,
