@@ -22,20 +22,57 @@ export const Ranking = () => {
     }
   };
 
-  useEffect(async () => {
-    const getDatas = collection(db, "users");
-    const rankingQuerySnapshot = await getDocs(getDatas);
-    const rankingArray = [];
-    rankingQuerySnapshot.forEach((docs) => {
-      rankingArray.push({
-        ranking: docs.data().ranking,
-        name: docs.data().name,
-        monthlyCoinUsage: docs.data().monthlyCoinUsage,
+  const userData = [];
+  const getUserData = async () => {
+    const getCollection = await getDocs(collection(db, "users"));
+    getCollection.forEach((docs) => {
+      userData.push({
         id: docs.id,
+        name: docs.data().name,
+        email: docs.data().email,
+        password: docs.data().password,
+        coinOwnership: docs.data().coinOwnership,
+        monthlyCoinUsage: docs.data().monthlyCoinUsage,
+        sumCoinUsage: docs.data().sumCoinUsage,
+        time: docs.data().time,
       });
     });
-    setRankingListData(rankingArray);
-  }, [isFocused]);
+  };
+
+  const ascendingOrder = (array) => {
+    array.time = array.sort((a, b) => {
+      const x = a["monthlyCoinUsage"];
+      const y = b["monthlyCoinUsage"];
+      if (x > y) {
+        return -1;
+      }
+      if (x < y) {
+        return 1;
+      }
+      return 0;
+    });
+    return array;
+  };
+
+  const descendingOrder = (array) => {
+    array.monthlyCoinUsage = array.sort((a, b) => {
+      const x = a["monthlyCoinUsage"];
+      const y = b["monthlyCoinUsage"];
+      if (x > y) {
+        return -1;
+      }
+      if (x < y) {
+        return 1;
+      }
+      return 0;
+    });
+    return array;
+  };
+
+  const getRankingData = async () => {
+    await getUserData();
+    setRankingListData(userData);
+  };
 
   if (buttonUpOrDown === true) {
     rankingListData.monthlyCoinUsage = rankingListData.sort((a, b) => {
@@ -71,6 +108,10 @@ export const Ranking = () => {
       }
     });
   }
+
+  useEffect(async () => {
+    await getRankingData();
+  }, [isFocused]);
 
   return (
     <View>
