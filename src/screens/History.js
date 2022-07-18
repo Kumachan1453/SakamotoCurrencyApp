@@ -71,6 +71,36 @@ export const History = () => {
     });
   };
 
+  const ascendingOrder = (array) => {
+    array.time = array.sort((a, b) => {
+      const x = a["time"];
+      const y = b["time"];
+      if (x > y) {
+        return -1;
+      }
+      if (x < y) {
+        return 1;
+      }
+      return 0;
+    });
+    return array;
+  };
+
+  const descendingOrder = (array) => {
+    array.time = array.sort((a, b) => {
+      const x = a["time"];
+      const y = b["time"];
+      if (x > y) {
+        return 1;
+      }
+      if (x < y) {
+        return -1;
+      }
+      return 0;
+    });
+    return array;
+  };
+
   const update = async () => {
     await getHistoryData();
     const historyFilter = historyData.filter((login) => {
@@ -78,18 +108,8 @@ export const History = () => {
     });
 
     if (buttonUpOrDown === false) {
-      historyFilter.time = historyFilter.sort((a, b) => {
-        const x = a["time"];
-        const y = b["time"];
-        if (x > y) {
-          return -1;
-        }
-        if (x < y) {
-          return 1;
-        }
-        return 0;
-      });
-      setHistoryListData(historyFilter);
+      const ascendingHistoryFilter = ascendingOrder(historyFilter);
+      setHistoryListData(ascendingHistoryFilter);
     } else if (buttonUpOrDown === true) {
       historyFilter.time = historyFilter.sort((a, b) => {
         const x = a["time"];
