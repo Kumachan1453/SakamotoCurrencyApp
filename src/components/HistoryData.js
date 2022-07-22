@@ -1,12 +1,10 @@
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "./Firebase";
 
-const HistoryData = [];
-
-const getHistoryData = async () => {
+export const GetHistoryData = async ({ array }) => {
   const getCollection = await getDocs(collection(db, "usersHistory"));
   getCollection.forEach((docs) => {
-    HistoryData.push({
+    array.push({
       name: docs.data().name,
       email: docs.data().email,
       recipientUserEmail: docs.data().recipientUserEmail,
@@ -19,6 +17,5 @@ const getHistoryData = async () => {
     });
   });
 };
-getHistoryData();
 
-export { HistoryData };
+export default GetHistoryData;
