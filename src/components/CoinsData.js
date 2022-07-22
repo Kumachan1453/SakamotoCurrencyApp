@@ -1,12 +1,10 @@
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "./Firebase";
 
-const coinsData = [];
-
-const getCoinsData = async () => {
+const GetCoinsData = async ({ array }) => {
   const getCollection = await getDocs(collection(db, "coins"));
   getCollection.forEach((docs) => {
-    coinsData.push({
+    array.push({
       name: docs.data().name,
       email: docs.data().email,
       recipientUserEmail: docs.data().recipientUserEmail,
@@ -18,6 +16,5 @@ const getCoinsData = async () => {
     });
   });
 };
-getCoinsData();
 
-export { coinsData };
+export default GetCoinsData;

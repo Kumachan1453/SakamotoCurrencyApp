@@ -15,6 +15,8 @@ import { getAuth } from "firebase/auth";
 import { useIsFocused, useRoute } from "@react-navigation/native";
 import { db } from "../components/Firebase";
 import { howMuchDouYouUseYourCoinThisMonth } from "../components/PatternText";
+import GetCoinsData from "../components/CoinsData";
+import GetUserData from "../components/UserData";
 
 export const Gift = () => {
   const route = useRoute();
@@ -32,38 +34,7 @@ export const Gift = () => {
   const isFocused = useIsFocused();
 
   const coinsData = [];
-  const getCoinsData = async () => {
-    const getCollection = await getDocs(collection(db, "coins"));
-    getCollection.forEach((docs) => {
-      coinsData.push({
-        name: docs.data().name,
-        email: docs.data().email,
-        recipientUserEmail: docs.data().recipientUserEmail,
-        recipientUserId: docs.data().recipientUserId,
-        sendingCoin: docs.data().sendingCoin,
-        subId: docs.data().subId,
-        time: docs.data().time,
-        id: docs.id,
-      });
-    });
-  };
-
   const userData = [];
-  const getUserData = async () => {
-    const getCollection = await getDocs(collection(db, "users"));
-    getCollection.forEach((docs) => {
-      userData.push({
-        id: docs.id,
-        name: docs.data().name,
-        email: docs.data().email,
-        password: docs.data().password,
-        coinOwnership: docs.data().coinOwnership,
-        monthlyCoinUsage: docs.data().monthlyCoinUsage,
-        sumCoinUsage: docs.data().sumCoinUsage,
-        time: docs.data().time,
-      });
-    });
-  };
 
   const ascendingOrder = (array) => {
     array.time = array.sort((a, b) => {
@@ -81,11 +52,11 @@ export const Gift = () => {
   };
 
   const getLoginUserData = async () => {
-    await getCoinsData();
+    await GetCoinsData({ array: coinsData });
     const coinsDataTime = ascendingOrder(coinsData);
     setGiftListData(coinsDataTime);
 
-    await getUserData();
+    await GetUserData({ array: userData });
     const loginFilter = userData.filter((login) => {
       return email === login.email;
     });
@@ -97,7 +68,7 @@ export const Gift = () => {
   };
 
   const updateData = async (item) => {
-    await getUserData();
+    await GetUserData({ array: userData });
     const loginFilter = userData.filter((login) => {
       return email === login.email;
     });
@@ -108,7 +79,7 @@ export const Gift = () => {
       time: new Date().toLocaleString(),
     });
 
-    await getCoinsData();
+    await GetCoinsData({ array: coinsData });
     const giftHistory = await addDoc(collection(db, "usersHistory"), {
       name: snapData.data().name,
       email: snapData.data().email,
