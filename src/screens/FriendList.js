@@ -4,8 +4,8 @@ import { FriendButton } from "../components/FriendButton";
 import { getAuth } from "firebase/auth";
 import { useIsFocused } from "@react-navigation/native";
 import TrueOrFalseButton from "../components/TrueOrFalseButton";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "../components/Firebase";
+import GetUserData from "../components/UserData";
+import GetHistoryData from "../components/HistoryData";
 
 export const FriendList = ({ navigation }) => {
   const isFocused = useIsFocused();
@@ -25,39 +25,9 @@ export const FriendList = ({ navigation }) => {
       setButtonTrueOrFalse(false);
     }
   };
-  const userData = [];
-  const getUserData = async () => {
-    const getCollection = await getDocs(collection(db, "users"));
-    getCollection.forEach((docs) => {
-      userData.push({
-        id: docs.id,
-        name: docs.data().name,
-        email: docs.data().email,
-        password: docs.data().password,
-        coinOwnership: docs.data().coinOwnership,
-        monthlyCoinUsage: docs.data().monthlyCoinUsage,
-        sumCoinUsage: docs.data().sumCoinUsage,
-        time: docs.data().time,
-      });
-    });
-  };
 
+  const userData = [];
   const historyData = [];
-  const getHistoryData = async () => {
-    const getCollection = await getDocs(collection(db, "usersHistory"));
-    getCollection.forEach((docs) => {
-      historyData.push({
-        name: docs.data().name,
-        email: docs.data().email,
-        recipientUserEmail: docs.data().recipientUserEmail,
-        recipientUserId: docs.data().recipientUserId,
-        recipientUserName: docs.data().recipientUserName,
-        sendOrGift: docs.data().sendOrGift,
-        sendingCoin: docs.data().sendingCoin,
-        time: docs.data().time,
-      });
-    });
-  };
 
   const ascendingOrder = (array) => {
     array.time = array.sort((a, b) => {
@@ -75,8 +45,8 @@ export const FriendList = ({ navigation }) => {
   };
 
   const functionInUseEffect = async () => {
-    await getUserData();
-    await getHistoryData();
+    await GetUserData({ array: userData });
+    await GetHistoryData({ array: historyData });
     const historyLoginFilter = historyData.filter((login) => {
       return email === login.email;
     });

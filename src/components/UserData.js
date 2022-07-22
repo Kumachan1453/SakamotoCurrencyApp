@@ -1,24 +1,23 @@
-// import { collection, getDocs } from "firebase/firestore";
-// import { db } from "./Firebase";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "./Firebase";
 
 // const userData = [];
-// const getUserData = async () => {
-//   const getCollection = await getDocs(collection(db, "users"));
-//   getCollection.forEach((docs) => {
-//     userData.push({
-//       id: docs.id,
-//       name: docs.data().name,
-//       email: docs.data().email,
-//       password: docs.data().password,
-//       coinOwnership: docs.data().coinOwnership,
-//       monthlyCoinUsage: docs.data().monthlyCoinUsage,
-//       sumCoinUsage: docs.data().sumCoinUsage,
-//       time: docs.data().time,
-//     });
-//   });
-// };
-// getUserData();
-// console.log("UserData", UserData);
+export const GetUserData = async ({ array }) => {
+  const getCollection = await getDocs(collection(db, "users"));
+  getCollection.forEach((docs) => {
+    array.push({
+      id: docs.id,
+      name: docs.data().name,
+      email: docs.data().email,
+      password: docs.data().password,
+      coinOwnership: docs.data().coinOwnership,
+      monthlyCoinUsage: docs.data().monthlyCoinUsage,
+      sumCoinUsage: docs.data().sumCoinUsage,
+      time: docs.data().time,
+    });
+  });
+};
+// GetUserData();
 
 // const UserDataId = [];
 // const getUserDataId = async () => {
@@ -137,15 +136,4 @@
 // };
 // loginUser();
 
-// export {
-// userData,
-// getUserData,
-// UserDataCoinOwnership,
-// UserDataEmail,
-// UserDataId,
-// UserDataMonthlyCoinUsage,
-// UserDataName,
-// UserDataPassword,
-// UserDataSumCoinUsage,
-// UserDataIdAndEmail,
-// };
+export default GetUserData;
