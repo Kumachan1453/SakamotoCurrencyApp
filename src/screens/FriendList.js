@@ -6,6 +6,7 @@ import { useIsFocused } from "@react-navigation/native";
 import TrueOrFalseButton from "../components/TrueOrFalseButton";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../components/Firebase";
+import GetUserData from "../components/UserData";
 
 export const FriendList = ({ navigation }) => {
   const isFocused = useIsFocused();
@@ -26,21 +27,21 @@ export const FriendList = ({ navigation }) => {
     }
   };
   const userData = [];
-  const getUserData = async () => {
-    const getCollection = await getDocs(collection(db, "users"));
-    getCollection.forEach((docs) => {
-      userData.push({
-        id: docs.id,
-        name: docs.data().name,
-        email: docs.data().email,
-        password: docs.data().password,
-        coinOwnership: docs.data().coinOwnership,
-        monthlyCoinUsage: docs.data().monthlyCoinUsage,
-        sumCoinUsage: docs.data().sumCoinUsage,
-        time: docs.data().time,
-      });
-    });
-  };
+  // const getUserData = async () => {
+  //   const getCollection = await getDocs(collection(db, "users"));
+  //   getCollection.forEach((docs) => {
+  //     userData.push({
+  //       id: docs.id,
+  //       name: docs.data().name,
+  //       email: docs.data().email,
+  //       password: docs.data().password,
+  //       coinOwnership: docs.data().coinOwnership,
+  //       monthlyCoinUsage: docs.data().monthlyCoinUsage,
+  //       sumCoinUsage: docs.data().sumCoinUsage,
+  //       time: docs.data().time,
+  //     });
+  //   });
+  // };
 
   const historyData = [];
   const getHistoryData = async () => {
@@ -75,7 +76,7 @@ export const FriendList = ({ navigation }) => {
   };
 
   const functionInUseEffect = async () => {
-    await getUserData();
+    await GetUserData({ array: userData });
     await getHistoryData();
     const historyLoginFilter = historyData.filter((login) => {
       return email === login.email;
