@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, FlatList, View, TouchableOpacity } from "react-native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { collection, getDocs, doc } from "firebase/firestore";
-import { db } from "../components/Firebase";
+import { StyleSheet, FlatList, View } from "react-native";
 import { getAuth } from "firebase/auth";
 import { useIsFocused } from "@react-navigation/native";
 import { HistoryList } from "../components/HistoryList";
 import { TrueOrFalseButton } from "../components/TrueOrFalseButton";
+import GetHistoryData from "../components/HistoryData";
 
-const Stack = createNativeStackNavigator();
 export const History = () => {
   const isFocused = useIsFocused();
   const [buttonUpOrDown, setButtonUpOrDown] = useState(false);
@@ -53,22 +50,6 @@ export const History = () => {
   };
 
   const historyData = [];
-  const getHistoryData = async () => {
-    const getCollection = await getDocs(collection(db, "usersHistory"));
-    getCollection.forEach((docs) => {
-      historyData.push({
-        name: docs.data().name,
-        email: docs.data().email,
-        recipientUserEmail: docs.data().recipientUserEmail,
-        recipientUserId: docs.data().recipientUserId,
-        recipientUserName: docs.data().recipientUserName,
-        sendOrGift: docs.data().sendOrGift,
-        sendingCoin: docs.data().sendingCoin,
-        time: docs.data().time,
-        id: docs.id,
-      });
-    });
-  };
 
   const ascendingOrder = (array) => {
     array.time = array.sort((a, b) => {
@@ -101,7 +82,7 @@ export const History = () => {
   };
 
   const update = async () => {
-    await getHistoryData();
+    await GetHistoryData({ array: historyData });
     const historyFilter = historyData.filter((login) => {
       return email === login.email;
     });
