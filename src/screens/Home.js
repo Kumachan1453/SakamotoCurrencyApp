@@ -9,6 +9,7 @@ import { howMuchDouYouUseYourCoinThisMonth } from "../components/PatternText";
 import { LongButton } from "../components/LongButton";
 import ModalTemplete from "../components/ModalTemplete";
 import MoneyText from "../components/MoneyText";
+import GetUserData from "../components/UserData";
 
 export const Home = () => {
   const isFocused = useIsFocused();
@@ -31,21 +32,6 @@ export const Home = () => {
   });
 
   const userData = [];
-  const getUserData = async () => {
-    const getCollection = await getDocs(collection(db, "users"));
-    getCollection.forEach((docs) => {
-      userData.push({
-        id: docs.id,
-        name: docs.data().name,
-        email: docs.data().email,
-        password: docs.data().password,
-        coinOwnership: docs.data().coinOwnership,
-        monthlyCoinUsage: docs.data().monthlyCoinUsage,
-        sumCoinUsage: docs.data().sumCoinUsage,
-        time: docs.data().time,
-      });
-    });
-  };
 
   const handleLogout = () => {
     signOut(auth).catch((error) => {
@@ -54,7 +40,7 @@ export const Home = () => {
   };
 
   const getLoginUserData = async () => {
-    await getUserData();
+    await GetUserData({ array: userData });
     const loginFilter = userData.filter((login) => {
       return email === login.email;
     });
