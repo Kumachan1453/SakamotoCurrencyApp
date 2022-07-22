@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { FlatList, View } from "react-native";
-import { getDocs, collection } from "firebase/firestore";
-import { db } from "../components/Firebase";
 import { useIsFocused } from "@react-navigation/native";
 import { getAuth } from "firebase/auth";
 import FriendButton from "../components/FriendButton";
 import { TrueOrFalseButton } from "../components/TrueOrFalseButton";
+import GetUserData from "../components/UserData";
 
 export const Ranking = () => {
   const isFocused = useIsFocused();
@@ -23,54 +22,9 @@ export const Ranking = () => {
   };
 
   const userData = [];
-  const getUserData = async () => {
-    const getCollection = await getDocs(collection(db, "users"));
-    getCollection.forEach((docs) => {
-      userData.push({
-        id: docs.id,
-        name: docs.data().name,
-        email: docs.data().email,
-        password: docs.data().password,
-        coinOwnership: docs.data().coinOwnership,
-        monthlyCoinUsage: docs.data().monthlyCoinUsage,
-        sumCoinUsage: docs.data().sumCoinUsage,
-        time: docs.data().time,
-      });
-    });
-  };
-
-  const ascendingOrder = (array) => {
-    array.time = array.sort((a, b) => {
-      const x = a["monthlyCoinUsage"];
-      const y = b["monthlyCoinUsage"];
-      if (x > y) {
-        return -1;
-      }
-      if (x < y) {
-        return 1;
-      }
-      return 0;
-    });
-    return array;
-  };
-
-  const descendingOrder = (array) => {
-    array.monthlyCoinUsage = array.sort((a, b) => {
-      const x = a["monthlyCoinUsage"];
-      const y = b["monthlyCoinUsage"];
-      if (x > y) {
-        return -1;
-      }
-      if (x < y) {
-        return 1;
-      }
-      return 0;
-    });
-    return array;
-  };
 
   const getRankingData = async () => {
-    await getUserData();
+    await GetUserData({ array: userData });
     setRankingListData(userData);
   };
 
