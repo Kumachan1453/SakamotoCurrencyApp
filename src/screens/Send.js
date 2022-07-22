@@ -25,6 +25,7 @@ import { getAuth } from "firebase/auth";
 import { howMuchDouYouUseYourCoinThisMonth } from "../components/PatternText";
 import { Warning } from "../components/Warning";
 import LeafCoinMini from "../components/LeafCoinMini";
+import GetUserData from "../components/UserData";
 
 const Stack = createNativeStackNavigator();
 
@@ -50,24 +51,9 @@ export const Send = ({ navigation }) => {
   const isFocused = useIsFocused();
 
   const userData = [];
-  const getUserData = async () => {
-    const getCollection = await getDocs(collection(db, "users"));
-    getCollection.forEach((docs) => {
-      userData.push({
-        id: docs.id,
-        name: docs.data().name,
-        email: docs.data().email,
-        password: docs.data().password,
-        coinOwnership: docs.data().coinOwnership,
-        monthlyCoinUsage: docs.data().monthlyCoinUsage,
-        sumCoinUsage: docs.data().sumCoinUsage,
-        time: docs.data().time,
-      });
-    });
-  };
 
   const getLoginUserData = async () => {
-    await getUserData();
+    await GetUserData({ array: userData });
     const loginFilter = userData.filter((login) => {
       return email === login.email;
     });
@@ -114,7 +100,7 @@ export const Send = ({ navigation }) => {
   };
 
   const update = async () => {
-    await getUserData();
+    await GetUserData({ array: userData });
     const loginFilter = userData.filter((login) => {
       return email === login.email;
     });
