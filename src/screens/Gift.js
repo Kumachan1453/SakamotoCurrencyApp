@@ -11,15 +11,13 @@ import {
   addDoc,
 } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
-import { useIsFocused, useRoute } from "@react-navigation/native";
+import { useIsFocused } from "@react-navigation/native";
 import { db } from "../components/Firebase";
 import { howMuchDouYouUseYourCoinThisMonth } from "../components/PatternText";
 import GetCoinsData from "../components/CoinsData";
 import GetUserData from "../components/UserData";
 
 export const Gift = () => {
-  // リファクタリング対象
-  const route = useRoute();
   const [coinOwnership, setCoinOwnership] = useState(0);
   const [monthlyCoinUsage, setMonthlyCoinUsage] = useState(0);
   const [userId, setUserId] = useState("");
@@ -153,24 +151,6 @@ export const Gift = () => {
 };
 
 const styles = StyleSheet.create({
-  bigText: {
-    fontWeight: "bold",
-    fontSize: 20,
-    margin: 10,
-    marginTop: 20,
-  },
-  bigCoinText: {
-    fontWeight: "bold",
-    fontSize: 20,
-    marginTop: 10,
-    marginBottom: 30,
-  },
-  subText: {
-    color: "#808080",
-  },
-  flexDirectionRow: {
-    flexDirection: "row",
-  },
   allertText: {
     textAlign: "center",
     fontSize: 15,
@@ -181,46 +161,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: "gray",
     marginTop: 20,
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: "white",
-    borderRadius: 20,
-    padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-  buttonOpen: {
-    backgroundColor: "#F194FF",
-  },
-  buttonClose: {
-    backgroundColor: "#2196F3",
-    width: 100,
-  },
-  textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: "center",
-  },
-  thanksTextStyle: {
-    color: "gray",
-    marginBottom: 15,
   },
 });
 
