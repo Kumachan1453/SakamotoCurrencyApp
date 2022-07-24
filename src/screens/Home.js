@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, ScrollView } from "react-native";
-import { getDoc, doc, collection, getDocs } from "firebase/firestore";
-import { onAuthStateChanged, signOut, getAuth } from "firebase/auth";
+import { getDoc, doc } from "firebase/firestore";
+import { signOut, getAuth } from "firebase/auth";
 import { auth } from "../components/Firebase";
 import { db } from "../components/Firebase";
 import { useIsFocused } from "@react-navigation/native";
@@ -18,24 +18,16 @@ export const Home = () => {
   const [name, setName] = useState("");
   const [coinOwnership, setCoinOwnership] = useState(0);
   const [monthlyCoinUsage, setMonthlyCoinUsage] = useState(0);
-  const [ranking, setRanking] = useState("ランク外");
 
   const getUserProfile = getAuth();
   const user = getUserProfile.currentUser;
   const email = user.email;
 
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      const uid = user.uid;
-    } else {
-    }
-  });
-
   const userData = [];
 
   const handleLogout = () => {
-    signOut(auth).catch((error) => {
-      console.log("error.message", error.message);
+    signOut(auth).catch(() => {
+      alert("エラーが発生しました。");
     });
   };
 
@@ -49,7 +41,6 @@ export const Home = () => {
     setName(snapData.data().name);
     setCoinOwnership(Math.round(snapData.data().coinOwnership));
     setMonthlyCoinUsage(Math.round(snapData.data().monthlyCoinUsage));
-    setRanking(Math.round(snapData.data().ranking));
   };
 
   useEffect(async () => {
@@ -125,9 +116,6 @@ const styles = StyleSheet.create({
   center: {
     marginTop: 10,
   },
-  alignItemsCenter: {
-    alignItems: "center",
-  },
   profileCategory: {
     margin: 5,
     marginTop: 10,
@@ -135,35 +123,12 @@ const styles = StyleSheet.create({
   profileText: {
     fontSize: 28,
   },
-  CircleIconPlacement: {
-    marginTop: 30,
-  },
-  textBox: {
-    width: 230,
-    height: 60,
-    borderWidth: 1,
-    borderColor: "gray",
-    padding: 10,
-    borderRadius: 15,
-  },
   headingText: {
     fontWeight: "bold",
     fontSize: 13,
     marginTop: 20,
     marginBottom: 10,
     color: "gray",
-  },
-  bigCoinText: {
-    fontWeight: "bold",
-    fontSize: 20,
-    marginTop: 10,
-    marginBottom: 30,
-  },
-  subText: {
-    color: "#808080",
-  },
-  flexDirectionRow: {
-    flexDirection: "row",
   },
   line: {
     width: "100%",
@@ -174,17 +139,6 @@ const styles = StyleSheet.create({
   logoutPlacement: {
     alignItems: "center",
     marginTop: 50,
-  },
-  unitFlexDirectionRow: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-  },
-  unit: {
-    fontSize: 28,
-    marginLeft: 7,
-  },
-  backgroundColorChange: {
-    backgroundColor: "red",
   },
 });
 

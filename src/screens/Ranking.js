@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { FlatList, View } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
-import { getAuth } from "firebase/auth";
 import FriendButton from "../components/FriendButton";
 import { TrueOrFalseButton } from "../components/TrueOrFalseButton";
 import GetUserData from "../components/UserData";
 
 export const Ranking = () => {
   const isFocused = useIsFocused();
-  const getUserProfile = getAuth();
-  const user = getUserProfile.currentUser;
   const [rankingListData, setRankingListData] = useState([]);
   const [buttonUpOrDown, setButtonUpOrDown] = useState(false);
 
