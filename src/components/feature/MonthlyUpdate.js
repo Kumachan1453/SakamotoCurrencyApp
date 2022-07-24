@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { getDoc, doc, collection, getDocs } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
-import { db } from "../components/Firebase";
+import { db } from "../Firebase";
 
 export const MonthlyUpdate = () => {
   const getUserProfile = getAuth();
