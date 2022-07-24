@@ -89,7 +89,7 @@ export const Send = ({ navigation }) => {
         time: new Date().toLocaleString(),
       });
     } else if (coinOwnership - sendingCoin < 0) {
-      alert("コインが足りません");
+      alert("Konが足りません");
     } else {
       alert("使用できない文字です");
     }
@@ -214,7 +214,7 @@ export const Send = ({ navigation }) => {
         </View>
         <View style={styles.line} />
         <View style={styles.alignItemsCenter}>
-          <Text style={styles.bigText}>あなたが送るコインの額</Text>
+          <Text style={styles.bigText}>あなたが送るKonの額</Text>
           <View style={styles.flexDirectionRow}>
             <TextInput
               style={isButtonDisabled ? styles.errorInput : styles.input}
@@ -241,7 +241,7 @@ export const Send = ({ navigation }) => {
               Alert.alert("Modal has been closed.");
               setModalVisible(!modalVisible);
             }}
-            centerText={"本当にコインを送りますか？"}
+            centerText={"本当にKonを送りますか？"}
             buttonPlacement={true}
             leftText={"キャンセル"}
             rightText={"OK"}
@@ -256,7 +256,7 @@ export const Send = ({ navigation }) => {
           />
           <View style={styles.alignItemsCenter}>
             <Button
-              content="コインを送る"
+              content="Konを送る"
               onPress={() => {
                 setModalVisible(true);
               }}

@@ -3,14 +3,7 @@ import { FriendList } from "./FriendList";
 import { Send } from "./Send";
 import { useRoute } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import {
-  getFirestore,
-  getDocs,
-  doc,
-  updateDoc,
-  collection,
-  addDoc,
-} from "firebase/firestore";
+import { getDocs, collection } from "firebase/firestore";
 import { db } from "../components/Firebase";
 
 const Stack = createNativeStackNavigator();
@@ -46,7 +39,7 @@ export const ScreenNavStack = () => {
         component={Send}
         options={{
           headerShown: true,
-          title: `コインを送る`,
+          title: `Konを送る`,
           headerStyle: {
             backgroundColor: "#ff9900",
           },
