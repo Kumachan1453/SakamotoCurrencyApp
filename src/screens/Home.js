@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, ScrollView } from "react-native";
-import { getDoc, doc, collection, getDocs } from "firebase/firestore";
+import { getDoc, doc } from "firebase/firestore";
 import { onAuthStateChanged, signOut, getAuth } from "firebase/auth";
 import { auth } from "../components/Firebase";
 import { db } from "../components/Firebase";
@@ -18,6 +18,7 @@ export const Home = () => {
   const [name, setName] = useState("");
   const [coinOwnership, setCoinOwnership] = useState(0);
   const [monthlyCoinUsage, setMonthlyCoinUsage] = useState(0);
+  // リファクタリング対象
   const [ranking, setRanking] = useState("ランク外");
 
   const getUserProfile = getAuth();

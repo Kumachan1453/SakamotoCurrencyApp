@@ -9,6 +9,7 @@ import GetUserData from "../components/UserData";
 export const Ranking = () => {
   const isFocused = useIsFocused();
   const getUserProfile = getAuth();
+  // リファクタリング対象
   const user = getUserProfile.currentUser;
   const [rankingListData, setRankingListData] = useState([]);
   const [buttonUpOrDown, setButtonUpOrDown] = useState(false);

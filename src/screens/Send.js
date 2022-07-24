@@ -18,7 +18,7 @@ import {
   addDoc,
 } from "firebase/firestore";
 import { useIsFocused, useRoute } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+// import { createNativeStackNavigator } from "@react-navigation/native-stack";　リファクタリング対象
 import ModalTemplete from "../components/ModalTemplete";
 import { db } from "../components/Firebase";
 import { getAuth } from "firebase/auth";
@@ -27,7 +27,7 @@ import { Warning } from "../components/Warning";
 import LeafCoinMini from "../components/LeafCoinMini";
 import GetUserData from "../components/UserData";
 
-const Stack = createNativeStackNavigator();
+// const Stack = createNativeStackNavigator();　リファクタリング対象
 
 export const Send = ({ navigation }) => {
   const getUserProfile = getAuth();

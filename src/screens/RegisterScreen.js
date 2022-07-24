@@ -7,7 +7,7 @@ import {
   StyleSheet,
   Alert,
 } from "react-native";
-import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import {
   jpCheck,
   blankCheck,
@@ -17,7 +17,7 @@ import {
 import { RegisterButton } from "../components/RegisterButton";
 import { LoginButton } from "../components/LoginButton";
 import { auth, db } from "../components/Firebase";
-import { addDoc, collection, query, getDocs } from "firebase/firestore";
+import { addDoc, collection, getDocs } from "firebase/firestore";
 import { Warning } from "../components/Warning";
 import { useIsFocused } from "@react-navigation/native";
 import { useStateIfMounted } from "use-state-if-mounted";
@@ -27,6 +27,7 @@ export const RegisterScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userName, setUserName] = useState("");
+  // リファクタリング対象
   const [signError, setSignError] = useState(false);
 
   const userNameLength = userName.length;
@@ -103,6 +104,7 @@ export const RegisterScreen = ({ navigation }) => {
     } else {
       const handleRegister = async (user) => {
         try {
+          // リファクタリング対象 変数の箇所のみ削除。await以降削除しない。
           const addUser = await addDoc(collection(db, "users"), {
             name: userName,
             email: email,

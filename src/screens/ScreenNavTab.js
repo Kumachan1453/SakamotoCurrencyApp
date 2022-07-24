@@ -10,6 +10,7 @@ import History from "./History";
 const Tab = createBottomTabNavigator();
 
 export const ScreenNavTab = () => {
+  // リファクタリング対象
   const today = new Date();
   const firstDay = today.getDate() === 1;
   const onMinutes = today.getMinutes() === 50;

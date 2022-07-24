@@ -6,7 +6,6 @@ import {
   getDoc,
   doc,
   updateDoc,
-  getDocs,
   collection,
   deleteDoc,
   addDoc,
@@ -19,6 +18,7 @@ import GetCoinsData from "../components/CoinsData";
 import GetUserData from "../components/UserData";
 
 export const Gift = () => {
+  // リファクタリング対象
   const route = useRoute();
   const [coinOwnership, setCoinOwnership] = useState(0);
   const [monthlyCoinUsage, setMonthlyCoinUsage] = useState(0);

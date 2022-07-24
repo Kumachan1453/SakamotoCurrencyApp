@@ -10,6 +10,7 @@ const Stack = createNativeStackNavigator();
 
 const getData = async () => {
   const getDatas = collection(db, "users");
+  // リファクタリング対象
   const querySnapshot = await getDocs(getDatas);
 };
 getData();

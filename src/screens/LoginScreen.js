@@ -12,6 +12,7 @@ import { LoginButton } from "../components/LoginButton";
 import { RegisterButton } from "../components/RegisterButton";
 
 export const LoginScreen = ({ navigation }) => {
+  // リファクタリング対象
   const getUserProfile = getAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
