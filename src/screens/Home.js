@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, ScrollView } from "react-native";
 import { getDoc, doc } from "firebase/firestore";
-import { onAuthStateChanged, signOut, getAuth } from "firebase/auth";
+import { signOut, getAuth } from "firebase/auth";
 import { auth } from "../components/Firebase";
 import { db } from "../components/Firebase";
 import { useIsFocused } from "@react-navigation/native";
@@ -18,24 +18,16 @@ export const Home = () => {
   const [name, setName] = useState("");
   const [coinOwnership, setCoinOwnership] = useState(0);
   const [monthlyCoinUsage, setMonthlyCoinUsage] = useState(0);
-  const [ranking, setRanking] = useState("ランク外");
 
   const getUserProfile = getAuth();
   const user = getUserProfile.currentUser;
   const email = user.email;
 
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      const uid = user.uid;
-    } else {
-    }
-  });
-
   const userData = [];
 
   const handleLogout = () => {
-    signOut(auth).catch((error) => {
-      console.log("error.message", error.message);
+    signOut(auth).catch(() => {
+      alert("エラーが発生しました。");
     });
   };
 
@@ -49,7 +41,6 @@ export const Home = () => {
     setName(snapData.data().name);
     setCoinOwnership(Math.round(snapData.data().coinOwnership));
     setMonthlyCoinUsage(Math.round(snapData.data().monthlyCoinUsage));
-    setRanking(Math.round(snapData.data().ranking));
   };
 
   useEffect(async () => {
