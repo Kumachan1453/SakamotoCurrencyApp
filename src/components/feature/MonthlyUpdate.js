@@ -10,27 +10,25 @@ export const MonthlyUpdate = () => {
 
   const today = new Date();
   const firstDay = today.getDate() === 29;
-  const onHours = today.getHours() === 13;
-  const offHours = today.getHours() === 13;
-  const offMinutes = today.getMinutes() === 59;
+  const onHours = today.getHours() === 14;
+  const offHours = today.getHours() === 14;
+  const offMinutes = today.getMinutes() === 22;
 
   const monthlyUpdate = async () => {
     const getData = doc(db, "users", "3cml6DnW3jPVmqLnnLkZ");
+    // const getData = collection(db, "users");
     const snapData = await getDoc(getData);
     if (firstDay && onHours && snapData.data().updateNumber < 1) {
-      useEffect(() => {
-        setCoinOwnership(
-          snapData.data().coinOwnership * 0.95 +
-            snapData.data().monthlyCoinUsage * 0.05
-        );
-        setMonthlyCoinUsage(0);
-        setUpdateNumber(snapData.data().updateNumber + 1);
-      }, onHours);
+      updateDoc(getData, {
+        coinOwnership:
+          Math.round(snapData.data().coinOwnership * 0.95) +
+          Math.round(snapData.data().monthlyCoinUsage * 0.05),
+        monthlyCoinUsage: 0,
+        updateNumber: snapData.data().updateNumber + 1,
+      });
     } else if (offHours && offMinutes && snapData.data().updateNumber === 1) {
-      useEffect(() => {
-        updateDoc(getData, {
-          updateNumber: snapData.data().updateNumber - 1,
-        });
+      updateDoc(getData, {
+        updateNumber: snapData.data().updateNumber - 1,
       });
     }
   };
