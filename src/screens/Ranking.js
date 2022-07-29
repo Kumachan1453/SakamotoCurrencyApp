@@ -37,6 +37,15 @@ export const Ranking = () => {
       }
       return 0;
     });
+    let tmp;
+    rankingListData.monthlyCoinUsage.forEach((item, index) => {
+      if (item.monthlyCoinUsage !== tmp) {
+        item.ranking = index + 1;
+        tmp = item.monthlyCoinUsage;
+      } else if (item.monthlyCoinUsage === tmp) {
+        item.ranking = index;
+      }
+    });
   } else if (buttonUpOrDown === false) {
     rankingListData.monthlyCoinUsage = rankingListData.sort((a, b) => {
       const x = a["monthlyCoinUsage"];
