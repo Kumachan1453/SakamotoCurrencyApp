@@ -131,7 +131,6 @@ export const RegisterScreen = ({ navigation }) => {
           } else {
             signError = true;
             Alert.alert("エラーです。異なる入力内容でもう一度お試しください");
-            console.log("error.message", error.message);
           }
         }
       };

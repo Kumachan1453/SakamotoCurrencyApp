@@ -32,10 +32,6 @@ const getUserDataName = async () => {
   });
 };
 getUserDataName();
-console.log(
-  "RecentlyExchangedFriendsDataRecipientUserId",
-  RecentlyExchangedFriendsDataRecipientUserId
-);
 
 export {
   RecentlyExchangedFriendsData,

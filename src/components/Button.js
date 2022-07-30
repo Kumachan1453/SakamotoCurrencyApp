@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    borderRadius: 10,
   },
   onListItemPlacement: {
     width: 200,
@@ -41,6 +42,7 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    borderRadius: 10,
   },
   listStyleText: {
     fontSize: 22,
