@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
   },
   deleteAccountPlacement: {
     alignItems: "center",
-    marginTop: 10,
+    marginTop: 11,
     color: "red",
   },
 });
