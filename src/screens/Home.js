@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, ScrollView } from "react-native";
-import { getDoc, doc } from "firebase/firestore";
+import { getDoc, doc, deleteDoc, addDoc, collection } from "firebase/firestore";
 import { signOut, getAuth, deleteUser } from "firebase/auth";
 import { auth } from "../components/Firebase";
 import { db } from "../components/Firebase";
@@ -35,7 +35,22 @@ export const Home = () => {
 
   const deleteAccount = () => {
     deleteUser(user)
-      .then(() => {})
+      .then(async () => {
+        await GetUserData({ array: userData });
+        const loginFilter = userData.filter((login) => {
+          return email === login.email;
+        });
+        await addDoc(collection(db, "deleteUser"), {
+          name: loginFilter[0].name,
+          email: loginFilter[0].email,
+          password: loginFilter[0].password,
+          coinOwnership: loginFilter[0].coinOwnership,
+          monthlyCoinUsage: loginFilter[0].monthlyCoinUsage,
+          sumCoinUsage: loginFilter[0].sumCoinUsage,
+          time: new Date().toLocaleString(),
+        });
+        await deleteDoc(doc(db, "users", loginFilter[0].id));
+      })
       .catch((error) => {
         alert("エラーが発生しました。");
       });
