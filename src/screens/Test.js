@@ -8,9 +8,7 @@ export const Test = () => {
   const handleLogout = () => {
     signOut(auth)
       .then(() => {})
-      .catch((error) => {
-        console.log("error.message", error.message);
-      });
+      .catch((error) => {});
   };
   return (
     <View>
