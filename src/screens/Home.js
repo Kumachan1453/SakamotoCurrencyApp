@@ -10,6 +10,7 @@ import { LongButton } from "../components/LongButton";
 import ModalTemplete from "../components/ModalTemplete";
 import MoneyText from "../components/MoneyText";
 import GetUserData from "../components/UserData";
+import LongRedButton from "../components/LongRedButton";
 
 export const Home = () => {
   const isFocused = useIsFocused();
@@ -151,7 +152,7 @@ export const Home = () => {
             }}
           />
           <View style={styles.deleteAccountPlacement}>
-            <LongButton
+            <LongRedButton
               onPress={() => {
                 setModalVisibleDeleteAccount(true);
               }}
