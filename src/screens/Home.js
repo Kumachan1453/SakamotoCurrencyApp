@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, ScrollView } from "react-native";
 import { getDoc, doc } from "firebase/firestore";
-import { signOut, getAuth } from "firebase/auth";
+import { signOut, getAuth, deleteUser } from "firebase/auth";
 import { auth } from "../components/Firebase";
 import { db } from "../components/Firebase";
 import { useIsFocused } from "@react-navigation/native";
@@ -14,6 +14,8 @@ import GetUserData from "../components/UserData";
 export const Home = () => {
   const isFocused = useIsFocused();
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisibleDeleteAccount, setModalVisibleDeleteAccount] =
+    useState(false);
 
   const [name, setName] = useState("");
   const [coinOwnership, setCoinOwnership] = useState(0);
@@ -29,6 +31,14 @@ export const Home = () => {
     signOut(auth).catch(() => {
       alert("エラーが発生しました。");
     });
+  };
+
+  const deleteAccount = () => {
+    deleteUser(user)
+      .then(() => {})
+      .catch((error) => {
+        alert("エラーが発生しました。");
+      });
   };
 
   const getLoginUserData = async () => {
@@ -106,6 +116,33 @@ export const Home = () => {
               letter={"ログアウト"}
             />
           </View>
+          <ModalTemplete
+            transparent={false}
+            visible={modalVisibleDeleteAccount}
+            onRequestClose={() => {
+              Alert.alert("Modal has been closed.");
+              setModalVisibleDeleteAccount(!modalVisibleDeleteAccount);
+            }}
+            centerText={"本当にアカウントを削除しますか？"}
+            buttonPlacement={true}
+            leftText={"キャンセル"}
+            rightText={"OK"}
+            leftOnPress={() => {
+              setModalVisibleDeleteAccount(!modalVisibleDeleteAccount);
+            }}
+            rightOnPress={() => {
+              setModalVisibleDeleteAccount(!modalVisibleDeleteAccount);
+              deleteAccount();
+            }}
+          />
+          <View style={styles.deleteAccountPlacement}>
+            <LongButton
+              onPress={() => {
+                setModalVisibleDeleteAccount(true);
+              }}
+              letter={"アカウント削除"}
+            />
+          </View>
         </View>
       </View>
     </ScrollView>
@@ -138,7 +175,12 @@ const styles = StyleSheet.create({
   },
   logoutPlacement: {
     alignItems: "center",
-    marginTop: 50,
+    marginTop: 30,
+  },
+  deleteAccountPlacement: {
+    alignItems: "center",
+    marginTop: 10,
+    color: "red",
   },
 });
 
