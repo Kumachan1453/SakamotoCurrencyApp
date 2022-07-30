@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import { getDoc, doc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { db } from "../Firebase";
@@ -16,7 +15,6 @@ export const MonthlyUpdate = () => {
 
   const monthlyUpdate = async () => {
     const getData = doc(db, "users", "3cml6DnW3jPVmqLnnLkZ");
-    // const getData = collection(db, "users");
     const snapData = await getDoc(getData);
     if (firstDay && onHours && snapData.data().updateNumber < 1) {
       updateDoc(getData, {
