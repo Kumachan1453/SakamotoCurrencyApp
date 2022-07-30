@@ -18,7 +18,6 @@ import {
   addDoc,
 } from "firebase/firestore";
 import { useIsFocused, useRoute } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ModalTemplete from "../components/ModalTemplete";
 import { db } from "../components/Firebase";
 import { getAuth } from "firebase/auth";
@@ -26,8 +25,6 @@ import { howMuchDouYouUseYourCoinThisMonth } from "../components/PatternText";
 import { Warning } from "../components/Warning";
 import LeafCoinMini from "../components/LeafCoinMini";
 import GetUserData from "../components/UserData";
-
-const Stack = createNativeStackNavigator();
 
 export const Send = ({ navigation }) => {
   const getUserProfile = getAuth();
@@ -89,7 +86,7 @@ export const Send = ({ navigation }) => {
         time: new Date().toLocaleString(),
       });
     } else if (coinOwnership - sendingCoin < 0) {
-      alert("コインが足りません");
+      alert("Konが足りません");
     } else {
       alert("使用できない文字です");
     }
@@ -214,7 +211,7 @@ export const Send = ({ navigation }) => {
         </View>
         <View style={styles.line} />
         <View style={styles.alignItemsCenter}>
-          <Text style={styles.bigText}>あなたが送るコインの額</Text>
+          <Text style={styles.bigText}>あなたが送るKonの額</Text>
           <View style={styles.flexDirectionRow}>
             <TextInput
               style={isButtonDisabled ? styles.errorInput : styles.input}
@@ -241,7 +238,7 @@ export const Send = ({ navigation }) => {
               Alert.alert("Modal has been closed.");
               setModalVisible(!modalVisible);
             }}
-            centerText={"本当にコインを送りますか？"}
+            centerText={"本当にKonを送りますか？"}
             buttonPlacement={true}
             leftText={"キャンセル"}
             rightText={"OK"}
@@ -256,7 +253,7 @@ export const Send = ({ navigation }) => {
           />
           <View style={styles.alignItemsCenter}>
             <Button
-              content="コインを送る"
+              content="Konを送る"
               onPress={() => {
                 setModalVisible(true);
               }}
@@ -295,9 +292,6 @@ const styles = StyleSheet.create({
     borderColor: "red",
     padding: 10,
   },
-  subText: {
-    color: "#808080",
-  },
   flexDirectionRow: {
     flexDirection: "row",
   },
@@ -313,15 +307,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginTop: 30,
   },
-  sendMessage: {
-    marginBottom: 60,
-  },
   space: {
     marginBottom: 500,
-  },
-
-  twoButtonPlacement: {
-    flexDirection: "row",
   },
 });
 

@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect } from "react";
+import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { ScreenNavStack } from "./ScreenNavStack";
 import { Home } from "./Home";
@@ -10,15 +10,6 @@ import History from "./History";
 const Tab = createBottomTabNavigator();
 
 export const ScreenNavTab = () => {
-  const today = new Date();
-  const firstDay = today.getDate() === 1;
-  const onMinutes = today.getMinutes() === 50;
-  const offMinutes = today.getMinutes() === 19;
-  const onHours = today.getHours() === 9;
-  const offHours = today.getHours() === 9;
-
-  const [onHours2, setOnHours2] = useState(onHours);
-
   return (
     <Tab.Navigator
       initialRouteName="Home"

@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { FlatList, View } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
-import { getAuth } from "firebase/auth";
 import FriendButton from "../components/FriendButton";
 import { TrueOrFalseButton } from "../components/TrueOrFalseButton";
 import GetUserData from "../components/UserData";
 
 export const Ranking = () => {
   const isFocused = useIsFocused();
-  const getUserProfile = getAuth();
-  const user = getUserProfile.currentUser;
   const [rankingListData, setRankingListData] = useState([]);
   const [buttonUpOrDown, setButtonUpOrDown] = useState(false);
 
@@ -39,6 +36,15 @@ export const Ranking = () => {
         return -1;
       }
       return 0;
+    });
+    let tmp;
+    rankingListData.monthlyCoinUsage.forEach((item, index) => {
+      if (item.monthlyCoinUsage !== tmp) {
+        item.ranking = index + 1;
+        tmp = item.monthlyCoinUsage;
+      } else if (item.monthlyCoinUsage === tmp) {
+        item.ranking = index;
+      }
     });
   } else if (buttonUpOrDown === false) {
     rankingListData.monthlyCoinUsage = rankingListData.sort((a, b) => {

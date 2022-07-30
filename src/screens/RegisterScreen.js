@@ -7,7 +7,7 @@ import {
   StyleSheet,
   Alert,
 } from "react-native";
-import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import {
   jpCheck,
   blankCheck,
@@ -17,7 +17,7 @@ import {
 import { RegisterButton } from "../components/RegisterButton";
 import { LoginButton } from "../components/LoginButton";
 import { auth, db } from "../components/Firebase";
-import { addDoc, collection, query, getDocs } from "firebase/firestore";
+import { addDoc, collection, getDocs } from "firebase/firestore";
 import { Warning } from "../components/Warning";
 import { useIsFocused } from "@react-navigation/native";
 import { useStateIfMounted } from "use-state-if-mounted";
@@ -27,7 +27,7 @@ export const RegisterScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userName, setUserName] = useState("");
-  const [signError, setSignError] = useState(false);
+  const signError = false;
 
   const userNameLength = userName.length;
   const userPasswordLength = password.length;
@@ -98,12 +98,12 @@ export const RegisterScreen = ({ navigation }) => {
       userNameLength > 8 ||
       userPasswordLength < 6
     ) {
-      setSignError(true);
+      signError = true;
       return;
     } else {
       const handleRegister = async (user) => {
         try {
-          const addUser = await addDoc(collection(db, "users"), {
+          await addDoc(collection(db, "users"), {
             name: userName,
             email: email,
             password: password,
@@ -115,27 +115,22 @@ export const RegisterScreen = ({ navigation }) => {
             updateNumber: updateNumber,
             time: new Date().toLocaleString(),
           });
-          const user = await createUserWithEmailAndPassword(
-            auth,
-            email,
-            password
-          );
+          await createUserWithEmailAndPassword(auth, email, password);
         } catch (error) {
           if (
             error.message ===
             "The email address is already in use by another account."
           ) {
-            setSignError(true);
+            signError = true;
             Alert.alert("すでに登録されているメールアドレスです。");
           } else if (
             error.message === "Password should be at least 6 characters"
           ) {
-            setSignError(true);
+            signError = true;
             Alert.alert("パスワードは6文字以上で登録してください。");
           } else {
-            setSignError(true);
+            signError = true;
             Alert.alert("エラーです。異なる入力内容でもう一度お試しください");
-            console.log("error.message", error.message);
           }
         }
       };
