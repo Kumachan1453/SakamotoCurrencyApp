@@ -27,6 +27,7 @@ export const RegisterScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userName, setUserName] = useState("");
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const signError = false;
 
   const userNameLength = userName.length;
@@ -102,6 +103,9 @@ export const RegisterScreen = ({ navigation }) => {
       return;
     } else {
       const handleRegister = async (user) => {
+        if (isButtonDisabled === false) {
+          setIsButtonDisabled(true);
+        }
         try {
           await addDoc(collection(db, "users"), {
             name: userName,
@@ -133,6 +137,9 @@ export const RegisterScreen = ({ navigation }) => {
             Alert.alert("エラーです。異なる入力内容でもう一度お試しください");
           }
         }
+        setTimeout(() => {
+          setIsButtonDisabled(false);
+        }, 2000);
       };
       handleRegister();
     }
@@ -221,6 +228,7 @@ export const RegisterScreen = ({ navigation }) => {
         <RegisterButton
           onPress={signUp}
           disabled={
+            isButtonDisabled === true ||
             !email ||
             !password ||
             isJapanese ||
