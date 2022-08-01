@@ -11,6 +11,7 @@ import ModalTemplete from "../components/ModalTemplete";
 import MoneyText from "../components/MoneyText";
 import GetUserData from "../components/UserData";
 import LongRedButton from "../components/LongRedButton";
+import DevButtonOfMonthlyUpdate from "../components/developerTools/DevButtonOfMonthlyUpdate";
 
 export const Home = () => {
   const isFocused = useIsFocused();
@@ -78,6 +79,7 @@ export const Home = () => {
       <View style={styles.content}>
         <View style={styles.center}>
           <View style={styles.profile}>
+            <DevButtonOfMonthlyUpdate />
             <View style={styles.profileCategory}>
               <Text style={styles.headingText}>ユーザー名</Text>
               <Text style={styles.profileText}>{name}</Text>
