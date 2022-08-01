@@ -10,11 +10,12 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../components/Firebase";
 import { LoginButton } from "../components/LoginButton";
 import { RegisterButton } from "../components/RegisterButton";
+import { useStateIfMounted } from "use-state-if-mounted";
 
 export const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useStateIfMounted(false);
   const handleLogin = () => {
     if (isButtonDisabled === false) {
       setIsButtonDisabled(true);
