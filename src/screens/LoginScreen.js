@@ -14,12 +14,22 @@ import { RegisterButton } from "../components/RegisterButton";
 export const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const handleLogin = async () => {
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-    } catch (error) {
-      alert("メールアドレスもしくはパスワードが間違っています。");
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const handleLogin = () => {
+    if (isButtonDisabled === false) {
+      setIsButtonDisabled(true);
     }
+    const login = async () => {
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+      } catch (error) {
+        alert("メールアドレスもしくはパスワードが間違っています。");
+      }
+    };
+    login();
+    setTimeout(() => {
+      setIsButtonDisabled(false);
+    }, 2000);
   };
 
   return (
@@ -57,7 +67,7 @@ export const LoginScreen = ({ navigation }) => {
         />
         <LoginButton
           onPress={handleLogin}
-          disabled={!email || !password}
+          disabled={isButtonDisabled === true || !email || !password}
           text={"ログイン"}
         />
       </View>
