@@ -11,7 +11,6 @@ import ModalTemplete from "../components/ModalTemplete";
 import MoneyText from "../components/MoneyText";
 import GetUserData from "../components/UserData";
 import LongRedButton from "../components/LongRedButton";
-import DevButtonOfMonthlyUpdate from "../components/developerTools/DevButtonOfMonthlyUpdate";
 
 export const Home = () => {
   const isFocused = useIsFocused();
