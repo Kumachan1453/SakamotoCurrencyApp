@@ -11,6 +11,7 @@ import ModalTemplete from "../components/ModalTemplete";
 import MoneyText from "../components/MoneyText";
 import GetUserData from "../components/UserData";
 import LongRedButton from "../components/LongRedButton";
+import { Warning } from "../components/Warning";
 
 export const Home = () => {
   const isFocused = useIsFocused();
@@ -21,6 +22,9 @@ export const Home = () => {
   const [name, setName] = useState("");
   const [coinOwnership, setCoinOwnership] = useState(0);
   const [monthlyCoinUsage, setMonthlyCoinUsage] = useState(0);
+
+  const date = new Date();
+  const month = date.getMonth() + 1;
 
   const getUserProfile = getAuth();
   const user = getUserProfile.currentUser;
@@ -101,6 +105,17 @@ export const Home = () => {
               </Text>
               <MoneyText numberOfCoin={monthlyCoinUsage} />
             </View>
+            <Warning
+              letter={
+                "※このアプリは、毎月月初め（今月の場合は" +
+                month +
+                "月1日）の0時に更新が行われます。まず【あなたが所持している「Kon」の数】の5%は失います。その代わり、【" +
+                howMuchDouYouUseYourCoinThisMonth +
+                "】の5%分をGETすることができます。そして【あなたが" +
+                (month + 1) +
+                "月中に使用した「Kon」の数】は0になります。"
+              }
+            />
           </View>
         </View>
 
