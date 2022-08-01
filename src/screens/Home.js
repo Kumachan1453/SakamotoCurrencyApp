@@ -79,7 +79,6 @@ export const Home = () => {
       <View style={styles.content}>
         <View style={styles.center}>
           <View style={styles.profile}>
-            <DevButtonOfMonthlyUpdate />
             <View style={styles.profileCategory}>
               <Text style={styles.headingText}>ユーザー名</Text>
               <Text style={styles.profileText}>{name}</Text>
