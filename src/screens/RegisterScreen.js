@@ -137,9 +137,6 @@ export const RegisterScreen = ({ navigation }) => {
             Alert.alert("エラーです。異なる入力内容でもう一度お試しください");
           }
         }
-        setTimeout(() => {
-          setIsButtonDisabled(false);
-        }, 2000);
       };
       handleRegister();
     }
