@@ -64,6 +64,7 @@ export const LoginScreen = ({ navigation }) => {
       <View style={styles.LoginAndRegister}>
         <RegisterButton
           onPress={() => navigation.navigate("Register")}
+          disabled={isButtonDisabled === true}
           text={"新規登録"}
         />
         <LoginButton

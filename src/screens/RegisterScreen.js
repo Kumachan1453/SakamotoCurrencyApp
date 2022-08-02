@@ -28,6 +28,7 @@ export const RegisterScreen = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [userName, setUserName] = useState("");
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [isLoginButtonDisabled, setIsLoginButtonDisabled] = useState(false);
   const signError = false;
 
   const userNameLength = userName.length;
@@ -105,6 +106,7 @@ export const RegisterScreen = ({ navigation }) => {
       const handleRegister = async (user) => {
         if (isButtonDisabled === false) {
           setIsButtonDisabled(true);
+          setIsLoginButtonDisabled(true);
         }
         try {
           await addDoc(collection(db, "users"), {
@@ -137,6 +139,7 @@ export const RegisterScreen = ({ navigation }) => {
             Alert.alert("エラーです。異なる入力内容でもう一度お試しください");
           }
         }
+        setIsLoginButtonDisabled(false);
       };
       handleRegister();
     }
@@ -220,6 +223,7 @@ export const RegisterScreen = ({ navigation }) => {
       <View style={styles.LoginAndRegister}>
         <LoginButton
           onPress={() => navigation.navigate("Login")}
+          disabled={isLoginButtonDisabled === true}
           text={"ログイン"}
         />
         <RegisterButton
