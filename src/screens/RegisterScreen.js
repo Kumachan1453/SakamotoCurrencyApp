@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  TextInput,
-  Text,
-  KeyboardAvoidingView,
-  StyleSheet,
-  Alert,
-} from "react-native";
+import { View, TextInput, Text, StyleSheet, Alert } from "react-native";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import {
   jpCheck,
@@ -153,10 +146,7 @@ export const RegisterScreen = ({ navigation }) => {
   }, [userName || email || password]);
 
   return (
-    <KeyboardAvoidingView
-      behavior="padding"
-      style={styles.keyboardAvoidingView}
-    >
+    <View behavior="padding" style={styles.contentsView}>
       <Text style={styles.textUsersRegister}>新規登録画面</Text>
       <View style={styles.view}>
         <Text>名前（8文字以内）</Text>
@@ -249,12 +239,12 @@ export const RegisterScreen = ({ navigation }) => {
       <Text style={styles.allertText}>
         ※新規登録後にこれらの記入事項を変更することはできません。ご注意ください。
       </Text>
-    </KeyboardAvoidingView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  keyboardAvoidingView: {
+  contentsView: {
     justifyContent: "center",
     alignItems: "center",
     flex: 1,
