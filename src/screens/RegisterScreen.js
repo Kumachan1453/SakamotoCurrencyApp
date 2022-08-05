@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  TextInput,
-  Text,
-  KeyboardAvoidingView,
-  StyleSheet,
-  Alert,
-} from "react-native";
+import { View, TextInput, Text, StyleSheet, Alert } from "react-native";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import {
   jpCheck,
@@ -27,6 +20,8 @@ export const RegisterScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userName, setUserName] = useState("");
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [isLoginButtonDisabled, setIsLoginButtonDisabled] = useState(false);
   const signError = false;
 
   const userNameLength = userName.length;
@@ -102,6 +97,10 @@ export const RegisterScreen = ({ navigation }) => {
       return;
     } else {
       const handleRegister = async (user) => {
+        if (isButtonDisabled === false) {
+          setIsButtonDisabled(true);
+          setIsLoginButtonDisabled(true);
+        }
         try {
           await addDoc(collection(db, "users"), {
             name: userName,
@@ -133,6 +132,7 @@ export const RegisterScreen = ({ navigation }) => {
             Alert.alert("エラーです。異なる入力内容でもう一度お試しください");
           }
         }
+        setIsLoginButtonDisabled(false);
       };
       handleRegister();
     }
@@ -146,10 +146,7 @@ export const RegisterScreen = ({ navigation }) => {
   }, [userName || email || password]);
 
   return (
-    <KeyboardAvoidingView
-      behavior="padding"
-      style={styles.keyboardAvoidingView}
-    >
+    <View behavior="padding" style={styles.contentsView}>
       <Text style={styles.textUsersRegister}>新規登録画面</Text>
       <View style={styles.view}>
         <Text>名前（8文字以内）</Text>
@@ -216,11 +213,13 @@ export const RegisterScreen = ({ navigation }) => {
       <View style={styles.LoginAndRegister}>
         <LoginButton
           onPress={() => navigation.navigate("Login")}
+          disabled={isLoginButtonDisabled === true}
           text={"ログイン"}
         />
         <RegisterButton
           onPress={signUp}
           disabled={
+            isButtonDisabled === true ||
             !email ||
             !password ||
             isJapanese ||
@@ -240,12 +239,12 @@ export const RegisterScreen = ({ navigation }) => {
       <Text style={styles.allertText}>
         ※新規登録後にこれらの記入事項を変更することはできません。ご注意ください。
       </Text>
-    </KeyboardAvoidingView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  keyboardAvoidingView: {
+  contentsView: {
     justifyContent: "center",
     alignItems: "center",
     flex: 1,

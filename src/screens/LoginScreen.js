@@ -1,32 +1,34 @@
 import React, { useState } from "react";
-import {
-  View,
-  TextInput,
-  Text,
-  KeyboardAvoidingView,
-  StyleSheet,
-} from "react-native";
+import { View, TextInput, Text, StyleSheet } from "react-native";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../components/Firebase";
 import { LoginButton } from "../components/LoginButton";
 import { RegisterButton } from "../components/RegisterButton";
+import { useStateIfMounted } from "use-state-if-mounted";
 
 export const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const handleLogin = async () => {
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-    } catch (error) {
-      alert("メールアドレスもしくはパスワードが間違っています。");
+  const [isButtonDisabled, setIsButtonDisabled] = useStateIfMounted(false);
+  const handleLogin = () => {
+    if (isButtonDisabled === false) {
+      setIsButtonDisabled(true);
     }
+    const login = async () => {
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+      } catch (error) {
+        alert("メールアドレスもしくはパスワードが間違っています。");
+      }
+    };
+    login();
+    setTimeout(() => {
+      setIsButtonDisabled(false);
+    }, 2000);
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior="padding"
-      style={styles.keyboardAvoidingView}
-    >
+    <View behavior="padding" style={styles.contentsView}>
       <Text style={styles.textUsersLogin}>ログイン画面</Text>
       <View style={styles.view}>
         <Text>メールアドレス</Text>
@@ -53,20 +55,21 @@ export const LoginScreen = ({ navigation }) => {
       <View style={styles.LoginAndRegister}>
         <RegisterButton
           onPress={() => navigation.navigate("Register")}
+          disabled={isButtonDisabled === true}
           text={"新規登録"}
         />
         <LoginButton
           onPress={handleLogin}
-          disabled={!email || !password}
+          disabled={isButtonDisabled === true || !email || !password}
           text={"ログイン"}
         />
       </View>
-    </KeyboardAvoidingView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  keyboardAvoidingView: {
+  contentsView: {
     justifyContent: "center",
     alignItems: "center",
     flex: 1,

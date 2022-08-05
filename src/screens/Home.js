@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, ScrollView } from "react-native";
-import { getDoc, doc } from "firebase/firestore";
-import { signOut, getAuth } from "firebase/auth";
+import { getDoc, doc, deleteDoc, addDoc, collection } from "firebase/firestore";
+import { signOut, getAuth, deleteUser } from "firebase/auth";
 import { auth } from "../components/Firebase";
 import { db } from "../components/Firebase";
 import { useIsFocused } from "@react-navigation/native";
@@ -10,14 +10,21 @@ import { LongButton } from "../components/LongButton";
 import ModalTemplete from "../components/ModalTemplete";
 import MoneyText from "../components/MoneyText";
 import GetUserData from "../components/UserData";
+import LongRedButton from "../components/LongRedButton";
+import { Warning } from "../components/Warning";
 
 export const Home = () => {
   const isFocused = useIsFocused();
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisibleDeleteAccount, setModalVisibleDeleteAccount] =
+    useState(false);
 
   const [name, setName] = useState("");
   const [coinOwnership, setCoinOwnership] = useState(0);
   const [monthlyCoinUsage, setMonthlyCoinUsage] = useState(0);
+
+  const date = new Date();
+  const month = date.getMonth() + 1;
 
   const getUserProfile = getAuth();
   const user = getUserProfile.currentUser;
@@ -29,6 +36,29 @@ export const Home = () => {
     signOut(auth).catch(() => {
       alert("エラーが発生しました。");
     });
+  };
+
+  const deleteAccount = () => {
+    deleteUser(user)
+      .then(async () => {
+        await GetUserData({ array: userData });
+        const loginFilter = userData.filter((login) => {
+          return email === login.email;
+        });
+        await addDoc(collection(db, "deleteUser"), {
+          name: loginFilter[0].name,
+          email: loginFilter[0].email,
+          password: loginFilter[0].password,
+          coinOwnership: loginFilter[0].coinOwnership,
+          monthlyCoinUsage: loginFilter[0].monthlyCoinUsage,
+          sumCoinUsage: loginFilter[0].sumCoinUsage,
+          time: new Date().toLocaleString(),
+        });
+        await deleteDoc(doc(db, "users", loginFilter[0].id));
+      })
+      .catch((error) => {
+        alert("エラーが発生しました。");
+      });
   };
 
   const getLoginUserData = async () => {
@@ -75,6 +105,17 @@ export const Home = () => {
               </Text>
               <MoneyText numberOfCoin={monthlyCoinUsage} />
             </View>
+            <Warning
+              letter={
+                "※このアプリは、毎月月初め（今月の場合は" +
+                month +
+                "月1日）の0時に更新が行われます。まず【あなたが所持している「Kon」の数】の5%は失います。その代わり、【" +
+                howMuchDouYouUseYourCoinThisMonth +
+                "】の5%分をGETすることができます。そして【あなたが" +
+                (month + 1) +
+                "月中に使用した「Kon」の数】は0になります。"
+              }
+            />
           </View>
         </View>
 
@@ -104,6 +145,33 @@ export const Home = () => {
                 setModalVisible(true);
               }}
               letter={"ログアウト"}
+            />
+          </View>
+          <ModalTemplete
+            transparent={false}
+            visible={modalVisibleDeleteAccount}
+            onRequestClose={() => {
+              Alert.alert("Modal has been closed.");
+              setModalVisibleDeleteAccount(!modalVisibleDeleteAccount);
+            }}
+            centerText={"本当にアカウントを削除しますか？"}
+            buttonPlacement={true}
+            leftText={"キャンセル"}
+            rightText={"OK"}
+            leftOnPress={() => {
+              setModalVisibleDeleteAccount(!modalVisibleDeleteAccount);
+            }}
+            rightOnPress={() => {
+              setModalVisibleDeleteAccount(!modalVisibleDeleteAccount);
+              deleteAccount();
+            }}
+          />
+          <View style={styles.deleteAccountPlacement}>
+            <LongRedButton
+              onPress={() => {
+                setModalVisibleDeleteAccount(true);
+              }}
+              letter={"アカウント削除"}
             />
           </View>
         </View>
@@ -138,7 +206,12 @@ const styles = StyleSheet.create({
   },
   logoutPlacement: {
     alignItems: "center",
-    marginTop: 50,
+    marginTop: 30,
+  },
+  deleteAccountPlacement: {
+    alignItems: "center",
+    marginTop: 11,
+    color: "red",
   },
 });
 
