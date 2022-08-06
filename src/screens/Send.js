@@ -25,6 +25,7 @@ import { howMuchDouYouUseYourCoinThisMonth } from "../components/PatternText";
 import { Warning } from "../components/Warning";
 import LeafCoinMini from "../components/LeafCoinMini";
 import GetUserData from "../components/UserData";
+import { dateText } from "../components/Date";
 
 export const Send = ({ navigation }) => {
   const getUserProfile = getAuth();
@@ -80,10 +81,10 @@ export const Send = ({ navigation }) => {
         coinOwnership: coinOwnership - sendingCoin,
         monthlyCoinUsage: monthlyCoinUsage + sendingCoin,
         sumCoinUsage: sumCoinUsage + sendingCoin,
-        time: new Date().toLocaleString(),
+        time: dateText,
       });
       await updateDoc(getParamsData, {
-        time: new Date().toLocaleString(),
+        time: dateText,
       });
     } else if (coinOwnership - sendingCoin < 0) {
       alert("Konが足りません");
@@ -112,7 +113,7 @@ export const Send = ({ navigation }) => {
         subId: subId,
         recipientUserId: route.params.id,
         recipientUserEmail: route.params.email,
-        time: new Date().toLocaleString(),
+        time: dateText,
       });
 
       const sendHistory = await addDoc(collection(db, "usersHistory"), {
@@ -122,7 +123,7 @@ export const Send = ({ navigation }) => {
         recipientUserName: route.params.name,
         recipientUserEmail: route.params.email,
         recipientUserId: route.params.id,
-        time: new Date().toLocaleString(),
+        time: dateText,
         sendOrGift: "-",
       });
 
