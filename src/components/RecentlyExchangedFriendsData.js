@@ -1,4 +1,5 @@
 import { collection, getDocs } from "firebase/firestore";
+import { dateText } from "./Date";
 import { db } from "./Firebase";
 
 const RecentlyExchangedFriendsData = [];
@@ -14,7 +15,7 @@ const getRecentlyExchangedFriendsData = async () => {
       email: docs.data().email,
       recipientUserName: docs.data().recipientUserName,
       recipientUserId: docs.data().recipientUserId,
-      time: new Date().toLocaleString(),
+      time: dateText,
     });
   });
 };

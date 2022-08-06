@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import {
-  View,
-  TextInput,
-  Text,
-  KeyboardAvoidingView,
-  StyleSheet,
-} from "react-native";
+import { View, TextInput, Text, StyleSheet } from "react-native";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../components/Firebase";
 import { LoginButton } from "../components/LoginButton";
@@ -34,10 +28,7 @@ export const LoginScreen = ({ navigation }) => {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior="padding"
-      style={styles.keyboardAvoidingView}
-    >
+    <View behavior="padding" style={styles.contentsView}>
       <Text style={styles.textUsersLogin}>ログイン画面</Text>
       <View style={styles.view}>
         <Text>メールアドレス</Text>
@@ -73,12 +64,12 @@ export const LoginScreen = ({ navigation }) => {
           text={"ログイン"}
         />
       </View>
-    </KeyboardAvoidingView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  keyboardAvoidingView: {
+  contentsView: {
     justifyContent: "center",
     alignItems: "center",
     flex: 1,
