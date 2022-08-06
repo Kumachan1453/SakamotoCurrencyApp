@@ -16,6 +16,7 @@ import { db } from "../components/Firebase";
 import { howMuchDouYouUseYourCoinThisMonth } from "../components/PatternText";
 import GetCoinsData from "../components/CoinsData";
 import GetUserData from "../components/UserData";
+import { dateText } from "../components/Date";
 
 export const Gift = () => {
   const [coinOwnership, setCoinOwnership] = useState(0);
@@ -74,7 +75,7 @@ export const Gift = () => {
     const snapData = await getDoc(getData);
     updateDoc(getData, {
       coinOwnership: coinOwnership + item.sendingCoin,
-      time: new Date().toLocaleString(),
+      time: dateText,
     });
 
     await GetCoinsData({ array: coinsData });
@@ -85,7 +86,7 @@ export const Gift = () => {
       recipientUserName: item.name,
       recipientUserEmail: item.email,
       recipientUserId: item.id,
-      time: new Date().toLocaleString(),
+      time: dateText,
       sendOrGift: "+",
     });
   };

@@ -3,6 +3,7 @@ import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import { getDoc, doc, updateDoc, collection, addDoc } from "firebase/firestore";
 import { db } from "../Firebase";
 import GetUserData from "../UserData";
+import { dateText } from "../Date";
 
 export const DevButtonOfMonthlyUpdate = () => {
   const today = new Date();
@@ -35,7 +36,7 @@ export const DevButtonOfMonthlyUpdate = () => {
             recipientUserName: "アプリ「Kon」運営",
             recipientUserEmail: "",
             recipientUserId: "",
-            time: new Date().toLocaleString(),
+            time: dateText,
             sendOrGift: "-",
           });
           await addDoc(collection(db, "usersHistory"), {
@@ -47,7 +48,7 @@ export const DevButtonOfMonthlyUpdate = () => {
             recipientUserName: "アプリ「Kon」運営",
             recipientUserEmail: "",
             recipientUserId: "",
-            time: new Date().toLocaleString(),
+            time: dateText,
             sendOrGift: "+",
           });
         };

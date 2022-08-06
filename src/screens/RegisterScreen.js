@@ -14,6 +14,7 @@ import { addDoc, collection, getDocs } from "firebase/firestore";
 import { Warning } from "../components/Warning";
 import { useIsFocused } from "@react-navigation/native";
 import { useStateIfMounted } from "use-state-if-mounted";
+import { dateText } from "../components/Date";
 
 export const RegisterScreen = ({ navigation }) => {
   const isFocused = useIsFocused();
@@ -112,7 +113,7 @@ export const RegisterScreen = ({ navigation }) => {
             ranking: ranking,
             sumCoinUsage: sumCoinUsage,
             updateNumber: updateNumber,
-            time: new Date().toLocaleString(),
+            time: dateText,
           });
           await createUserWithEmailAndPassword(auth, email, password);
         } catch (error) {

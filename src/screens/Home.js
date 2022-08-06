@@ -12,6 +12,7 @@ import MoneyText from "../components/MoneyText";
 import GetUserData from "../components/UserData";
 import LongRedButton from "../components/LongRedButton";
 import { Warning } from "../components/Warning";
+import { dateText } from "../components/Date";
 
 export const Home = () => {
   const isFocused = useIsFocused();
@@ -52,7 +53,7 @@ export const Home = () => {
           coinOwnership: loginFilter[0].coinOwnership,
           monthlyCoinUsage: loginFilter[0].monthlyCoinUsage,
           sumCoinUsage: loginFilter[0].sumCoinUsage,
-          time: new Date().toLocaleString(),
+          time: dateText,
         });
         await deleteDoc(doc(db, "users", loginFilter[0].id));
       })
