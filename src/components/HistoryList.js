@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   friendNameText: {
-    fontSize: 28,
+    fontSize: 20,
     marginLeft: 10,
   },
   listStyleText: {
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   centerText: {
-    width: 150,
+    width: 100,
     paddingLeft: 20,
   },
 });
