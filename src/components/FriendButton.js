@@ -48,8 +48,8 @@ export const FriendButton = ({
           {ranking > 3 && <Text style={styles.listStyleText}>{ranking}</Text>}
           <Text style={styles.friendNameText}>{friendName}</Text>
           {thanksText !== "" && (
-            <View style={styles.centerText}>
-              <Text>{thanksText}</Text>
+            <View style={styles.centerTextPlacement}>
+              <Text style={styles.centerText}>{thanksText}</Text>
             </View>
           )}
         </View>
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   friendNameText: {
-    fontSize: 26,
+    fontSize: 20,
     marginLeft: 10,
   },
   listStyleText: {
@@ -140,15 +140,18 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   timeText: {
-    fontSize: 15,
+    fontSize: 12,
     color: "gray",
   },
   justifyContentFlexEnd: {
     justifyContent: "flex-end",
   },
-  centerText: {
+  centerTextPlacement: {
     width: 100,
     paddingLeft: 20,
+  },
+  centerText: {
+    fontSize: 13,
   },
 });
 
