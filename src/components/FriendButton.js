@@ -10,6 +10,7 @@ export const FriendButton = ({
   coin,
   unit,
   ranking,
+  thanksText,
   time,
 }) => {
   return (
@@ -46,6 +47,11 @@ export const FriendButton = ({
           )}
           {ranking > 3 && <Text style={styles.listStyleText}>{ranking}</Text>}
           <Text style={styles.friendNameText}>{friendName}</Text>
+          {thanksText !== "" && (
+            <View style={styles.centerText}>
+              <Text>{thanksText}</Text>
+            </View>
+          )}
         </View>
         <View style={styles.rightPlacement}>
           <View style={styles.coinTextPlacement}>
@@ -139,6 +145,10 @@ const styles = StyleSheet.create({
   },
   justifyContentFlexEnd: {
     justifyContent: "flex-end",
+  },
+  centerText: {
+    width: 100,
+    paddingLeft: 20,
   },
 });
 

@@ -12,6 +12,7 @@ export const GetHistoryData = async ({ array }) => {
       recipientUserName: docs.data().recipientUserName,
       sendOrGift: docs.data().sendOrGift,
       sendingCoin: docs.data().sendingCoin,
+      thanksText: docs.data().thanksText,
       time: docs.data().time,
       id: docs.id,
     });

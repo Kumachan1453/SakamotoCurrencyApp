@@ -25,9 +25,20 @@ import { howMuchDouYouUseYourCoinThisMonth } from "../components/PatternText";
 import { Warning } from "../components/Warning";
 import LeafCoinMini from "../components/LeafCoinMini";
 import GetUserData from "../components/UserData";
-import { dateText } from "../components/Date";
+import { checkNgWord, checkNumber } from "../components/IfText";
 
 export const Send = ({ navigation }) => {
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = ("0" + (date.getMonth() + 1)).slice(-2);
+  const day = ("0" + date.getDate()).slice(-2);
+  const hour = ("0" + date.getHours()).slice(-2);
+  const minute = ("0" + date.getMinutes()).slice(-2);
+  const second = ("0" + date.getSeconds()).slice(-2);
+
+  const dateText =
+    year + "/" + month + "/" + day + " " + hour + ":" + minute + ":" + second;
+
   const getUserProfile = getAuth();
   const user = getUserProfile.currentUser;
   const email = user.email;
@@ -41,9 +52,14 @@ export const Send = ({ navigation }) => {
   const [futureMonthlyCoinUsage, setFutureMonthlyCoinUsage] = useState(
     Math.round(monthlyCoinUsage + sendingCoin)
   );
+  const [thanksText, setThanksText] = useState("");
   const [sumCoinUsage, setSumCoinUsage] = useState(0);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [subId, setSubId] = useState(0);
+
+  const isNgWord = checkNgWord(thanksText);
+  const isNumber = checkNumber(sendingCoin);
+  const thanksTextLength = thanksText.length;
 
   const route = useRoute();
   const isFocused = useIsFocused();
@@ -113,6 +129,7 @@ export const Send = ({ navigation }) => {
         subId: subId,
         recipientUserId: route.params.id,
         recipientUserEmail: route.params.email,
+        thanksText: thanksText,
         time: dateText,
       });
 
@@ -123,6 +140,7 @@ export const Send = ({ navigation }) => {
         recipientUserName: route.params.name,
         recipientUserEmail: route.params.email,
         recipientUserId: route.params.id,
+        thanksText: thanksText,
         time: dateText,
         sendOrGift: "-",
       });
@@ -141,7 +159,7 @@ export const Send = ({ navigation }) => {
     afterFutureMonthlyCoinUsage();
   }
 
-  if (sendingCoin > 0 && sendingCoin <= coinOwnership) {
+  if (sendingCoin > 0 && sendingCoin <= coinOwnership && isNgWord === false) {
     if (isButtonDisabled) {
       setIsButtonDisabled(false);
     }
@@ -213,9 +231,11 @@ export const Send = ({ navigation }) => {
         <View style={styles.line} />
         <View style={styles.alignItemsCenter}>
           <Text style={styles.bigText}>あなたが送るKonの額</Text>
-          <View style={styles.flexDirectionRow}>
+          <View style={styles.coinTextInputStyle}>
             <TextInput
-              style={isButtonDisabled ? styles.errorInput : styles.input}
+              style={
+                sendingCoin > coinOwnership ? styles.errorInput : styles.input
+              }
               onChangeText={(text) =>
                 setSendingCoin(parseInt(text === "" ? 0 : text))
               }
@@ -224,10 +244,23 @@ export const Send = ({ navigation }) => {
               keyboardType="number-pad"
             />
             <LeafCoinMini width={35} height={35} />
-            {sendingCoin > coinOwnership && (
-              <Warning letter={"残額を上回ってます"} />
-            )}
           </View>
+          {sendingCoin > coinOwnership && (
+            <Warning letter={"残額を上回ってます"} />
+          )}
+          {isNumber === false && <Warning letter={"整数のみご入力ください"} />}
+          <View style={styles.borderLine} />
+          <View style={styles.textInputStyle}>
+            <TextInput
+              style={styles.inputString}
+              onChangeText={setThanksText}
+              placeholder="感謝のメッセージ（15文字以内）"
+            />
+          </View>
+          {isNgWord === true && (
+            <Warning letter={"不適切な用語が使われています"} />
+          )}
+          {thanksTextLength > 15 && <Warning letter={"字数が多すぎます"} />}
         </View>
         <View style={styles.borderLine} />
 
@@ -286,6 +319,13 @@ const styles = StyleSheet.create({
     borderColor: "gray",
     padding: 10,
   },
+  inputString: {
+    width: 265,
+    height: 40,
+    borderBottomWidth: 1,
+    borderColor: "gray",
+    padding: 10,
+  },
   errorInput: {
     width: 230,
     height: 40,
@@ -293,7 +333,10 @@ const styles = StyleSheet.create({
     borderColor: "red",
     padding: 10,
   },
-  flexDirectionRow: {
+  coinTextInputStyle: {
+    flexDirection: "row",
+  },
+  textInputStyle: {
     flexDirection: "row",
   },
   line: {

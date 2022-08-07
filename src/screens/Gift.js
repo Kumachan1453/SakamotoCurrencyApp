@@ -16,9 +16,19 @@ import { db } from "../components/Firebase";
 import { howMuchDouYouUseYourCoinThisMonth } from "../components/PatternText";
 import GetCoinsData from "../components/CoinsData";
 import GetUserData from "../components/UserData";
-import { dateText } from "../components/Date";
 
 export const Gift = () => {
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = ("0" + (date.getMonth() + 1)).slice(-2);
+  const day = ("0" + date.getDate()).slice(-2);
+  const hour = ("0" + date.getHours()).slice(-2);
+  const minute = ("0" + date.getMinutes()).slice(-2);
+  const second = ("0" + date.getSeconds()).slice(-2);
+
+  const dateText =
+    year + "/" + month + "/" + day + " " + hour + ":" + minute + ":" + second;
+
   const [coinOwnership, setCoinOwnership] = useState(0);
   const [monthlyCoinUsage, setMonthlyCoinUsage] = useState(0);
   const [userId, setUserId] = useState("");
@@ -53,6 +63,7 @@ export const Gift = () => {
   const getLoginUserData = async () => {
     await GetCoinsData({ array: coinsData });
     const coinsDataTime = ascendingOrder(coinsData);
+    console.log("coinsData", coinsData);
     setGiftListData(coinsDataTime);
 
     await GetUserData({ array: userData });
@@ -86,6 +97,7 @@ export const Gift = () => {
       recipientUserName: item.name,
       recipientUserEmail: item.email,
       recipientUserId: item.id,
+      thanksText: item.thanksText,
       time: dateText,
       sendOrGift: "+",
     });
@@ -139,6 +151,7 @@ export const Gift = () => {
                 friendName={item.name}
                 coin={item.sendingCoin}
                 unit={true}
+                thanksText={item.thanksText}
                 time={item.time}
                 disabled={isButtonDisabled}
               />
