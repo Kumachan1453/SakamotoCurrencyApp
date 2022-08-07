@@ -91,6 +91,7 @@ export const Ranking = () => {
               friendName={item.name}
               coin={item.monthlyCoinUsage}
               unit={true}
+              thanksText={""}
               time=""
             />
           );

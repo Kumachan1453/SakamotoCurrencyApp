@@ -124,6 +124,7 @@ export const FriendList = ({ navigation }) => {
           return (
             <FriendButton
               friendName={item.name}
+              thanksText={""}
               onPress={() => navigation.navigate("Send", item)}
             />
           );
