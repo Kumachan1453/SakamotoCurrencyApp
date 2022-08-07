@@ -11,6 +11,7 @@ const GetCoinsData = async ({ array }) => {
       recipientUserId: docs.data().recipientUserId,
       sendingCoin: docs.data().sendingCoin,
       subId: docs.data().subId,
+      thanksText: docs.data().thanksText,
       time: docs.data().time,
       id: docs.id,
     });

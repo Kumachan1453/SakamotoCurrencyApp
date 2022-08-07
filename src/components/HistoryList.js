@@ -8,6 +8,7 @@ export const HistoryList = ({
   unit,
   time,
   sendOrGift,
+  thanksText,
 }) => {
   return (
     <View style={styles.contents}>
@@ -19,6 +20,11 @@ export const HistoryList = ({
         >
           {friendName}
         </Text>
+        {thanksText !== "" && (
+          <View style={styles.centerText}>
+            <Text>{thanksText}</Text>
+          </View>
+        )}
         <View style={styles.rightPlacement}>
           <View style={styles.coinTextPlacement}>
             <Text
@@ -98,6 +104,10 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginTop: 10,
     marginRight: 10,
+  },
+  centerText: {
+    width: 150,
+    paddingLeft: 20,
   },
 });
 

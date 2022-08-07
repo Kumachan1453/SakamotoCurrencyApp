@@ -44,6 +44,12 @@ const checkNgWord = (userName) => {
     /viado|viad○|porra|めくら|つんぼ|知恵遅れ|どもり|狂|バカ|アホ|ばか|あほ|ばーか|バーカ|阿呆|きちがい|キチがい|キチガイ|キ◯ガイ|キチ◯イ|ちんば|やぶにらみ|土人|殺|死|害|あばずれ|アバずれ|アバズレ|ビッチ|ビ◯チ|びっち|ビッち|クソ野郎|くそやろう|くそ野郎|糞|うんち|ウンチ|ババア|ジジイ|ばばあ|じじい|ファック|fuck|f○ck|fu○k|fxxk|fxck|fuxk|童貞|せっくす|セックス|セ◯クス|sex|まんこ|ちんこ|ま◯こ|ち◯こ|ちんちん|ち◯ち◯|ち◯ちん|中出し|中◯し|おっぱい|オッパイ|オ◯パイ|お◯ぱい|オ◯パイ|フェラチオ|フ◯ラチオ|パイズリ/i;
   return regexUserName.test(userName);
 };
+
+const checkNumber = (sendingCoin) => {
+  const regexNumber = /[0-9]+/g;
+  return regexNumber.test(sendingCoin);
+};
+
 export {
   jpCheck,
   blankCheck,
@@ -51,4 +57,5 @@ export {
   checkNgWord,
   checkNameConflict,
   checkRecentlyExchangedFriendsDataIdConflict,
+  checkNumber,
 };

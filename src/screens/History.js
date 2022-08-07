@@ -128,6 +128,7 @@ export const History = () => {
               friendName={item.recipientUserName}
               sontCoin={item.sendingCoin}
               unit={true}
+              thanksText={item.thanksText}
               time={item.time}
               sendOrGift={item.sendOrGift}
             />
