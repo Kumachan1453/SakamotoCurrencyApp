@@ -1,11 +1,11 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
-import { API_KEY } from "@env";
+// import { API_KEY } from "@env";
 
 // 本番環境モード
 const firebaseConfig = {
-  apiKey: API_KEY,
+  apiKey: "AIzaSyCfvGUVm8Uwn1EXLCo2ZlqPO18T5XeHofU",
   authDomain: "sakamotocurrencyapp.firebaseapp.com",
   projectId: "sakamotocurrencyapp",
   storageBucket: "sakamotocurrencyapp.appspot.com",
