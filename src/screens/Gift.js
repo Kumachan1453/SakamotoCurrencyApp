@@ -63,7 +63,6 @@ export const Gift = () => {
   const getLoginUserData = async () => {
     await GetCoinsData({ array: coinsData });
     const coinsDataTime = ascendingOrder(coinsData);
-    console.log("coinsData", coinsData);
     setGiftListData(coinsDataTime);
 
     await GetUserData({ array: userData });
