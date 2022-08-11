@@ -1,11 +1,31 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
-import { API_KEY } from "@env";
+
+// 本番環境モード（仮）
+// const firebaseConfig = {
+//   apiKey: "AIzaSyCkn_4t-mqqyqrbxZZtbisDw-izy0mJnQ8",
+//   authDomain: "koncurrencyapp.firebaseapp.com",
+//   projectId: "koncurrencyapp",
+//   storageBucket: "koncurrencyapp.appspot.com",
+//   messagingSenderId: "283648314292",
+//   appId: "1:283648314292:web:9ab7c2198ec7a6662640e1",
+//   measurementId: "G-KHPD7N2TS1",
+// };
 
 // 本番環境モード
+// const firebaseConfig = {
+//   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+//   authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+//   projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+//   storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+//   messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGE_SENDER_ID,
+//   appId: process.env.REACT_APP_FIREBASE_APP_ID,
+//   measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
+// };
+
 const firebaseConfig = {
-  apiKey: API_KEY,
+  apiKey: "AIzaSyABV-kPEhfJ3pD5w6pXFjlQqvOuZ_gTyNc",
   authDomain: "sakamotocurrencyapp.firebaseapp.com",
   projectId: "sakamotocurrencyapp",
   storageBucket: "sakamotocurrencyapp.appspot.com",
@@ -16,7 +36,16 @@ const firebaseConfig = {
 
 // テスト環境モード
 // const firebaseConfig = {
-//   apiKey: "AIzaSyC5rEBggU9PcalM-vWtkXq3L2g-SECz7TI",
+//   apiKey: process.env.REACT_APP_FIREBASE_TEST_API_KEY,
+//   authDomain: process.env.REACT_APP_FIREBASE_TEST_AUTH_DOMAIN,
+//   projectId: process.env.REACT_APP_FIREBASE_TEST_PROJECT_ID,
+//   storageBucket: process.env.REACT_APP_FIREBASE_TEST_STORAGE_BUCKET,
+//   messagingSenderId: process.env.REACT_APP_FIREBASE_TEST_MESSAGE_SENDER_ID,
+//   appId: process.env.REACT_APP_FIREBASE_TEST_APP_ID,
+//   measurementId: process.env.REACT_APP_FIREBASE_TEST_MEASUREMENT_ID,
+// };
+
+// const firebaseConfig = {
 //   apiKey: "AIzaSyC5rEBggU9PcalM-vWtkXq3L2g-SECz7TI",
 //   authDomain: "dev-sakamotocurrencyapp.firebaseapp.com",
 //   projectId: "dev-sakamotocurrencyapp",
@@ -27,6 +56,5 @@ const firebaseConfig = {
 // };
 
 const app = initializeApp(firebaseConfig);
-
 export const auth = getAuth(app);
 export const db = getFirestore(app);
