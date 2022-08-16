@@ -15,6 +15,7 @@ import { Warning } from "../components/Warning";
 import { dateText } from "../components/Date";
 
 export const Home = () => {
+  // const APIKEY = process.env.REACT_APP_FIREBASE_API_KEY;
   const isFocused = useIsFocused();
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisibleDeleteAccount, setModalVisibleDeleteAccount] =
