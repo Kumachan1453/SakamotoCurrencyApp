@@ -15,6 +15,7 @@ import { Warning } from "../components/Warning";
 import { useIsFocused } from "@react-navigation/native";
 import { useStateIfMounted } from "use-state-if-mounted";
 import { dateText } from "../components/Date";
+import LoadingScreen from "../components/LoadingScreen";
 
 export const RegisterScreen = ({ navigation }) => {
   const isFocused = useIsFocused();
@@ -23,6 +24,7 @@ export const RegisterScreen = ({ navigation }) => {
   const [userName, setUserName] = useState("");
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [isLoginButtonDisabled, setIsLoginButtonDisabled] = useState(false);
+  const [loading, setLoading] = useState(false);
   const signError = false;
 
   const userNameLength = userName.length;
@@ -82,6 +84,7 @@ export const RegisterScreen = ({ navigation }) => {
   const isEmailConflict = emailConflict(email);
 
   const signUp = () => {
+    setLoading(true);
     if (
       isJapanese ||
       isBlankEmail ||
@@ -95,10 +98,12 @@ export const RegisterScreen = ({ navigation }) => {
       userPasswordLength < 6
     ) {
       signError = true;
+      setLoading(false);
       return;
     } else {
       const handleRegister = async (user) => {
         if (isButtonDisabled === false) {
+          setLoading(true);
           setIsButtonDisabled(true);
           setIsLoginButtonDisabled(true);
         }
@@ -106,7 +111,6 @@ export const RegisterScreen = ({ navigation }) => {
           await addDoc(collection(db, "users"), {
             name: userName,
             email: email,
-            password: password,
             coinOwnership: coinOwnership,
             monthlyCoinUsage: monthlyCoinUsage,
             sendingCoin: sendingCoin,
@@ -117,6 +121,23 @@ export const RegisterScreen = ({ navigation }) => {
           });
           await createUserWithEmailAndPassword(auth, email, password);
         } catch (error) {
+          if (
+            !isJapanese ||
+            !isBlankEmail ||
+            !isEmailFormat ||
+            !isBlankPassword ||
+            !isBlankUserName ||
+            !isNameConflict ||
+            !isEmailConflict ||
+            !isNgWord ||
+            !userNameLength > 8 ||
+            !userPasswordLength < 6
+          ) {
+            setLoading(false);
+            setIsButtonDisabled(false);
+          }
+          setIsLoginButtonDisabled(false);
+          setLoading(false);
           if (
             error.message ===
             "The email address is already in use by another account."
@@ -133,6 +154,7 @@ export const RegisterScreen = ({ navigation }) => {
             Alert.alert("エラーです。異なる入力内容でもう一度お試しください");
           }
         }
+        setLoading(false);
         setIsLoginButtonDisabled(false);
       };
       handleRegister();
@@ -146,102 +168,108 @@ export const RegisterScreen = ({ navigation }) => {
     return () => clearTimeout(timerId);
   }, [userName || email || password]);
 
-  return (
-    <View behavior="padding" style={styles.contentsView}>
-      <Text style={styles.textUsersRegister}>新規登録画面</Text>
-      <View style={styles.view}>
-        <Text>名前（8文字以内）</Text>
-        <TextInput
-          style={
-            isNgWord || isNameConflict || userNameLength > 8
-              ? styles.errorTextInput
-              : styles.textInput
-          }
-          onChangeText={setUserName}
-          value={userName}
-          placeholder="お名前を入力してください"
-          autoCapitalize="none"
-        />
-        {isNgWord && (
-          <Warning letter={"名前の中で不適切な用語が使われています"} />
-        )}
-        {isNameConflict && (
-          <Warning letter={"名前が他のユーザーと重複しています"} />
-        )}
-        {userNameLength > 8 && <Warning letter={"名前が8文字を超えています"} />}
-      </View>
-      <View style={styles.view}>
-        <Text>メールアドレス</Text>
-        <TextInput
-          style={
-            isJapanese || (!isBlankEmail && isEmailFormat) || isEmailConflict
-              ? styles.errorTextInput
-              : styles.textInput
-          }
-          onChangeText={setEmail}
-          value={email}
-          placeholder="メールアドレスを入力してください"
-          autoCapitalize="none"
-          autoCorrect={false}
-        />
-        {isJapanese && <Warning letter={"日本語が含まれています"} />}
-        {!isBlankEmail && !isJapanese && isEmailFormat && (
-          <Warning letter={"メールアドレスの形式が間違っています"} />
-        )}
-        {isEmailConflict && (
-          <Warning letter={"メールアドレスが他のユーザーと重複しています"} />
-        )}
-      </View>
+  if (loading) {
+    return <LoadingScreen />;
+  } else {
+    return (
+      <View behavior="padding" style={styles.contentsView}>
+        <Text style={styles.textUsersRegister}>新規登録画面</Text>
+        <View style={styles.view}>
+          <Text>名前（8文字以内）</Text>
+          <TextInput
+            style={
+              isNgWord || isNameConflict || userNameLength > 8
+                ? styles.errorTextInput
+                : styles.textInput
+            }
+            onChangeText={setUserName}
+            value={userName}
+            placeholder="お名前を入力してください"
+            autoCapitalize="none"
+          />
+          {isNgWord && (
+            <Warning letter={"名前の中で不適切な用語が使われています"} />
+          )}
+          {isNameConflict && (
+            <Warning letter={"名前が他のユーザーと重複しています"} />
+          )}
+          {userNameLength > 8 && (
+            <Warning letter={"名前が8文字を超えています"} />
+          )}
+        </View>
+        <View style={styles.view}>
+          <Text>メールアドレス</Text>
+          <TextInput
+            style={
+              isJapanese || (!isBlankEmail && isEmailFormat) || isEmailConflict
+                ? styles.errorTextInput
+                : styles.textInput
+            }
+            onChangeText={setEmail}
+            value={email}
+            placeholder="メールアドレスを入力してください"
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
+          {isJapanese && <Warning letter={"日本語が含まれています"} />}
+          {!isBlankEmail && !isJapanese && isEmailFormat && (
+            <Warning letter={"メールアドレスの形式が間違っています"} />
+          )}
+          {isEmailConflict && (
+            <Warning letter={"メールアドレスが他のユーザーと重複しています"} />
+          )}
+        </View>
 
-      <View style={styles.view}>
-        <Text>パスワード（6文字以上）</Text>
-        <TextInput
-          style={
-            userPasswordLength < 6 && !isBlankPassword
-              ? styles.errorTextInput
-              : styles.textInput
-          }
-          onChangeText={setPassword}
-          value={password}
-          placeholder="パスワードを入力してください"
-          secureTextEntry={true}
-          autoCapitalize="none"
-        />
-        {!isBlankPassword && userPasswordLength < 6 && (
-          <Warning letter={"パスワードは6文字以上にしてください"} />
-        )}
+        <View style={styles.view}>
+          <Text>パスワード（6文字以上）</Text>
+          <TextInput
+            style={
+              userPasswordLength < 6 && !isBlankPassword
+                ? styles.errorTextInput
+                : styles.textInput
+            }
+            onChangeText={setPassword}
+            value={password}
+            placeholder="パスワードを入力してください"
+            secureTextEntry={true}
+            autoCapitalize="none"
+          />
+          {!isBlankPassword && userPasswordLength < 6 && (
+            <Warning letter={"パスワードは6文字以上にしてください"} />
+          )}
+        </View>
+        <View style={styles.LoginAndRegister}>
+          <LoginButton
+            onPress={() => navigation.navigate("Login")}
+            disabled={isLoginButtonDisabled === true}
+            text={"ログイン"}
+          />
+          <RegisterButton
+            onPress={signUp}
+            disabled={
+              isButtonDisabled === true ||
+              !email ||
+              !password ||
+              isJapanese ||
+              isBlankEmail ||
+              isEmailFormat ||
+              isBlankPassword ||
+              isBlankUserName ||
+              isNgWord ||
+              isNameConflict ||
+              isEmailConflict ||
+              userNameLength > 8 ||
+              userPasswordLength < 6
+            }
+            text={"新規登録"}
+          />
+        </View>
+        <Text style={styles.allertText}>
+          ※新規登録後にこれらの記入事項を変更することはできません。ご注意ください。
+        </Text>
       </View>
-      <View style={styles.LoginAndRegister}>
-        <LoginButton
-          onPress={() => navigation.navigate("Login")}
-          disabled={isLoginButtonDisabled === true}
-          text={"ログイン"}
-        />
-        <RegisterButton
-          onPress={signUp}
-          disabled={
-            isButtonDisabled === true ||
-            !email ||
-            !password ||
-            isJapanese ||
-            isBlankEmail ||
-            isEmailFormat ||
-            isBlankPassword ||
-            isBlankUserName ||
-            isNgWord ||
-            isNameConflict ||
-            isEmailConflict ||
-            userNameLength > 8 ||
-            userPasswordLength < 6
-          }
-          text={"新規登録"}
-        />
-      </View>
-      <Text style={styles.allertText}>
-        ※新規登録後にこれらの記入事項を変更することはできません。ご注意ください。
-      </Text>
-    </View>
-  );
+    );
+  }
 };
 
 const styles = StyleSheet.create({

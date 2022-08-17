@@ -15,7 +15,6 @@ import { Warning } from "../components/Warning";
 import { dateText } from "../components/Date";
 
 export const Home = () => {
-  // const APIKEY = process.env.REACT_APP_FIREBASE_API_KEY;
   const isFocused = useIsFocused();
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisibleDeleteAccount, setModalVisibleDeleteAccount] =
@@ -40,22 +39,21 @@ export const Home = () => {
     });
   };
 
-  const deleteAccount = () => {
+  const deleteAccount = async () => {
+    await GetUserData({ array: userData });
+    const loginFilter = userData.filter((login) => {
+      return email === login.email;
+    });
+    await addDoc(collection(db, "deleteUser"), {
+      name: loginFilter[0].name,
+      email: loginFilter[0].email,
+      coinOwnership: loginFilter[0].coinOwnership,
+      monthlyCoinUsage: loginFilter[0].monthlyCoinUsage,
+      sumCoinUsage: loginFilter[0].sumCoinUsage,
+      time: dateText,
+    });
     deleteUser(user)
       .then(async () => {
-        await GetUserData({ array: userData });
-        const loginFilter = userData.filter((login) => {
-          return email === login.email;
-        });
-        await addDoc(collection(db, "deleteUser"), {
-          name: loginFilter[0].name,
-          email: loginFilter[0].email,
-          password: loginFilter[0].password,
-          coinOwnership: loginFilter[0].coinOwnership,
-          monthlyCoinUsage: loginFilter[0].monthlyCoinUsage,
-          sumCoinUsage: loginFilter[0].sumCoinUsage,
-          time: dateText,
-        });
         await deleteDoc(doc(db, "users", loginFilter[0].id));
       })
       .catch((error) => {
@@ -65,9 +63,11 @@ export const Home = () => {
 
   const getLoginUserData = async () => {
     await GetUserData({ array: userData });
+    console.log("userData", userData);
     const loginFilter = userData.filter((login) => {
       return email === login.email;
     });
+    console.log("loginFilter", loginFilter);
     const getData = doc(db, "users", loginFilter[0].id);
     const snapData = await getDoc(getData);
     setName(snapData.data().name);
