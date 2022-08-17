@@ -1,5 +1,5 @@
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "./Firebase";
+import { auth, db } from "./Firebase";
 
 export const GetUserData = async ({ array }) => {
   const getCollection = await getDocs(collection(db, "users"));
@@ -8,11 +8,11 @@ export const GetUserData = async ({ array }) => {
       id: docs.id,
       name: docs.data().name,
       email: docs.data().email,
-      password: docs.data().password,
       coinOwnership: docs.data().coinOwnership,
       monthlyCoinUsage: docs.data().monthlyCoinUsage,
       sumCoinUsage: docs.data().sumCoinUsage,
       time: docs.data().time,
+      authId: auth.currentUser.uid,
     });
   });
 };
