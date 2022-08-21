@@ -10,7 +10,7 @@ import {
 import { RegisterButton } from "../components/RegisterButton";
 import { LoginButton } from "../components/LoginButton";
 import { auth, db } from "../components/Firebase";
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import { setDoc, collection, getDocs, doc } from "firebase/firestore";
 import { Warning } from "../components/Warning";
 import { useIsFocused } from "@react-navigation/native";
 import { useStateIfMounted } from "use-state-if-mounted";
@@ -106,7 +106,9 @@ export const RegisterScreen = ({ navigation }) => {
           setIsLoginButtonDisabled(true);
         }
         try {
-          await addDoc(collection(db, "users"), {
+          await createUserWithEmailAndPassword(auth, email, password);
+          console.log("auth.currentUser.uid", auth.currentUser.uid);
+          await setDoc(doc(db, "users", auth.currentUser.uid), {
             name: userName,
             email: email,
             coinOwnership: coinOwnership,
@@ -117,7 +119,17 @@ export const RegisterScreen = ({ navigation }) => {
             updateNumber: updateNumber,
             time: dateText,
           });
-          await createUserWithEmailAndPassword(auth, email, password);
+          // await addDoc(collection(db, "users"), {
+          //   name: userName,
+          //   email: email,
+          //   coinOwnership: coinOwnership,
+          //   monthlyCoinUsage: monthlyCoinUsage,
+          //   sendingCoin: sendingCoin,
+          //   ranking: ranking,
+          //   sumCoinUsage: sumCoinUsage,
+          //   updateNumber: updateNumber,
+          //   time: dateText,
+          // });
         } catch (error) {
           if (
             !isJapanese ||
