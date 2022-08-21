@@ -107,7 +107,6 @@ export const RegisterScreen = ({ navigation }) => {
         }
         try {
           await createUserWithEmailAndPassword(auth, email, password);
-          console.log("auth.currentUser.uid", auth.currentUser.uid);
           await setDoc(doc(db, "users", auth.currentUser.uid), {
             name: userName,
             email: email,
@@ -119,17 +118,6 @@ export const RegisterScreen = ({ navigation }) => {
             updateNumber: updateNumber,
             time: dateText,
           });
-          // await addDoc(collection(db, "users"), {
-          //   name: userName,
-          //   email: email,
-          //   coinOwnership: coinOwnership,
-          //   monthlyCoinUsage: monthlyCoinUsage,
-          //   sendingCoin: sendingCoin,
-          //   ranking: ranking,
-          //   sumCoinUsage: sumCoinUsage,
-          //   updateNumber: updateNumber,
-          //   time: dateText,
-          // });
         } catch (error) {
           if (
             !isJapanese ||
