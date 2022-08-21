@@ -63,11 +63,9 @@ export const Home = () => {
 
   const getLoginUserData = async () => {
     await GetUserData({ array: userData });
-    console.log("userData", userData);
     const loginFilter = userData.filter((login) => {
       return email === login.email;
     });
-    console.log("loginFilter", loginFilter);
     const getData = doc(db, "users", loginFilter[0].id);
     const snapData = await getDoc(getData);
     setName(snapData.data().name);
