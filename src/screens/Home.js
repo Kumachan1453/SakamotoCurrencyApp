@@ -52,7 +52,7 @@ export const Home = () => {
       sumCoinUsage: loginFilter[0].sumCoinUsage,
       time: dateText,
     });
-    deleteUser(user)
+    await deleteUser(user)
       .then(async () => {
         await deleteDoc(doc(db, "users", loginFilter[0].id));
       })
