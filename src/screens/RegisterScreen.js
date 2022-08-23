@@ -10,7 +10,7 @@ import {
 import { RegisterButton } from "../components/RegisterButton";
 import { LoginButton } from "../components/LoginButton";
 import { auth, db } from "../components/Firebase";
-import { setDoc, collection, getDocs, doc } from "firebase/firestore";
+import { addDoc, collection, getDocs, setDoc, doc } from "firebase/firestore";
 import { Warning } from "../components/Warning";
 import { useIsFocused } from "@react-navigation/native";
 import { useStateIfMounted } from "use-state-if-mounted";
@@ -82,6 +82,23 @@ export const RegisterScreen = ({ navigation }) => {
   };
   const isEmailConflict = emailConflict(email);
 
+  const makeAccount = async () => {
+    setLoading(true);
+    await createUserWithEmailAndPassword(auth, email, password);
+    await setDoc(doc(db, "users", auth.currentUser.uid), {
+      name: userName,
+      email: email,
+      coinOwnership: coinOwnership,
+      monthlyCoinUsage: monthlyCoinUsage,
+      sendingCoin: sendingCoin,
+      ranking: ranking,
+      sumCoinUsage: sumCoinUsage,
+      updateNumber: updateNumber,
+      time: dateText,
+    });
+    setLoading(false);
+  };
+
   const signUp = () => {
     setLoading(true);
     if (
@@ -106,18 +123,18 @@ export const RegisterScreen = ({ navigation }) => {
           setIsLoginButtonDisabled(true);
         }
         try {
-          await createUserWithEmailAndPassword(auth, email, password);
-          await setDoc(doc(db, "users", auth.currentUser.uid), {
-            name: userName,
-            email: email,
-            coinOwnership: coinOwnership,
-            monthlyCoinUsage: monthlyCoinUsage,
-            sendingCoin: sendingCoin,
-            ranking: ranking,
-            sumCoinUsage: sumCoinUsage,
-            updateNumber: updateNumber,
-            time: dateText,
-          });
+          // await addDoc(collection(db, "users"), {
+          //   name: userName,
+          //   email: email,
+          //   coinOwnership: coinOwnership,
+          //   monthlyCoinUsage: monthlyCoinUsage,
+          //   sendingCoin: sendingCoin,
+          //   ranking: ranking,
+          //   sumCoinUsage: sumCoinUsage,
+          //   updateNumber: updateNumber,
+          //   time: dateText,
+          // });
+          await makeAccount();
         } catch (error) {
           if (
             !isJapanese ||

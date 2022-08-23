@@ -16,10 +16,8 @@ export const DevButtonOfMonthlyUpdate = () => {
   const monthlyUpdate = async () => {
     if (firstDay && onHours && onMinutes) {
       await GetUserData({ array: userData });
-      console.log("userData", userData);
       for (let index = 0; index < userData.length; index++) {
         const updateUserCoinData = async () => {
-          console.log("userData[index].id", userData[index].id);
           const getData = doc(db, "users", userData[index].id);
           const snapData = await getDoc(getData);
           updateDoc(getData, {
