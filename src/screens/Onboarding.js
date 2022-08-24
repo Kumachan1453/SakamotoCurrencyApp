@@ -6,20 +6,21 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../components/Firebase";
 import { LoginScreen } from "./LoginScreen";
 import { LoadingScreen } from "../components/LoadingScreen";
+import Start from "./Start";
 
 const Stack = createNativeStackNavigator();
 
 export const Onboarding = () => {
-  const [user, setUser] = useState("");
+  const [getUser, setGetUser] = useState("");
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  useEffect(async () => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setLoading(false);
       if (user) {
-        setUser(user);
+        setGetUser(user);
       } else {
-        setUser("");
+        setGetUser("");
       }
     });
     return () => unsubscribe();
@@ -34,8 +35,11 @@ export const Onboarding = () => {
           headerShown: false,
         }}
       >
-        {user ? (
-          <Stack.Screen name="ScreenNavTab" component={ScreenNavTab} />
+        {getUser ? (
+          <>
+            <Stack.Screen name="Start" component={Start} />
+            <Stack.Screen name="ScreenNavTab" component={ScreenNavTab} />
+          </>
         ) : (
           <>
             <Stack.Screen name="Register" component={RegisterScreen} />
