@@ -10,7 +10,7 @@ import {
 import { RegisterButton } from "../components/RegisterButton";
 import { LoginButton } from "../components/LoginButton";
 import { auth, db } from "../components/Firebase";
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import { setDoc, collection, getDocs, doc } from "firebase/firestore";
 import { Warning } from "../components/Warning";
 import { useIsFocused } from "@react-navigation/native";
 import { useStateIfMounted } from "use-state-if-mounted";
@@ -25,7 +25,6 @@ export const RegisterScreen = ({ navigation }) => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [isLoginButtonDisabled, setIsLoginButtonDisabled] = useState(false);
   const [loading, setLoading] = useState(false);
-  const signError = false;
 
   const userNameLength = userName.length;
   const userPasswordLength = password.length;
@@ -97,7 +96,6 @@ export const RegisterScreen = ({ navigation }) => {
       userNameLength > 8 ||
       userPasswordLength < 6
     ) {
-      signError = true;
       setLoading(false);
       return;
     } else {
@@ -108,7 +106,8 @@ export const RegisterScreen = ({ navigation }) => {
           setIsLoginButtonDisabled(true);
         }
         try {
-          await addDoc(collection(db, "users"), {
+          await createUserWithEmailAndPassword(auth, email, password);
+          await setDoc(doc(db, "users", auth.currentUser.uid), {
             name: userName,
             email: email,
             coinOwnership: coinOwnership,
@@ -119,7 +118,6 @@ export const RegisterScreen = ({ navigation }) => {
             updateNumber: updateNumber,
             time: dateText,
           });
-          await createUserWithEmailAndPassword(auth, email, password);
         } catch (error) {
           if (
             !isJapanese ||
@@ -142,15 +140,12 @@ export const RegisterScreen = ({ navigation }) => {
             error.message ===
             "The email address is already in use by another account."
           ) {
-            signError = true;
             Alert.alert("すでに登録されているメールアドレスです。");
           } else if (
             error.message === "Password should be at least 6 characters"
           ) {
-            signError = true;
             Alert.alert("パスワードは6文字以上で登録してください。");
           } else {
-            signError = true;
             Alert.alert("エラーです。異なる入力内容でもう一度お試しください");
           }
         }
