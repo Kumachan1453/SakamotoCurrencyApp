@@ -35,6 +35,7 @@ export const RegisterScreen = ({ navigation }) => {
   const ranking = 0;
   const sumCoinUsage = 0;
   const updateNumber = 0;
+  const countDown = 600;
 
   const [userDataName, setUserDataName] = useStateIfMounted([]);
   const [userDataEmail, setUserDataEmail] = useStateIfMounted([]);
@@ -94,6 +95,7 @@ export const RegisterScreen = ({ navigation }) => {
       ranking: ranking,
       sumCoinUsage: sumCoinUsage,
       updateNumber: updateNumber,
+      countDown: countDown,
       time: dateText,
     });
     setLoading(false);
