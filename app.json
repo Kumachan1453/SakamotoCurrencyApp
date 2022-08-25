@@ -2,7 +2,7 @@
   "expo": {
     "name": "KonCurrencyApp",
     "slug": "KonCurrencyApp",
-    "version": "2.1.0",
+    "version": "2.2.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -19,7 +19,7 @@
       "bundleIdentifier": "com.Distribution.SNS.CurrencyApp"
     },
     "android": {
-      "versionCode": 2,
+      "versionCode": 3,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
