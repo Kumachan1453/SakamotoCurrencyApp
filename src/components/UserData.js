@@ -11,6 +11,7 @@ export const GetUserData = async ({ array }) => {
       coinOwnership: docs.data().coinOwnership,
       monthlyCoinUsage: docs.data().monthlyCoinUsage,
       sumCoinUsage: docs.data().sumCoinUsage,
+      countDown: docs.data().countDown,
       time: docs.data().time,
       authId: auth.currentUser.uid,
     });
