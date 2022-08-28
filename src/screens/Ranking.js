@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FlatList, View } from "react-native";
+import { FlatList, View, StyleSheet } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
 import FriendButton from "../components/FriendButton";
 import { TrueOrFalseButton } from "../components/TrueOrFalseButton";
@@ -74,7 +74,7 @@ export const Ranking = () => {
   }, [isFocused]);
 
   return (
-    <View>
+    <View style={styles.content}>
       <TrueOrFalseButton
         onPress={getButtonUpOrDown}
         buttonTrueOrFalse={buttonUpOrDown}
@@ -101,5 +101,11 @@ export const Ranking = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  content: {
+    height: "100%",
+  },
+});
 
 export default Ranking;
