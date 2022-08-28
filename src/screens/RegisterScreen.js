@@ -10,7 +10,7 @@ import {
 import { RegisterButton } from "../components/RegisterButton";
 import { LoginButton } from "../components/LoginButton";
 import { auth, db } from "../components/Firebase";
-import { addDoc, collection, getDocs, setDoc, doc } from "firebase/firestore";
+import { collection, getDocs, setDoc, doc } from "firebase/firestore";
 import { Warning } from "../components/Warning";
 import { useIsFocused } from "@react-navigation/native";
 import { useStateIfMounted } from "use-state-if-mounted";
@@ -125,17 +125,6 @@ export const RegisterScreen = ({ navigation }) => {
           setIsLoginButtonDisabled(true);
         }
         try {
-          // await addDoc(collection(db, "users"), {
-          //   name: userName,
-          //   email: email,
-          //   coinOwnership: coinOwnership,
-          //   monthlyCoinUsage: monthlyCoinUsage,
-          //   sendingCoin: sendingCoin,
-          //   ranking: ranking,
-          //   sumCoinUsage: sumCoinUsage,
-          //   updateNumber: updateNumber,
-          //   time: dateText,
-          // });
           await makeAccount();
         } catch (error) {
           if (
@@ -189,7 +178,7 @@ export const RegisterScreen = ({ navigation }) => {
       <View behavior="padding" style={styles.contentsView}>
         <Text style={styles.textUsersRegister}>新規登録画面</Text>
         <View style={styles.view}>
-          <Text>名前（8文字以内）</Text>
+          <Text>ニックネーム（8文字以内）</Text>
           <TextInput
             style={
               isNgWord || isNameConflict || userNameLength > 8
@@ -198,17 +187,15 @@ export const RegisterScreen = ({ navigation }) => {
             }
             onChangeText={setUserName}
             value={userName}
-            placeholder="お名前を入力してください"
+            placeholder="ニックネームを入力してください"
             autoCapitalize="none"
           />
-          {isNgWord && (
-            <Warning letter={"名前の中で不適切な用語が使われています"} />
-          )}
+          {isNgWord && <Warning letter={"不適切な用語が使われています"} />}
           {isNameConflict && (
-            <Warning letter={"名前が他のユーザーと重複しています"} />
+            <Warning letter={"ニックネームが他のユーザーと重複しています"} />
           )}
           {userNameLength > 8 && (
-            <Warning letter={"名前が8文字を超えています"} />
+            <Warning letter={"ニックネームが8文字を超えています"} />
           )}
         </View>
         <View style={styles.view}>

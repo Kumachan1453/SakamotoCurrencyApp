@@ -83,7 +83,7 @@ export const Home = () => {
         <View style={styles.center}>
           <View style={styles.profile}>
             <View style={styles.profileCategory}>
-              <Text style={styles.headingText}>ユーザー名</Text>
+              <Text style={styles.headingText}>ニックネーム</Text>
               <Text style={styles.profileText}>{name}</Text>
             </View>
             <View style={styles.profileCategory}>
