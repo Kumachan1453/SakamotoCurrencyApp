@@ -3,7 +3,6 @@ import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import { getDoc, doc, updateDoc, collection, addDoc } from "firebase/firestore";
 import { db } from "../Firebase";
 import GetUserData from "../UserData";
-import { dateText } from "../Date";
 
 export const DevButtonOfMonthlyUpdate = () => {
   const today = new Date();
@@ -11,6 +10,18 @@ export const DevButtonOfMonthlyUpdate = () => {
   const onHours = today.getHours() === 0;
   const onMinutes = today.getMinutes() === 0;
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = ("0" + (date.getMonth() + 1)).slice(-2);
+  const day = ("0" + date.getDate()).slice(-2);
+  const hour = ("0" + date.getHours()).slice(-2);
+  const minute = ("0" + date.getMinutes()).slice(-2);
+  const second = ("0" + date.getSeconds()).slice(-2);
+
+  const dateText =
+    year + "/" + month + "/" + day + " " + hour + ":" + minute + ":" + second;
+
   const userData = [];
 
   const monthlyUpdate = async () => {
@@ -31,7 +42,7 @@ export const DevButtonOfMonthlyUpdate = () => {
             name: snapData.data().name,
             email: snapData.data().email,
             sendingCoin: Math.round(snapData.data().coinOwnership * 0.05),
-            recipientUserName: "アプリ「Kon」運営",
+            recipientUserName: "Kon運営",
             recipientUserEmail: "",
             recipientUserId: "",
             time: dateText,
@@ -43,7 +54,7 @@ export const DevButtonOfMonthlyUpdate = () => {
             sendingCoin: Math.round(
               Math.round(snapData.data().monthlyCoinUsage * 0.05)
             ),
-            recipientUserName: "アプリ「Kon」運営",
+            recipientUserName: "Kon運営",
             recipientUserEmail: "",
             recipientUserId: "",
             time: dateText,
@@ -57,7 +68,6 @@ export const DevButtonOfMonthlyUpdate = () => {
 
   const update = () => {
     monthlyUpdate();
-    buttonDisabledFunction();
   };
 
   return (
