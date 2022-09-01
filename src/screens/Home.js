@@ -13,6 +13,7 @@ import GetUserData from "../components/UserData";
 import LongRedButton from "../components/LongRedButton";
 import { Warning } from "../components/Warning";
 import { dateText } from "../components/Date";
+import DevButtonOfMonthlyUpdate from "../components/developerTools/DevButtonOfMonthlyUpdate";
 
 export const Home = () => {
   const isFocused = useIsFocused();
@@ -83,6 +84,7 @@ export const Home = () => {
         <View style={styles.center}>
           <View style={styles.profile}>
             <View style={styles.profileCategory}>
+              <DevButtonOfMonthlyUpdate />
               <Text style={styles.headingText}>ニックネーム</Text>
               <Text style={styles.profileText}>{name}</Text>
             </View>
@@ -111,7 +113,7 @@ export const Home = () => {
                 month +
                 "月1日）の0時に更新が行われます。まず【あなたが所持している「Kon」の数】の5%は失います。その代わり、【" +
                 howMuchDouYouUseYourCoinThisMonth +
-                "】の5%分をGETすることができます。そして【あなたが" +
+                "】の5%分を特典としてGETすることができます（ただし100000Kon以上ご使用された場合であっても5000Kon以上はもらえません）。そして【あなたが" +
                 (month + 1) +
                 "月中に使用した「Kon」の数】は0になります。"
               }

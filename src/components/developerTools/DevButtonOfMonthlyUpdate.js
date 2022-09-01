@@ -7,8 +7,8 @@ import GetUserData from "../UserData";
 export const DevButtonOfMonthlyUpdate = () => {
   const today = new Date();
   const firstDay = today.getDate() === 1;
-  const onHours = today.getHours() === 0;
-  const onMinutes = today.getMinutes() === 0;
+  const onHours = today.getHours() === 11;
+  const onMinutes = today.getMinutes() === 33;
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   const date = new Date();
@@ -31,11 +31,15 @@ export const DevButtonOfMonthlyUpdate = () => {
         const updateUserCoinData = async () => {
           const getData = doc(db, "users", userData[index].id);
           const snapData = await getDoc(getData);
+          const getCoinAmount =
+            5000 <= Math.round(snapData.data().monthlyCoinUsage * 0.05)
+              ? 5000
+              : Math.round(snapData.data().monthlyCoinUsage * 0.05);
+
           updateDoc(getData, {
             updateNumber: snapData.data().updateNumber + 1,
             coinOwnership:
-              Math.round(snapData.data().coinOwnership * 0.95) +
-              Math.round(snapData.data().monthlyCoinUsage * 0.05),
+              Math.round(snapData.data().coinOwnership * 0.95) + getCoinAmount,
             monthlyCoinUsage: 0,
           });
           await addDoc(collection(db, "usersHistory"), {
@@ -51,9 +55,7 @@ export const DevButtonOfMonthlyUpdate = () => {
           await addDoc(collection(db, "usersHistory"), {
             name: snapData.data().name,
             email: snapData.data().email,
-            sendingCoin: Math.round(
-              Math.round(snapData.data().monthlyCoinUsage * 0.05)
-            ),
+            sendingCoin: getCoinAmount,
             recipientUserName: "Kon運営",
             recipientUserEmail: "",
             recipientUserId: "",
