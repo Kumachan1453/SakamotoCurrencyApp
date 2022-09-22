@@ -13,7 +13,6 @@ import GetUserData from "../components/UserData";
 import LongRedButton from "../components/LongRedButton";
 import { Warning } from "../components/Warning";
 import { dateText } from "../components/Date";
-import DevButtonOfMonthlyUpdate from "../components/developerTools/DevButtonOfMonthlyUpdate";
 
 export const Home = () => {
   const isFocused = useIsFocused();
@@ -84,7 +83,6 @@ export const Home = () => {
         <View style={styles.center}>
           <View style={styles.profile}>
             <View style={styles.profileCategory}>
-              <DevButtonOfMonthlyUpdate />
               <Text style={styles.headingText}>ニックネーム</Text>
               <Text style={styles.profileText}>{name}</Text>
             </View>

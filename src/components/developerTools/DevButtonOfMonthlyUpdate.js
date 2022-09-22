@@ -7,8 +7,8 @@ import GetUserData from "../UserData";
 export const DevButtonOfMonthlyUpdate = () => {
   const today = new Date();
   const firstDay = today.getDate() === 1;
-  const onHours = today.getHours() === 11;
-  const onMinutes = today.getMinutes() === 33;
+  const onHours = today.getHours() === 0;
+  const onMinutes = today.getMinutes() === 0;
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   const date = new Date();
