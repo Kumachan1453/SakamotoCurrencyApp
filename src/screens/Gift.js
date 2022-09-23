@@ -13,9 +13,13 @@ import {
 import { getAuth } from "firebase/auth";
 import { useIsFocused } from "@react-navigation/native";
 import { db } from "../components/Firebase";
-import { howMuchDouYouUseYourCoinThisMonth } from "../components/PatternText";
 import GetCoinsData from "../components/CoinsData";
 import GetUserData from "../components/UserData";
+import {
+  konOwnership,
+  monthlyKonUsage,
+  touchBar,
+} from "../components/SupportedLanguages";
 
 export const Gift = () => {
   const date = new Date();
@@ -126,18 +130,16 @@ export const Gift = () => {
     <>
       <View style={styles.content}>
         <TextTemplateYourCoinRerated
-          letter="あなたの所持「Kon」数"
+          letter={konOwnership}
           numberOfCoin={coinOwnership}
           unit={true}
         />
         <TextTemplateYourCoinRerated
-          letter={howMuchDouYouUseYourCoinThisMonth}
+          letter={monthlyKonUsage}
           numberOfCoin={monthlyCoinUsage}
           unit={true}
         />
-        <Text style={styles.allertText}>
-          下のバーをタッチして「Kon」を受け取ろう!
-        </Text>
+        <Text style={styles.allertText}>{touchBar}</Text>
         <View style={styles.line} />
       </View>
       <FlatList
