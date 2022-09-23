@@ -6,6 +6,13 @@ import { Ionicons } from "@expo/vector-icons";
 import Gift from "./Gift";
 import Ranking from "./Ranking";
 import History from "./History";
+import {
+  friendScreen,
+  giftScreen,
+  historyScreen,
+  homeScreen,
+  rankingScreen,
+} from "../components/SupportedLanguages";
 
 const Tab = createBottomTabNavigator();
 
@@ -17,15 +24,15 @@ export const ScreenNavTab = () => {
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 
-          if (route.name === "ホーム") {
+          if (route.name === homeScreen) {
             iconName = focused ? "ios-home" : "ios-home-outline";
-          } else if (route.name === "フレンド") {
+          } else if (route.name === friendScreen) {
             iconName = focused ? "ios-people" : "ios-people-outline";
-          } else if (route.name === "ギフト") {
+          } else if (route.name === giftScreen) {
             iconName = focused ? "ios-gift" : "ios-gift-outline";
-          } else if (route.name === "ランキング") {
+          } else if (route.name === rankingScreen) {
             iconName = focused ? "ios-list" : "ios-list-outline";
-          } else if (route.name === "履歴") {
+          } else if (route.name === historyScreen) {
             iconName = focused ? "ios-map" : "ios-map-outline";
           }
 
@@ -37,7 +44,7 @@ export const ScreenNavTab = () => {
       })}
     >
       <Tab.Screen
-        name="ホーム"
+        name={homeScreen}
         component={Home}
         options={{
           headerShown: true,
@@ -52,7 +59,7 @@ export const ScreenNavTab = () => {
         }}
       />
       <Tab.Screen
-        name="フレンド"
+        name={friendScreen}
         component={ScreenNavStack}
         options={{
           headerShown: false,
@@ -67,7 +74,7 @@ export const ScreenNavTab = () => {
         }}
       />
       <Tab.Screen
-        name="ギフト"
+        name={giftScreen}
         component={Gift}
         options={{
           headerShown: true,
@@ -82,7 +89,7 @@ export const ScreenNavTab = () => {
         }}
       />
       <Tab.Screen
-        name="ランキング"
+        name={rankingScreen}
         component={Ranking}
         options={{
           headerShown: true,
@@ -97,7 +104,7 @@ export const ScreenNavTab = () => {
         }}
       />
       <Tab.Screen
-        name="履歴"
+        name={historyScreen}
         component={History}
         options={{
           headerShown: true,

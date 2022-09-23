@@ -21,11 +21,28 @@ import { useIsFocused, useRoute } from "@react-navigation/native";
 import ModalTemplete from "../components/ModalTemplete";
 import { db } from "../components/Firebase";
 import { getAuth } from "firebase/auth";
-import { howMuchDouYouUseYourCoinThisMonth } from "../components/PatternText";
 import { Warning } from "../components/Warning";
 import LeafCoinMini from "../components/LeafCoinMini";
 import GetUserData from "../components/UserData";
 import { checkNgWord, checkNumber } from "../components/IfText";
+import {
+  amountUseAfter,
+  attentionSendKon,
+  cancel,
+  checkInappropriateWord,
+  checkWholeNumbers,
+  enterNumbers,
+  exceedsBalance,
+  konOwnership,
+  konYouSend,
+  monthlyKonUsage,
+  ok,
+  remainingAmount,
+  sendKon,
+  sendTo,
+  thanksMessage,
+  tooManyCharacters,
+} from "../components/SupportedLanguages";
 
 export const Send = ({ navigation }) => {
   const date = new Date();
@@ -190,7 +207,7 @@ export const Send = ({ navigation }) => {
       <View>
         <View>
           <TextTemplateYourCoinRerated
-            letter="送る相手："
+            letter={sendTo}
             numberOfCoin={route.params.name}
           />
         </View>
@@ -198,14 +215,14 @@ export const Send = ({ navigation }) => {
         <View>
           {sendingCoin === 0 && (
             <TextTemplateYourCoinRerated
-              letter="所持「Kon」数："
+              letter={konOwnership}
               numberOfCoin={coinOwnership}
               unit={true}
             />
           )}
           {sendingCoin > 0 && sendingCoin <= coinOwnership && (
             <TextTemplateYourCoinRerated
-              letter="残額："
+              letter={remainingAmount}
               numberOfCoin={balance}
               unit={true}
             />
@@ -215,14 +232,14 @@ export const Send = ({ navigation }) => {
         <View>
           {sendingCoin === 0 && (
             <TextTemplateYourCoinRerated
-              letter={howMuchDouYouUseYourCoinThisMonth}
+              letter={monthlyKonUsage}
               numberOfCoin={monthlyCoinUsage}
               unit={true}
             />
           )}
           {sendingCoin > 0 && sendingCoin <= coinOwnership && (
             <TextTemplateYourCoinRerated
-              letter="使用後の使用量："
+              letter={amountUseAfter}
               numberOfCoin={futureMonthlyCoinUsage}
               unit={true}
             />
@@ -230,7 +247,7 @@ export const Send = ({ navigation }) => {
         </View>
         <View style={styles.line} />
         <View style={styles.alignItemsCenter}>
-          <Text style={styles.bigText}>あなたが送るKonの額</Text>
+          <Text style={styles.bigText}>{konYouSend}</Text>
           <View style={styles.coinTextInputStyle}>
             <TextInput
               style={
@@ -240,27 +257,23 @@ export const Send = ({ navigation }) => {
                 setSendingCoin(parseInt(text === "" ? 0 : text))
               }
               type="number"
-              placeholder="数字を入力"
+              placeholder={enterNumbers}
               keyboardType="number-pad"
             />
             <LeafCoinMini width={35} height={35} />
           </View>
-          {sendingCoin > coinOwnership && (
-            <Warning letter={"残額を上回ってます"} />
-          )}
-          {isNumber === false && <Warning letter={"整数のみご入力ください"} />}
+          {sendingCoin > coinOwnership && <Warning letter={exceedsBalance} />}
+          {isNumber === false && <Warning letter={checkWholeNumbers} />}
           <View style={styles.borderLine} />
           <View style={styles.textInputStyle}>
             <TextInput
               style={styles.inputString}
               onChangeText={setThanksText}
-              placeholder="感謝のメッセージ（15文字以内）"
+              placeholder={thanksMessage}
             />
           </View>
-          {isNgWord === true && (
-            <Warning letter={"不適切な用語が使われています"} />
-          )}
-          {thanksTextLength > 15 && <Warning letter={"字数が多すぎます"} />}
+          {isNgWord === true && <Warning letter={checkInappropriateWord} />}
+          {thanksTextLength > 15 && <Warning letter={tooManyCharacters} />}
         </View>
         <View style={styles.borderLine} />
 
@@ -272,10 +285,10 @@ export const Send = ({ navigation }) => {
               Alert.alert("Modal has been closed.");
               setModalVisible(!modalVisible);
             }}
-            centerText={"本当にKonを送りますか？"}
+            centerText={attentionSendKon}
             buttonPlacement={true}
-            leftText={"キャンセル"}
-            rightText={"OK"}
+            leftText={cancel}
+            rightText={ok}
             leftOnPress={() => {
               setModalVisible(!modalVisible);
             }}
@@ -287,7 +300,7 @@ export const Send = ({ navigation }) => {
           />
           <View style={styles.alignItemsCenter}>
             <Button
-              content="Konを送る"
+              content={sendKon}
               onPress={() => {
                 setModalVisible(true);
               }}

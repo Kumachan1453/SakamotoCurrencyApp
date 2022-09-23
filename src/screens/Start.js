@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Button } from "../components/Button";
+import { start, startKon } from "../components/SupportedLanguages";
 
 export const Start = ({ navigation }) => {
   const startPush = () => {
@@ -8,8 +9,8 @@ export const Start = ({ navigation }) => {
   };
   return (
     <View style={styles.konStart}>
-      <Text style={styles.konStartText}>Konの世界にようこそ</Text>
-      <Button content="はじめる" onPress={startPush} />
+      <Text style={styles.konStartText}>{startKon}</Text>
+      <Button content={start} onPress={startPush} />
     </View>
   );
 };

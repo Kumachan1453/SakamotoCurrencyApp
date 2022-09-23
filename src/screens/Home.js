@@ -5,7 +5,6 @@ import { signOut, getAuth, deleteUser } from "firebase/auth";
 import { auth } from "../components/Firebase";
 import { db } from "../components/Firebase";
 import { useIsFocused } from "@react-navigation/native";
-import { howMuchDouYouUseYourCoinThisMonth } from "../components/PatternText";
 import { LongButton } from "../components/LongButton";
 import ModalTemplete from "../components/ModalTemplete";
 import MoneyText from "../components/MoneyText";
@@ -13,6 +12,19 @@ import GetUserData from "../components/UserData";
 import LongRedButton from "../components/LongRedButton";
 import { Warning } from "../components/Warning";
 import { dateText } from "../components/Date";
+import {
+  accountDeletion,
+  attentionAccountDeletion,
+  attentionLogout,
+  cancel,
+  detail,
+  konOwnership,
+  logout,
+  monthlyKonUsage,
+  myUserEmailAddress,
+  myUserName,
+  ok,
+} from "../components/SupportedLanguages";
 
 export const Home = () => {
   const isFocused = useIsFocused();
@@ -83,39 +95,25 @@ export const Home = () => {
         <View style={styles.center}>
           <View style={styles.profile}>
             <View style={styles.profileCategory}>
-              <Text style={styles.headingText}>ニックネーム</Text>
+              <Text style={styles.headingText}>{myUserName}</Text>
               <Text style={styles.profileText}>{name}</Text>
             </View>
             <View style={styles.profileCategory}>
-              <Text style={styles.headingText}>メールアドレス</Text>
+              <Text style={styles.headingText}>{myUserEmailAddress}</Text>
               <Text style={styles.profileText}>{email}</Text>
             </View>
           </View>
           <View style={styles.line} />
           <View style={styles.profile}>
             <View style={styles.profileCategory}>
-              <Text style={styles.headingText}>
-                あなたが所持している「Kon」の数
-              </Text>
+              <Text style={styles.headingText}>{konOwnership}</Text>
               <MoneyText numberOfCoin={coinOwnership} />
             </View>
             <View style={styles.profileCategory}>
-              <Text style={styles.headingText}>
-                {howMuchDouYouUseYourCoinThisMonth}
-              </Text>
+              <Text style={styles.headingText}>{monthlyKonUsage}</Text>
               <MoneyText numberOfCoin={monthlyCoinUsage} />
             </View>
-            <Warning
-              letter={
-                "※このアプリは、毎月月初め（今月の場合は" +
-                month +
-                "月1日）の0時に更新が行われます。まず【あなたが所持している「Kon」の数】の5%は失います。その代わり、【" +
-                howMuchDouYouUseYourCoinThisMonth +
-                "】の5%分をGETすることができます。そして【あなたが" +
-                (month + 1) +
-                "月中に使用した「Kon」の数】は0になります。"
-              }
-            />
+            <Warning letter={detail} />
           </View>
         </View>
 
@@ -127,10 +125,10 @@ export const Home = () => {
               Alert.alert("Modal has been closed.");
               setModalVisible(!modalVisible);
             }}
-            centerText={"本当にログアウトしますか？"}
+            centerText={attentionLogout}
             buttonPlacement={true}
-            leftText={"キャンセル"}
-            rightText={"OK"}
+            leftText={cancel}
+            rightText={ok}
             leftOnPress={() => {
               setModalVisible(!modalVisible);
             }}
@@ -144,7 +142,7 @@ export const Home = () => {
               onPress={() => {
                 setModalVisible(true);
               }}
-              letter={"ログアウト"}
+              letter={logout}
             />
           </View>
           <ModalTemplete
@@ -154,10 +152,10 @@ export const Home = () => {
               Alert.alert("Modal has been closed.");
               setModalVisibleDeleteAccount(!modalVisibleDeleteAccount);
             }}
-            centerText={"本当にアカウントを削除しますか？"}
+            centerText={attentionAccountDeletion}
             buttonPlacement={true}
-            leftText={"キャンセル"}
-            rightText={"OK"}
+            leftText={cancel}
+            rightText={ok}
             leftOnPress={() => {
               setModalVisibleDeleteAccount(!modalVisibleDeleteAccount);
             }}
@@ -171,7 +169,7 @@ export const Home = () => {
               onPress={() => {
                 setModalVisibleDeleteAccount(true);
               }}
-              letter={"アカウント削除"}
+              letter={accountDeletion}
             />
           </View>
         </View>

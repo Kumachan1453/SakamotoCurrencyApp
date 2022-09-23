@@ -5,6 +5,16 @@ import { auth } from "../components/Firebase";
 import { LoginButton } from "../components/LoginButton";
 import { RegisterButton } from "../components/RegisterButton";
 import { useStateIfMounted } from "use-state-if-mounted";
+import {
+  alertEmailOrPassword,
+  enterEmail,
+  enterPassword,
+  login,
+  newRegistration,
+  textOfEmailAddress,
+  textOfLoginScreen,
+  textOfPassword,
+} from "../components/SupportedLanguages";
 
 export const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -18,7 +28,7 @@ export const LoginScreen = ({ navigation }) => {
       try {
         await signInWithEmailAndPassword(auth, email, password);
       } catch (error) {
-        alert("メールアドレスもしくはパスワードが間違っています。");
+        alert(alertEmailOrPassword);
       }
     };
     login();
@@ -29,25 +39,25 @@ export const LoginScreen = ({ navigation }) => {
 
   return (
     <View behavior="padding" style={styles.contentsView}>
-      <Text style={styles.textUsersLogin}>ログイン画面</Text>
+      <Text style={styles.textUsersLogin}>{textOfLoginScreen}</Text>
       <View style={styles.view}>
-        <Text>メールアドレス</Text>
+        <Text>{textOfEmailAddress}</Text>
         <TextInput
           style={styles.textInput}
           onChangeText={setEmail}
           value={email}
-          placeholder="メールアドレスを入力してください"
+          placeholder={enterEmail}
           autoCapitalize="none"
           autoCorrect={false}
         />
       </View>
       <View style={styles.view}>
-        <Text>パスワード</Text>
+        <Text>{textOfPassword}</Text>
         <TextInput
           style={styles.textInput}
           onChangeText={setPassword}
           value={password}
-          placeholder="パスワードを入力してください"
+          placeholder={enterPassword}
           secureTextEntry={true}
           autoCapitalize="none"
         />
@@ -56,12 +66,12 @@ export const LoginScreen = ({ navigation }) => {
         <RegisterButton
           onPress={() => navigation.navigate("Register")}
           disabled={isButtonDisabled === true}
-          text={"新規登録"}
+          text={newRegistration}
         />
         <LoginButton
           onPress={handleLogin}
           disabled={isButtonDisabled === true || !email || !password}
-          text={"ログイン"}
+          text={login}
         />
       </View>
     </View>
