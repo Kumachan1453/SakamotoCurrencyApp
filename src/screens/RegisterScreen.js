@@ -16,6 +16,26 @@ import { useIsFocused } from "@react-navigation/native";
 import { useStateIfMounted } from "use-state-if-mounted";
 import { dateText } from "../components/Date";
 import LoadingScreen from "../components/LoadingScreen";
+import {
+  alertEmailConflict,
+  alertEmailFormat,
+  alertLessPassword,
+  alertNicknameConflict,
+  checkInappropriateWord,
+  enterEmail,
+  enterNickname,
+  enterPassword,
+  exceedNickname,
+  includeJapanese,
+  login,
+  newRegistration,
+  nickname,
+  overCharacter,
+  textOfEmailAddress,
+  textOfPassword,
+  textOfRegisterScreen,
+  warningDetail,
+} from "../components/SupportedLanguages";
 
 export const RegisterScreen = ({ navigation }) => {
   const isFocused = useIsFocused();
@@ -176,9 +196,9 @@ export const RegisterScreen = ({ navigation }) => {
   } else {
     return (
       <View behavior="padding" style={styles.contentsView}>
-        <Text style={styles.textUsersRegister}>新規登録画面</Text>
+        <Text style={styles.textUsersRegister}>{textOfRegisterScreen}</Text>
         <View style={styles.view}>
-          <Text>ニックネーム（8文字以内）</Text>
+          <Text>{nickname}</Text>
           <TextInput
             style={
               isNgWord || isNameConflict || userNameLength > 8
@@ -187,19 +207,15 @@ export const RegisterScreen = ({ navigation }) => {
             }
             onChangeText={setUserName}
             value={userName}
-            placeholder="ニックネームを入力してください"
+            placeholder={enterNickname}
             autoCapitalize="none"
           />
-          {isNgWord && <Warning letter={"不適切な用語が使われています"} />}
-          {isNameConflict && (
-            <Warning letter={"ニックネームが他のユーザーと重複しています"} />
-          )}
-          {userNameLength > 8 && (
-            <Warning letter={"ニックネームが8文字を超えています"} />
-          )}
+          {isNgWord && <Warning letter={checkInappropriateWord} />}
+          {isNameConflict && <Warning letter={alertNicknameConflict} />}
+          {userNameLength > 8 && <Warning letter={exceedNickname} />}
         </View>
         <View style={styles.view}>
-          <Text>メールアドレス</Text>
+          <Text>{textOfEmailAddress}</Text>
           <TextInput
             style={
               isJapanese || (!isBlankEmail && isEmailFormat) || isEmailConflict
@@ -208,21 +224,19 @@ export const RegisterScreen = ({ navigation }) => {
             }
             onChangeText={setEmail}
             value={email}
-            placeholder="メールアドレスを入力してください"
+            placeholder={enterEmail}
             autoCapitalize="none"
             autoCorrect={false}
           />
-          {isJapanese && <Warning letter={"日本語が含まれています"} />}
+          {isJapanese && <Warning letter={includeJapanese} />}
           {!isBlankEmail && !isJapanese && isEmailFormat && (
-            <Warning letter={"メールアドレスの形式が間違っています"} />
+            <Warning letter={alertEmailFormat} />
           )}
-          {isEmailConflict && (
-            <Warning letter={"メールアドレスが他のユーザーと重複しています"} />
-          )}
+          {isEmailConflict && <Warning letter={alertEmailConflict} />}
         </View>
 
         <View style={styles.view}>
-          <Text>パスワード（6文字以上）</Text>
+          <Text>{textOfPassword + " " + overCharacter}</Text>
           <TextInput
             style={
               userPasswordLength < 6 && !isBlankPassword
@@ -231,19 +245,19 @@ export const RegisterScreen = ({ navigation }) => {
             }
             onChangeText={setPassword}
             value={password}
-            placeholder="パスワードを入力してください"
+            placeholder={enterPassword}
             secureTextEntry={true}
             autoCapitalize="none"
           />
           {!isBlankPassword && userPasswordLength < 6 && (
-            <Warning letter={"パスワードは6文字以上にしてください"} />
+            <Warning letter={alertLessPassword} />
           )}
         </View>
         <View style={styles.LoginAndRegister}>
           <LoginButton
             onPress={() => navigation.navigate("Login")}
             disabled={isLoginButtonDisabled === true}
-            text={"ログイン"}
+            text={login}
           />
           <RegisterButton
             onPress={signUp}
@@ -262,12 +276,10 @@ export const RegisterScreen = ({ navigation }) => {
               userNameLength > 8 ||
               userPasswordLength < 6
             }
-            text={"新規登録"}
+            text={newRegistration}
           />
         </View>
-        <Text style={styles.allertText}>
-          ※新規登録後にこれらの記入事項を変更することはできません。ご注意ください。
-        </Text>
+        <Text style={styles.allertText}>{warningDetail}</Text>
       </View>
     );
   }

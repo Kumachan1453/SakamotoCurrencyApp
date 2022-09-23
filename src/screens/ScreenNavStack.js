@@ -2,6 +2,7 @@ import React from "react";
 import { FriendList } from "./FriendList";
 import { Send } from "./Send";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { friendScreen, sendScreen } from "../components/SupportedLanguages";
 
 const Stack = createNativeStackNavigator();
 
@@ -13,7 +14,7 @@ export const ScreenNavStack = () => {
         component={FriendList}
         options={{
           headerShown: true,
-          title: "フレンド",
+          title: friendScreen,
           headerStyle: {
             backgroundColor: "#ff9900",
           },
@@ -29,7 +30,7 @@ export const ScreenNavStack = () => {
         component={Send}
         options={{
           headerShown: true,
-          title: `Konを送る`,
+          title: sendScreen,
           headerStyle: {
             backgroundColor: "#ff9900",
           },

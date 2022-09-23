@@ -6,6 +6,11 @@ import { useIsFocused } from "@react-navigation/native";
 import TrueOrFalseButton from "../components/TrueOrFalseButton";
 import GetUserData from "../components/UserData";
 import GetHistoryData from "../components/HistoryData";
+import {
+  enterFriendName,
+  allFriends,
+  relevantFriendsOnly,
+} from "../components/SupportedLanguages";
 
 export const FriendList = ({ navigation }) => {
   const isFocused = useIsFocused();
@@ -107,15 +112,15 @@ export const FriendList = ({ navigation }) => {
           style={styles.textInput}
           onChangeText={setFriendName}
           value={friendName}
-          placeholder="フレンド名を入力してください"
+          placeholder={enterFriendName}
           autoCapitalize="none"
         />
       </View>
       <TrueOrFalseButton
         onPress={getButtonTrueOrFalse}
         buttonTrueOrFalse={buttonTrueOrFalse}
-        trueText={"すべてのフレンド"}
-        falseText={"関連したフレンドのみ"}
+        trueText={allFriends}
+        falseText={relevantFriendsOnly}
       />
 
       <FlatList
