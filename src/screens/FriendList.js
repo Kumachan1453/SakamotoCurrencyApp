@@ -17,7 +17,6 @@ export const FriendList = ({ navigation }) => {
   const [listData, setListData] = useState([]);
   const [friendName, setFriendName] = useState("");
   const [historyListData, setHistoryListData] = useState([]);
-  // const [buttonTrueOrFalse, setButtonTrueOrFalse] = useState(false);
   const [buttonTrueOrFalseAllUser, setButtonTrueOrFalseAllUser] =
     useState(true);
   const [buttonTrueOrFalseRecipientUser, setButtonTrueOrFalseRecipientUser] =
@@ -133,24 +132,24 @@ export const FriendList = ({ navigation }) => {
           autoCapitalize="none"
         />
       </View>
-      {/* <TrueOrFalseButton
-        onPress={getButtonTrueOrFalse}
-        buttonTrueOrFalse={buttonTrueOrFalse}
-        trueText={allFriends}
-        falseText={relevantFriendsOnly}
-      /> */}
-      <TrueOrFalseButton
-        onPress={getButtonTrueOrFalse}
-        buttonTrueOrFalse={buttonTrueOrFalseAllUser}
-        trueText={allFriends}
-        falseText={allFriends}
-      />
-      <TrueOrFalseButton
-        onPress={getButtonTrueOrFalse}
-        buttonTrueOrFalse={buttonTrueOrFalseRecipientUser}
-        trueText={relevantFriendsOnly}
-        falseText={relevantFriendsOnly}
-      />
+      <View style={styles.headButton}>
+        <View style={styles.buttonSize}>
+          <TrueOrFalseButton
+            onPress={getButtonTrueOrFalse}
+            buttonTrueOrFalse={buttonTrueOrFalseAllUser}
+            trueText={allFriends}
+            falseText={allFriends}
+          />
+        </View>
+        <View style={styles.buttonSize}>
+          <TrueOrFalseButton
+            onPress={getButtonTrueOrFalse}
+            buttonTrueOrFalse={buttonTrueOrFalseRecipientUser}
+            trueText={relevantFriendsOnly}
+            falseText={relevantFriendsOnly}
+          />
+        </View>
+      </View>
 
       <FlatList
         data={buttonTrueOrFalseAllUser === true ? listData : historyListData}
@@ -184,6 +183,13 @@ const styles = StyleSheet.create({
     padding: 5,
     borderColor: "gray",
     backgroundColor: "#DDDDDD",
+  },
+  headButton: {
+    width: "100%",
+    flexDirection: "row",
+  },
+  buttonSize: {
+    width: "50%",
   },
 });
 
