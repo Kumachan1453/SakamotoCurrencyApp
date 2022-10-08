@@ -34,10 +34,10 @@ const en = {
   accountDeletion: "Account Deletion",
   attentionAccountDeletion: "Do you really want to delete the account?",
 
-  friendScreen: "Friend",
-  enterFriendName: "Enter a Friend's name",
-  allFriends: "All Friends",
-  relevantFriendsOnly: "Related Friends",
+  friendScreen: "Users",
+  enterFriendName: "Enter an User's name",
+  allFriends: "All",
+  relevantFriendsOnly: "Related",
 
   sendScreen: "Send 'Kon'",
   sendTo: "Send to",
@@ -109,10 +109,10 @@ i18n.translations = {
     accountDeletion: "Account Deletion",
     attentionAccountDeletion: "Do you really want to delete the account?",
 
-    friendScreen: "Friend",
-    enterFriendName: "Enter a Friend's name",
-    allFriends: "All Friends",
-    relevantFriendsOnly: "Related Friends",
+    friendScreen: "Users",
+    enterFriendName: "Enter an User's name",
+    allFriends: "All",
+    relevantFriendsOnly: "Related",
 
     sendScreen: "Send 'Kon'",
     sendTo: "Send to",
@@ -182,10 +182,10 @@ i18n.translations = {
     accountDeletion: "アカウント削除",
     attentionAccountDeletion: "本当にアカウントを削除しますか？",
 
-    friendScreen: "フレンド",
-    enterFriendName: "フレンド名を入力",
-    allFriends: "すべてのフレンド",
-    relevantFriendsOnly: "関連したフレンド",
+    friendScreen: "ユーザー",
+    enterFriendName: "ユーザー名を入力",
+    allFriends: "すべて",
+    relevantFriendsOnly: "関連のみ",
 
     sendScreen: "「Kon」を送る",
     sendTo: "送る相手",
@@ -255,10 +255,10 @@ i18n.translations = {
     accountDeletion: "Eliminação de conta",
     attentionAccountDeletion: "Você realmente quer excluir sua conta?",
 
-    friendScreen: "Amigo",
-    enterFriendName: "Digite o nome de um amigo",
-    allFriends: "Todos os amigos",
-    relevantFriendsOnly: "Amigos relacionados",
+    friendScreen: "Usuários",
+    enterFriendName: "Digite o nome de um Usuário",
+    allFriends: "Todos",
+    relevantFriendsOnly: "Relacionado",
 
     sendScreen: "Enviar 'Kon'",
     sendTo: "a quem enviá-lo para",

@@ -17,17 +17,28 @@ export const FriendList = ({ navigation }) => {
   const [listData, setListData] = useState([]);
   const [friendName, setFriendName] = useState("");
   const [historyListData, setHistoryListData] = useState([]);
-  const [buttonTrueOrFalse, setButtonTrueOrFalse] = useState(false);
+  const [buttonTrueOrFalseAllUser, setButtonTrueOrFalseAllUser] =
+    useState(true);
+  const [buttonTrueOrFalseRecipientUser, setButtonTrueOrFalseRecipientUser] =
+    useState(false);
 
   const getUserProfile = getAuth();
   const user = getUserProfile.currentUser;
   const email = user.email;
 
   const getButtonTrueOrFalse = () => {
-    if (buttonTrueOrFalse === false) {
-      setButtonTrueOrFalse(true);
-    } else if (buttonTrueOrFalse === true) {
-      setButtonTrueOrFalse(false);
+    if (
+      buttonTrueOrFalseAllUser === false &&
+      buttonTrueOrFalseRecipientUser === true
+    ) {
+      setButtonTrueOrFalseAllUser(true);
+      setButtonTrueOrFalseRecipientUser(false);
+    } else if (
+      buttonTrueOrFalseAllUser === true &&
+      buttonTrueOrFalseRecipientUser === false
+    ) {
+      setButtonTrueOrFalseAllUser(false);
+      setButtonTrueOrFalseRecipientUser(true);
     }
   };
 
@@ -79,7 +90,7 @@ export const FriendList = ({ navigation }) => {
       if (friendName !== "") {
         const filterFriendList = () => {
           setListData(loginFilterTime);
-          if (buttonTrueOrFalse === true) {
+          if (buttonTrueOrFalseAllUser === true) {
             const filterListData = loginFilterTime.filter((value) => {
               return value.name.match(friendName);
             });
@@ -103,7 +114,12 @@ export const FriendList = ({ navigation }) => {
 
   useEffect(async () => {
     await functionInUseEffect();
-  }, [friendName, isFocused, buttonTrueOrFalse]);
+  }, [
+    friendName,
+    isFocused,
+    buttonTrueOrFalseAllUser,
+    buttonTrueOrFalseRecipientUser,
+  ]);
 
   return (
     <View style={styles.content}>
@@ -116,15 +132,27 @@ export const FriendList = ({ navigation }) => {
           autoCapitalize="none"
         />
       </View>
-      <TrueOrFalseButton
-        onPress={getButtonTrueOrFalse}
-        buttonTrueOrFalse={buttonTrueOrFalse}
-        trueText={allFriends}
-        falseText={relevantFriendsOnly}
-      />
+      <View style={styles.headButton}>
+        <View style={styles.buttonSize}>
+          <TrueOrFalseButton
+            onPress={getButtonTrueOrFalse}
+            buttonTrueOrFalse={buttonTrueOrFalseAllUser}
+            trueText={allFriends}
+            falseText={allFriends}
+          />
+        </View>
+        <View style={styles.buttonSize}>
+          <TrueOrFalseButton
+            onPress={getButtonTrueOrFalse}
+            buttonTrueOrFalse={buttonTrueOrFalseRecipientUser}
+            trueText={relevantFriendsOnly}
+            falseText={relevantFriendsOnly}
+          />
+        </View>
+      </View>
 
       <FlatList
-        data={buttonTrueOrFalse === true ? listData : historyListData}
+        data={buttonTrueOrFalseAllUser === true ? listData : historyListData}
         renderItem={({ item }) => {
           return (
             <FriendButton
@@ -155,6 +183,13 @@ const styles = StyleSheet.create({
     padding: 5,
     borderColor: "gray",
     backgroundColor: "#DDDDDD",
+  },
+  headButton: {
+    width: "100%",
+    flexDirection: "row",
+  },
+  buttonSize: {
+    width: "50%",
   },
 });
 
