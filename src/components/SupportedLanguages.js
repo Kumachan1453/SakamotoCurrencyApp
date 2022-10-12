@@ -302,6 +302,78 @@ i18n.translations = {
     alertEmailConflict: "O endereço de e-mail é duplicado com outro usuário",
     alertLessPassword: "As senhas devem ter pelo menos 6 caracteres",
   },
+
+  zh: {
+    startKon: "欢迎来到 'Kon '的世界。",
+    start: "开始...",
+
+    homeScreen: "首页",
+    myUserName: "帐号",
+    myUserEmailAddress: "电子邮件地址",
+    konOwnership: "你所拥有的'Kons'的数量",
+    monthlyKonUsage: "您在 " + month + "月份使用的 'Kon'数量",
+    detail:
+      "*本申请在每个月月初的午夜更新（就本月而言，是" +
+      month +
+      "月1日）。 首先，你失去5%的[你拥有的'康'的数量]。相反，你将得到[你在" +
+      month +
+      "月期间消费的'Kon'数量]的5%作为奖励（但你不会得到超过5000Kon，即使你消费超过100000Kon）。而[你在" +
+      (month + 1) +
+      "月期间花费的'康'的数量]将为零。",
+    logout: "登出",
+    login: "登录",
+    attentionLogout: "你真的想登出吗？",
+    cancel: "取消",
+    ok: "认可",
+    accountDeletion: "删除账户",
+    attentionAccountDeletion: "你真的想删除你的账户吗？",
+
+    friendScreen: "用户",
+    enterFriendName: "输入你的用户名。",
+    allFriends: "所有",
+    relevantFriendsOnly: "相关的只有",
+
+    sendScreen: "发送 ‘Kon'",
+    sendTo: "寄给谁",
+    konYouSend: "你发送的'Kon'数量",
+    enterNumbers: "输入数字",
+    sendKon: "发送 ‘Kon'",
+    thanksMessage: "谢谢你的留言（最多15个字）",
+    attentionSendKon: "你真的想发送'Kon'吗？",
+    remainingAmount: "剩余金额",
+    amountUseAfter: "使用后的数量",
+    exceedsBalance: "超过剩余金额",
+    checkInappropriateWord: "使用了不适当的术语",
+    tooManyCharacters: "角色太多",
+    checkWholeNumbers: "请只输入整数",
+
+    giftScreen: "礼物",
+    touchBar: "触摸下面的栏，就可以收到 ‘Kon'!",
+
+    rankingScreen: "排名",
+
+    historyScreen: "历史",
+
+    textOfLoginScreen: "登录屏幕",
+    textOfEmailAddress: "电子邮件地址",
+    textOfPassword: "(密码",
+    enterEmail: "输入你的电子邮件地址",
+    enterPassword: "输入你的密码",
+    newRegistration: "新注册",
+    alertEmailOrPassword: "电子邮件地址或密码不正确。",
+
+    textOfRegisterScreen: "新的注册屏幕",
+    nickname: "绰号（最多8个字符）",
+    enterNickname: "输入你的绰号",
+    overCharacter: "(至少6个字符)",
+    warningDetail: "*在新注册后不可能改变这些条目。请注意。",
+    alertNicknameConflict: "绰号与其他用户重复",
+    exceedNickname: "绰号超过8个字符",
+    includeJapanese: "包括日语",
+    alertEmailFormat: "电子邮件地址的格式不对",
+    alertEmailConflict: "电子邮件地址与其他用户重复",
+    alertLessPassword: "密码必须至少有6个字符长",
+  },
 };
 
 const startKon = i18n.t("startKon");
