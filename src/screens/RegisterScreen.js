@@ -36,6 +36,7 @@ import {
   textOfRegisterScreen,
   warningDetail,
 } from "../components/SupportedLanguages";
+import { Ionicons } from "@expo/vector-icons";
 
 export const RegisterScreen = ({ navigation }) => {
   const isFocused = useIsFocused();
@@ -45,6 +46,8 @@ export const RegisterScreen = ({ navigation }) => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [isLoginButtonDisabled, setIsLoginButtonDisabled] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const [isRevealPassword, setIsRevealPassword] = useState(true);
 
   const userNameLength = userName.length;
   const userPasswordLength = password.length;
@@ -237,18 +240,34 @@ export const RegisterScreen = ({ navigation }) => {
 
         <View style={styles.view}>
           <Text>{textOfPassword + " " + overCharacter}</Text>
-          <TextInput
-            style={
-              userPasswordLength < 6 && !isBlankPassword
-                ? styles.errorTextInput
-                : styles.textInput
-            }
-            onChangeText={setPassword}
-            value={password}
-            placeholder={enterPassword}
-            secureTextEntry={true}
-            autoCapitalize="none"
-          />
+          <View style={styles.contentsEyeOnOff}>
+            <TextInput
+              style={
+                userPasswordLength < 6 && !isBlankPassword
+                  ? styles.errorTextInput
+                  : styles.textInput
+              }
+              onChangeText={setPassword}
+              value={password}
+              placeholder={enterPassword}
+              secureTextEntry={isRevealPassword ? true : false}
+              autoCapitalize="none"
+            />
+            {isRevealPassword === true && (
+              <Ionicons
+                name="md-eye-off"
+                size={20}
+                onPress={() => setIsRevealPassword(false)}
+              />
+            )}
+            {isRevealPassword === false && (
+              <Ionicons
+                name="md-eye"
+                size={20}
+                onPress={() => setIsRevealPassword(true)}
+              />
+            )}
+          </View>
           {!isBlankPassword && userPasswordLength < 6 && (
             <Warning letter={alertLessPassword} />
           )}
@@ -317,6 +336,10 @@ const styles = StyleSheet.create({
   },
   LoginAndRegister: {
     flexDirection: "row",
+  },
+  contentsEyeOnOff: {
+    flexDirection: "row",
+    alignItems: "center",
   },
 });
 
